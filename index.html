@@ -787,6 +787,346 @@
   }
 }
 
+.search-wrap{
+  position:relative;
+}
+
+.menu-search{
+  width:100%;
+  height:48px;
+  border:none;
+  outline:none;
+  border-radius:16px;
+  padding:0 14px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  font-size:14px;
+}
+
+.menu-search::placeholder{
+  color:rgba(255,255,255,.48);
+}
+
+.search-results{
+  margin-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:220px;
+  overflow:auto;
+}
+
+.search-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  cursor:pointer;
+  transition:transform .15s ease, background .15s ease;
+}
+
+.search-item:hover{
+  background:rgba(255,255,255,.09);
+  transform:translateY(-1px);
+}
+
+.search-item-info{
+  min-width:0;
+}
+
+.search-item-name{
+  font-weight:700;
+  font-size:14px;
+}
+
+.search-item-meta{
+  margin-top:3px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.search-empty{
+  padding:12px;
+  border-radius:14px;
+  text-align:center;
+  color:var(--muted);
+  background:rgba(255,255,255,.04);
+  border:1px dashed rgba(255,255,255,.10);
+}
+
+.search-fab{
+  position:fixed;
+  right:14px;
+  bottom:78px;
+  z-index:3200;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px;
+  border:none;
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+  box-shadow:0 18px 40px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.search-fab:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 22px 46px rgba(0,0,0,.42);
+}
+
+.search-float{
+  position:fixed;
+  right:14px;
+  bottom:136px;
+  z-index:3199;
+  width:min(360px, calc(100vw - 20px));
+  max-height:52dvh;
+  display:none;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+  border-radius:22px;
+  background:rgba(18,18,18,.97);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 24px 60px rgba(0,0,0,.45);
+  backdrop-filter:blur(16px);
+}
+
+.search-float.open{
+  display:flex;
+}
+
+.search-float-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.search-float-close{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:16px;
+}
+
+.floating-menu-search{
+  width:100%;
+  height:48px;
+  border:none;
+  outline:none;
+  border-radius:16px;
+  padding:0 14px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  font-size:14px;
+}
+
+.floating-menu-search::placeholder{
+  color:rgba(255,255,255,.48);
+}
+
+.floating-search-results{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  overflow:auto;
+  max-height:34dvh;
+  padding-right:4px;
+}
+
+.floating-search-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  cursor:pointer;
+  transition:transform .15s ease, background .15s ease;
+}
+
+.floating-search-item:hover{
+  background:rgba(255,255,255,.09);
+  transform:translateY(-1px);
+}
+
+.floating-search-info{
+  min-width:0;
+}
+
+.floating-search-name{
+  font-weight:700;
+  font-size:14px;
+}
+
+.floating-search-meta{
+  margin-top:3px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.floating-search-empty{
+  padding:12px;
+  border-radius:14px;
+  text-align:center;
+  color:var(--muted);
+  background:rgba(255,255,255,.04);
+  border:1px dashed rgba(255,255,255,.10);
+}
+
+@media (max-width:860px){
+  .search-fab{
+    right:10px;
+    bottom:70px;
+    padding:13px 16px;
+    font-size:13px;
+  }
+
+  .search-fab span{
+    display:none;
+  }
+
+  .search-float{
+    right:10px;
+    bottom:124px;
+    width:calc(100vw - 20px);
+    max-height:48dvh;
+  }
+}
+
+.po-modal{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:none;
+}
+
+.po-modal.open{
+  display:block;
+}
+
+.po-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(6px);
+}
+
+.po-modal-card{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  width:min(560px, calc(100vw - 24px));
+  max-height:82dvh;
+  overflow:auto;
+  border-radius:24px;
+  padding:18px;
+  background:rgba(18,18,18,.98);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 28px 70px rgba(0,0,0,.45);
+}
+
+.po-modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.po-modal-head h3{
+  margin:0;
+  font-size:22px;
+}
+
+.po-close{
+  appearance:none;
+  border:none;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  cursor:pointer;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:16px;
+}
+
+.po-guide,
+.po-steps{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.po-guide{
+  margin-bottom:12px;
+}
+
+.po-steps{
+  margin-top:12px;
+}
+
+.po-preview{
+  margin:0;
+  white-space:pre-wrap;
+  word-break:break-word;
+  border-radius:18px;
+  padding:14px;
+  background:#0f0f0f;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  font-family:monospace;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.po-modal-actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:16px;
+}
+
+@media (max-width:860px){
+  .po-modal-card{
+    width:calc(100vw - 16px);
+    padding:14px;
+    border-radius:20px;
+  }
+
+  .po-modal-actions{
+    flex-direction:column;
+  }
+
+  .po-modal-actions .action-btn{
+    width:100%;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -1017,7 +1357,16 @@
     </div>
   </div>
 
-  <div class="quick-menu" id="quickMenu"></div>
+  <div class="search-wrap">
+  <input
+    type="text"
+    id="menuSearch"
+    class="menu-search"
+    placeholder="Search item... example: burger, milk tea, fries"
+    autocomplete="off"
+  />
+  <div class="search-results" id="searchResults"></div>
+</div>
 
   <div class="tray-body" id="trayBody">
     <div class="empty-order" id="emptyOrder">No items yet.</div>
@@ -1029,8 +1378,6 @@
       <strong id="trayTotal">₱0</strong>
     </div>
 
-    <textarea id="poOutput" class="po-output" placeholder="Generated purchase order will appear here..."></textarea>
-
     <div class="tray-buttons">
       <button class="action-btn secondary" id="copyPoBtn" type="button">Copy PO</button>
     </div>
@@ -1040,6 +1387,53 @@
   <button class="speak-fab" id="voiceBtn" type="button" aria-label="Speak Order">
   🎤 <span>Speak Order</span>
 </button>
+
+<button class="search-fab" id="searchFab" type="button" aria-label="Search Order">
+  🔎 <span>Search Order</span>
+</button>
+
+<div class="search-float" id="searchFloat">
+  <div class="search-float-head">
+    <strong>Search Item</strong>
+    <button class="search-float-close" id="searchFloatClose" type="button">✕</button>
+  </div>
+
+  <input
+    type="text"
+    id="floatingMenuSearch"
+    class="floating-menu-search"
+    placeholder="Type item name..."
+    autocomplete="off"
+  />
+
+  <div class="floating-search-results" id="floatingSearchResults"></div>
+</div>
+
+<div class="po-modal" id="poModal" aria-hidden="true">
+  <div class="po-modal-backdrop" id="poModalBackdrop"></div>
+
+  <div class="po-modal-card" role="dialog" aria-modal="true" aria-labelledby="poModalTitle">
+    <div class="po-modal-head">
+      <h3 id="poModalTitle">Order Ready</h3>
+      <button class="po-close" id="poCloseBtn" type="button" aria-label="Close">✕</button>
+    </div>
+
+    <div class="po-guide">
+      Please copy this order, then paste it into <strong>Hungry Bar Messenger</strong> to send your order.
+    </div>
+
+    <pre class="po-preview" id="poPreview"></pre>
+
+    <div class="po-steps">
+      Next step: open Hungry Bar Messenger, paste your order, then send it to confirm.
+    </div>
+
+    <div class="po-modal-actions">
+      <button class="action-btn secondary" id="poDoneBtn" type="button">Close</button>
+      <button class="action-btn" id="poCopyNowBtn" type="button">Copy Now</button>
+    </div>
+  </div>
+</div>
 
   <script>
   const pages = [...document.querySelectorAll('.page')];
@@ -1502,14 +1896,25 @@ const MENU_ITEMS = [
   const topCart = document.getElementById('topCart');
   const cartFab = document.getElementById('cartFab');
   const cartCount = document.getElementById('cartCount');
-  const quickMenu = document.getElementById('quickMenu');
+  const menuSearch = document.getElementById('menuSearch');
+  const searchResults = document.getElementById('searchResults');
   const trayBody = document.getElementById('trayBody');
   const emptyOrder = document.getElementById('emptyOrder');
   const trayTotal = document.getElementById('trayTotal');
-  const poOutput = document.getElementById('poOutput');
   const copyPoBtn = document.getElementById('copyPoBtn');
   const clearOrderBtn = document.getElementById('clearOrderBtn');
   const voiceBtn = document.getElementById('voiceBtn');
+  const searchFab = document.getElementById('searchFab');
+  const searchFloat = document.getElementById('searchFloat');
+  const searchFloatClose = document.getElementById('searchFloatClose');
+  const floatingMenuSearch = document.getElementById('floatingMenuSearch');
+  const floatingSearchResults = document.getElementById('floatingSearchResults');
+  const poModal = document.getElementById('poModal');
+  const poModalBackdrop = document.getElementById('poModalBackdrop');
+  const poPreview = document.getElementById('poPreview');
+  const poCloseBtn = document.getElementById('poCloseBtn');
+  const poDoneBtn = document.getElementById('poDoneBtn');
+  const poCopyNowBtn = document.getElementById('poCopyNowBtn');
 
   function openCart() {
     topCart.classList.add('open');
@@ -1528,18 +1933,6 @@ const MENU_ITEMS = [
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     });
-  }
-
-  function renderQuickMenu() {
-    quickMenu.innerHTML = MENU_ITEMS.map(item => `
-      <div class="quick-item">
-        <div class="quick-item-info">
-          <div class="quick-item-name">${item.name}</div>
-          <div class="quick-item-price">${peso(item.price)}</div>
-        </div>
-        <button class="quick-add" type="button" data-add="${item.name}">Add</button>
-      </div>
-    `).join('');
   }
 
   function addItemByName(name, qty = 1) {
@@ -1608,7 +2001,6 @@ const MENU_ITEMS = [
     `).join('');
 
     trayTotal.textContent = peso(getTotal());
-    refreshPOOutput();
   }
 
   function playAddSound() {
@@ -1675,41 +2067,48 @@ const MENU_ITEMS = [
   }
 }
 
+function openPoModal(text) {
+  poPreview.textContent = text;
+  poModal.classList.add('open');
+  poModal.setAttribute('aria-hidden', 'false');
+}
+
+function closePoModal() {
+  poModal.classList.remove('open');
+  poModal.setAttribute('aria-hidden', 'true');
+}
+
   function generatePOText() {
-    const now = new Date();
-    const lines = [];
-    lines.push(STORE_NAME);
-    lines.push('PURCHASE ORDER');
+  const now = new Date();
+  const lines = [];
+  lines.push(STORE_NAME);
+  lines.push('ORDER REQUEST');
+  lines.push('------------------------------');
+
+  if (!order.length) {
+    lines.push('No items selected');
+  } else {
+    order.forEach(item => {
+      lines.push(`${item.qty} x ${item.name} - ${peso(item.price * item.qty)}`);
+    });
     lines.push('------------------------------');
-
-    if (!order.length) {
-      lines.push('No items selected');
-    } else {
-      order.forEach(item => {
-        lines.push(`${item.qty} x ${item.name} - ${peso(item.price * item.qty)}`);
-      });
-      lines.push('------------------------------');
-      lines.push(`TOTAL: ${peso(getTotal())}`);
-    }
-
-    lines.push('------------------------------');
-    lines.push('Customer: Walk-in');
-    lines.push(`Date: ${now.toLocaleDateString('en-PH')} ${now.toLocaleTimeString('en-PH')}`);
-
-    return lines.join('\n');
+    lines.push(`TOTAL: ${peso(getTotal())}`);
   }
+
+  lines.push('------------------------------');
+  lines.push('Customer Name:');
+  lines.push('Contact Number:');
+  lines.push('Address / Pickup:');
+  lines.push(`Date: ${now.toLocaleDateString('en-PH')} ${now.toLocaleTimeString('en-PH')}`);
+  lines.push('------------------------------');
+  lines.push('Send this order to Hungry Bar Messenger.');
+
+  return lines.join('\n');
+}
 
   if (cartFab) {
     cartFab.addEventListener('click', toggleCart);
   }
-
-  quickMenu.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-add]');
-    if (!btn) return;
-
-    addItemByName(btn.dataset.add, 1);
-    openCart();
-  });
 
   trayBody.addEventListener('click', (e) => {
     const inc = e.target.closest('[data-inc]');
@@ -1719,24 +2118,16 @@ const MENU_ITEMS = [
     if (dec) changeQty(dec.dataset.dec, -1);
   });
 
-  copyPoBtn.addEventListener('click', async () => {
-    try {
-      if (!poOutput.value.trim()) {
-        poOutput.value = generatePOText();
-      }
-      await navigator.clipboard.writeText(poOutput.value);
-      copyPoBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyPoBtn.textContent = 'Copy PO';
-      }, 1200);
-    } catch (err) {
-      alert('Copy failed. Please copy manually.');
-    }
-  });
+  copyPoBtn.addEventListener('click', () => {
+  const text = generatePOText();
 
-  function refreshPOOutput() {
-  poOutput.value = generatePOText();
-}
+  if (!order.length) {
+    alert('Your cart is empty.');
+    return;
+  }
+
+  openPoModal(text);
+});
 
   clearOrderBtn.addEventListener('click', () => {
     order.length = 0;
@@ -1848,8 +2239,17 @@ function extractQuantity(text) {
 }
 
 function extractAction(text) {
-  if (/\b(remove|delete|minus|bawas|tanggal|tanggalin)\b/.test(text)) return 'remove';
+  if (/\b(remove|delete|minus|bawas|tanggal|tanggalin|cancel|undo|erase)\b/.test(text)) {
+    return 'remove';
+  }
+  if (/\b(clear cart|clear order|empty cart|empty order)\b/.test(text)) {
+    return 'clear';
+  }
   return 'add';
+}
+
+function isGenericVoiceCommand(text) {
+  return /\b(order|item|menu|cart|this|that|yon|yun|ito|iyan|ayun)\b/.test(text);
 }
 
 function extractSize(text) {
@@ -1991,9 +2391,36 @@ function parseVoiceOrder(text) {
   const misses = [];
 
   for (const part of parts) {
-    const action = extractAction(part);
-    const qty = extractQuantity(part);
-    const bestItem = findBestMenuMatch(part);
+    const cleanPart = normalizeText(part);
+    const action = extractAction(cleanPart);
+    const qty = extractQuantity(cleanPart);
+
+    // clear whole cart
+    if (action === 'clear') {
+      order.length = 0;
+      renderOrder();
+      successCount++;
+      continue;
+    }
+
+    // phrases like "cancel 1 order" or "remove 1 item"
+    // remove last added item if no specific item was spoken
+    if (
+      action === 'remove' &&
+      isGenericVoiceCommand(cleanPart) &&
+      !findBestMenuMatch(cleanPart)
+    ) {
+      if (order.length) {
+        const lastItem = order[order.length - 1];
+        changeQty(lastItem.name, -qty);
+        successCount++;
+      } else {
+        misses.push(part);
+      }
+      continue;
+    }
+
+    const bestItem = findBestMenuMatch(cleanPart);
 
     if (!bestItem) {
       misses.push(part);
@@ -2064,8 +2491,207 @@ voiceBtn.style.opacity = '.6';
   }
 }
 
-  renderQuickMenu();
+function escapeHtml(text) {
+  return String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function searchMenuItems(query) {
+  const q = String(query || '').trim().toLowerCase();
+  if (!q) return [];
+
+  return MENU_ITEMS
+    .map(item => {
+      const name = item.name.toLowerCase();
+      const category = String(item.category || '').toLowerCase();
+
+      let score = 0;
+      if (name === q) score += 100;
+      if (name.startsWith(q)) score += 60;
+      if (name.includes(q)) score += 35;
+      if (category.includes(q)) score += 15;
+
+      const tokens = q.split(/\s+/).filter(Boolean);
+      for (const token of tokens) {
+        if (name.includes(token)) score += 8;
+        if (category.includes(token)) score += 4;
+      }
+
+      return { item, score };
+    })
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score || a.item.name.localeCompare(b.item.name))
+    .slice(0, 12)
+    .map(x => x.item);
+}
+
+function renderSearchResults(query) {
+  const results = searchMenuItems(query);
+
+  if (!query.trim()) {
+    searchResults.innerHTML = '';
+    return;
+  }
+
+  if (!results.length) {
+    searchResults.innerHTML = `<div class="search-empty">No matching item found.</div>`;
+    return;
+  }
+
+  searchResults.innerHTML = results.map(item => `
+    <div class="search-item" data-item-name="${escapeHtml(item.name)}">
+      <div class="search-item-info">
+        <div class="search-item-name">${escapeHtml(item.name)}</div>
+        <div class="search-item-meta">${escapeHtml(item.category || '')} • ${peso(item.price)}</div>
+      </div>
+      <div class="search-item-meta">Add</div>
+    </div>
+  `).join('');
+}
+
+function clearSearchBox() {
+  menuSearch.value = '';
+  searchResults.innerHTML = '';
+}
+
+if (menuSearch) {
+  menuSearch.addEventListener('input', () => {
+    renderSearchResults(menuSearch.value);
+  });
+
+  menuSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      clearSearchBox();
+      menuSearch.blur();
+    }
+  });
+}
+
+if (searchResults) {
+  searchResults.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-item-name]');
+    if (!card) return;
+
+    const itemName = card.dataset.itemName;
+    addItemByName(itemName, 1);
+    openCart();
+    clearSearchBox();
+  });
+}
   renderOrder();
+
+  function openFloatingSearch() {
+  searchFloat.classList.add('open');
+  setTimeout(() => {
+    try { floatingMenuSearch.focus(); } catch (e) {}
+  }, 30);
+}
+
+function closeFloatingSearch() {
+  searchFloat.classList.remove('open');
+  clearFloatingSearch();
+}
+
+function toggleFloatingSearch() {
+  if (searchFloat.classList.contains('open')) closeFloatingSearch();
+  else openFloatingSearch();
+}
+
+function clearFloatingSearch() {
+  floatingMenuSearch.value = '';
+  floatingSearchResults.innerHTML = '';
+}
+
+function renderFloatingSearchResults(query) {
+  const results = searchMenuItems(query);
+
+  if (!query.trim()) {
+    floatingSearchResults.innerHTML = '';
+    return;
+  }
+
+  if (!results.length) {
+    floatingSearchResults.innerHTML = `<div class="floating-search-empty">No matching item found.</div>`;
+    return;
+  }
+
+  floatingSearchResults.innerHTML = results.map(item => `
+    <div class="floating-search-item" data-item-name="${escapeHtml(item.name)}">
+      <div class="floating-search-info">
+        <div class="floating-search-name">${escapeHtml(item.name)}</div>
+        <div class="floating-search-meta">${escapeHtml(item.category || '')} • ${peso(item.price)}</div>
+      </div>
+      <div class="floating-search-meta">Add</div>
+    </div>
+  `).join('');
+}
+
+if (searchFab) {
+  searchFab.addEventListener('click', toggleFloatingSearch);
+}
+
+if (searchFloatClose) {
+  searchFloatClose.addEventListener('click', closeFloatingSearch);
+}
+
+if (floatingMenuSearch) {
+  floatingMenuSearch.addEventListener('input', () => {
+    renderFloatingSearchResults(floatingMenuSearch.value);
+  });
+
+  floatingMenuSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeFloatingSearch();
+    }
+  });
+}
+
+if (floatingSearchResults) {
+  floatingSearchResults.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-item-name]');
+    if (!card) return;
+
+    const itemName = card.dataset.itemName;
+    addItemByName(itemName, 1);
+    openCart();
+    clearFloatingSearch();
+  });
+}
+
+async function copyGeneratedPO() {
+  try {
+    const text = poPreview.textContent || '';
+    if (!text.trim()) return;
+
+    await navigator.clipboard.writeText(text);
+    poCopyNowBtn.textContent = 'Copied!';
+    setTimeout(() => {
+      poCopyNowBtn.textContent = 'Copy Now';
+    }, 1200);
+  } catch (err) {
+    alert('Copy failed. Please copy manually.');
+  }
+}
+
+if (poCopyNowBtn) {
+  poCopyNowBtn.addEventListener('click', copyGeneratedPO);
+}
+
+if (poCloseBtn) {
+  poCloseBtn.addEventListener('click', closePoModal);
+}
+
+if (poDoneBtn) {
+  poDoneBtn.addEventListener('click', closePoModal);
+}
+
+if (poModalBackdrop) {
+  poModalBackdrop.addEventListener('click', closePoModal);
+}
 </script>
 </body>
 </html>
