@@ -157,15 +157,19 @@
       transform-style:preserve-3d;
     }
 
+    .page:active{
+  filter:brightness(1.02);
+}
+
     .page{
-      position:absolute;
-      inset:0;
-      transform-origin:left center;
-      transform-style:preserve-3d;
-      transition:transform .85s cubic-bezier(.22,.61,.36,1);
-      cursor:grab;
-      will-change:transform;
-    }
+  position:absolute;
+  inset:0;
+  transform-origin:left center;
+  transform-style:preserve-3d;
+  transition:transform 1.45s cubic-bezier(.2,.7,.2,1), filter .25s ease;
+  cursor:grab;
+  will-change:transform;
+}
 
     .page.flipped{
       transform:rotateY(-180deg);
@@ -180,26 +184,51 @@
   box-shadow:
     0 30px 70px rgba(0,0,0,.55),
     0 10px 24px rgba(0,0,0,.28);
-  background:#101010;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+    linear-gradient(90deg, rgba(255,255,255,.03), rgba(0,0,0,.04)),
+    #101010;
   border:1px solid rgba(255,255,255,.08);
 }
 
+.page::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  width:10px;
+  z-index:5;
+  pointer-events:none;
+  background:linear-gradient(90deg, rgba(255,255,255,.12), rgba(255,255,255,0));
+  border-top-left-radius:28px;
+  border-bottom-left-radius:28px;
+}
+
+
     .page-front::after,
-    .page-back::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:linear-gradient(90deg, rgba(255,255,255,.08), transparent 12%, transparent 88%, rgba(0,0,0,.16));
-      mix-blend-mode:screen;
-    }
+.page-back::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,.16) 0%,
+      rgba(255,255,255,.05) 7%,
+      rgba(255,255,255,0) 18%,
+      rgba(0,0,0,0) 70%,
+      rgba(0,0,0,.10) 88%,
+      rgba(0,0,0,.22) 100%);
+}
 
     .page-back{
-      transform:rotateY(180deg);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.03), rgba(0,0,0,.18)),
-        #151515;
-    }
+  transform:rotateY(180deg);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.01)),
+    linear-gradient(90deg, rgba(255,255,255,.04), rgba(0,0,0,.08)),
+    #1a1a1a;
+}
 
     .page-back-inner{
       position:absolute;
@@ -726,7 +755,7 @@
 
     isTouching = false;
 
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+    if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(dy)) {
       if (dx < 0) next();
       else prev();
     }
@@ -746,7 +775,7 @@
     const dx = e.clientX - mouseStartX;
     isMouseDown = false;
 
-    if (Math.abs(dx) > 70) {
+    if (Math.abs(dx) > 100) {
       if (dx < 0) next();
       else prev();
     }
