@@ -2197,10 +2197,9 @@ function closePoModal() {
 });
 
   clearOrderBtn.addEventListener('click', () => {
-    order.length = 0;
-    poOutput.value = '';
-    renderOrder();
-  });
+  order.length = 0;
+  renderOrder();
+});
 
   // swipe down from top = open
   // swipe up while cart open = close
@@ -2246,6 +2245,14 @@ function normalizeText(text) {
     .replace(/["]/g, ' inch ')
     .replace(/-/g, ' ')
     .replace(/[.,]/g, ' ')
+    .replace(/\bsi log\b/g, 'silog')
+    .replace(/\bsee log\b/g, 'silog')
+    .replace(/\bsi lug\b/g, 'silog')
+    .replace(/\bhot silog\b/g, 'hotsilog')
+    .replace(/\bmilk t\b/g, 'milk tea')
+    .replace(/\bmilkte\b/g, 'milk tea')
+    .replace(/\bberger\b/g, 'burger')
+    .replace(/\bburjer\b/g, 'burger')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -2371,6 +2378,35 @@ function buildAliases(item) {
   if (base.includes('milk tea')) aliases.add(base.replace('milk tea', '').trim());
   if (base.includes('cream cheese')) aliases.add(base.replace('cream cheese', '').trim());
 
+    if (base.includes('bacon silog')) {
+    aliases.add('bacon silog');
+    aliases.add('baconsilog');
+    aliases.add('silog bacon');
+  }
+
+  if (base.includes('hungarian silog')) {
+    aliases.add('hungarian silog');
+    aliases.add('hungariansilog');
+    aliases.add('silog hungarian');
+  }
+
+  if (base.includes('hotsilog')) {
+    aliases.add('hot silog');
+    aliases.add('hotdog silog');
+    aliases.add('hotsilog');
+    aliases.add('silog hotdog');
+  }
+
+  if (base.includes('burger steak')) {
+    aliases.add('burger steak');
+    aliases.add('burgersteak');
+  }
+
+  if (base.includes('chicken bites with rice')) {
+    aliases.add('chicken bites');
+    aliases.add('chicken rice');
+  }
+
   return [...aliases].filter(Boolean);
 }
 
@@ -2443,6 +2479,52 @@ function removeMatchedItem(itemName, qty) {
   if (!existing) return false;
   changeQty(itemName, -qty);
   return true;
+}
+
+function normalizeVoiceTranscript(text) {
+  let t = String(text || '').toLowerCase();
+
+  const fixes = [
+    // silog family
+    [/\bsi log\b/g, 'silog'],
+    [/\bsee log\b/g, 'silog'],
+    [/\bsy log\b/g, 'silog'],
+    [/\bci log\b/g, 'silog'],
+    [/\bshi log\b/g, 'silog'],
+    [/\bsi lug\b/g, 'silog'],
+    [/\bsee lug\b/g, 'silog'],
+    [/\bsilogs\b/g, 'silog'],
+
+    [/\bhot silog\b/g, 'hotsilog'],
+    [/\bhot si log\b/g, 'hotsilog'],
+    [/\bhat silog\b/g, 'hotsilog'],
+    [/\bhotdog silog\b/g, 'hotsilog'],
+
+    [/\bbacon silog\b/g, 'bacon silog'],
+    [/\bbacon si log\b/g, 'bacon silog'],
+
+    [/\bhungarian silog\b/g, 'hungarian silog'],
+    [/\bhungarian si log\b/g, 'hungarian silog'],
+
+    // common menu mishears
+    [/\bmilk t\b/g, 'milk tea'],
+    [/\bmilkte\b/g, 'milk tea'],
+    [/\bmilky\b/g, 'milk tea'],
+    [/\bfriess\b/g, 'fries'],
+    [/\bfryes\b/g, 'fries'],
+    [/\bberger\b/g, 'burger'],
+    [/\bburjer\b/g, 'burger'],
+    [/\bcombo mill\b/g, 'combo meal'],
+    [/\bnacho's\b/g, 'nachos'],
+    [/\bspageti\b/g, 'spaghetti'],
+    [/\bcarbonarra\b/g, 'carbonara']
+  ];
+
+  fixes.forEach(([pattern, replacement]) => {
+    t = t.replace(pattern, replacement);
+  });
+
+  return t;
 }
 
 function parseVoiceOrder(text) {
@@ -2539,15 +2621,14 @@ voiceBtn.style.opacity = '.6';
 });
 
     recognition.addEventListener('result', (event) => {
-      const results = Array.from(event.results[0] || []);
-      const transcript = results.map(r => r.transcript).join(' ') || '';
-      console.log('Voice heard:', transcript);
-      parseVoiceOrder(transcript);
-    });
+  const results = Array.from(event.results[0] || []);
+  const transcript = results.map(r => r.transcript).join(' ') || '';
+  const fixedTranscript = normalizeVoiceTranscript(transcript);
 
-    recognition.addEventListener('end', () => {
-  voiceBtn.classList.remove('listening');
-  voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
+  console.log('Voice heard:', transcript);
+  console.log('Voice fixed:', fixedTranscript);
+
+  parseVoiceOrder(fixedTranscript);
 });
 
     recognition.addEventListener('error', (event) => {
