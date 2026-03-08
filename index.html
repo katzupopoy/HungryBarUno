@@ -1192,6 +1192,160 @@ body::before{
   0%{ opacity:.88; transform:translateY(0); }
   100%{ opacity:1; transform:translateY(-1px); }
 }
+
+.premium-cover{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:clamp(24px,4vw,44px);
+  background:
+    radial-gradient(circle at top right, rgba(243,200,106,.18), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(255,255,255,.05), transparent 24%),
+    linear-gradient(145deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+    linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+}
+
+.premium-cover::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.05), transparent 16%, transparent 84%, rgba(255,255,255,.03)),
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 20%, transparent 80%, rgba(0,0,0,.12));
+  border-radius:28px;
+}
+
+.cover-logo-img{
+  width:clamp(110px, 18vw, 180px);
+  height:clamp(110px, 18vw, 180px);
+  object-fit:cover;
+  border-radius:50%;
+  display:block;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.45),
+    0 0 0 1px rgba(255,255,255,.08),
+    0 0 40px rgba(243,200,106,.08);
+  background:#111;
+}
+
+.premium-chip{
+  padding:12px 18px;
+  border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.12);
+  color:#f3e7c0;
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  backdrop-filter:blur(12px);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+}
+
+.premium-main{
+  position:relative;
+  z-index:2;
+}
+
+.cover-kicker{
+  display:inline-block;
+  margin-bottom:16px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(243,200,106,.10);
+  color:#f3c86a;
+  border:1px solid rgba(243,200,106,.18);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.premium-main h2{
+  margin:0;
+  font-size:clamp(46px, 8vw, 96px);
+  line-height:.88;
+  letter-spacing:1px;
+  color:#fff;
+  text-shadow:0 8px 28px rgba(0,0,0,.35);
+}
+
+.premium-main p{
+  margin:18px 0 0;
+  max-width:620px;
+  color:rgba(255,255,255,.88);
+  font-size:clamp(15px, 1.9vw, 21px);
+  line-height:1.6;
+}
+
+.premium-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.premium-swipe{
+  padding:16px 22px;
+  border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  font-weight:800;
+  box-shadow:0 14px 30px rgba(0,0,0,.22);
+}
+
+.premium-tagline{
+  color:rgba(243,200,106,.95);
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:13px;
+}
+
+@media (max-width:860px){
+  .cover-top{
+    align-items:flex-start;
+    gap:14px;
+  }
+
+  .cover-logo-img{
+    width:96px;
+    height:96px;
+  }
+
+  .premium-chip{
+    font-size:11px;
+    letter-spacing:.10em;
+    padding:10px 14px;
+  }
+
+  .cover-kicker{
+    font-size:11px;
+    margin-bottom:12px;
+  }
+
+  .premium-main h2{
+    font-size:clamp(38px, 12vw, 60px);
+  }
+
+  .premium-main p{
+    font-size:15px;
+    line-height:1.5;
+  }
+
+  .premium-bottom{
+    gap:12px;
+  }
+
+  .premium-tagline{
+    font-size:12px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -1208,22 +1362,28 @@ body::before{
           <!-- COVER -->
           <section class="page" data-page="0">
             <div class="page-face page-front">
-              <div class="cover-content">
-                <div class="cover-top">
-                  <div class="cover-logo">THE<br>HUNGRY<br>BAR</div>
-                  <div class="cover-chip">Restaurant Menu Book</div>
-                </div>
-                <div class="cover-main">
-                  <h2>THE<br>HUNGRY BAR</h2>
-                  <p>Welcome to our digital menu. Flip each sheet to browse your food and drinks one page at a time.</p>
-                </div>
-                <div class="cover-bottom">
-                  <div class="swipe-pill">Tap or swipe to open the menu</div>
-                  <div>Fresh • Fun • Hungry-approved</div>
-                </div>
-              </div>
-              <div class="page-number">1</div>
-            </div>
+  <div class="cover-content premium-cover">
+    <div class="cover-top">
+      <img class="cover-logo-img" src="images/hungrybar-logo-premium.png" alt="The Hungry Bar Logo">
+      <div class="cover-chip premium-chip">Sta Rosa Uno, Marilao</div>
+    </div>
+
+    <div class="cover-main premium-main">
+      <div class="cover-kicker">SIGNATURE MENU BOOK</div>
+      <h2>THE<br>HUNGRY BAR</h2>
+      <p>
+        Discover our burgers, combo meals, frappes, milk tea, wings, pasta,
+        breakfast favorites, and more — all in one premium digital menu experience.
+      </p>
+    </div>
+
+    <div class="cover-bottom premium-bottom">
+      <div class="swipe-pill premium-swipe">Tap or swipe to open the menu</div>
+      <div class="premium-tagline">Fresh • Fun • Hungry-approved</div>
+    </div>
+  </div>
+  <div class="page-number">1</div>
+</div>
             <div class="page-face page-back">
               <div class="page-back-inner">The Hungry Bar</div>
             </div>
