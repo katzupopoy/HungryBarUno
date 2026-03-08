@@ -740,8 +740,39 @@ body::before{
   }
 
   .top-cart{
+    top:-110%;
+    left:0;
+    right:0;
     height:78dvh;
     padding:12px;
+    transform:none;
+    opacity:0;
+    transition:top .30s ease, opacity .25s ease;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    background:rgba(18,18,18,.99);
+  }
+
+  .top-cart.open{
+    top:0;
+    opacity:1;
+  }
+
+  .menu-search{
+    font-size:16px;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+
+  .search-results{
+    max-height:180px;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .tray-body{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
   }
 
   .po-output{
@@ -1584,12 +1615,15 @@ body::before{
 
   <div class="search-wrap">
   <input
-    type="text"
-    id="menuSearch"
-    class="menu-search"
-    placeholder="Search item... example: burger, milk tea, fries"
-    autocomplete="off"
-  />
+  type="text"
+  id="menuSearch"
+  class="menu-search"
+  placeholder="Search item... example: burger, milk tea, fries"
+  autocomplete="off"
+  autocapitalize="off"
+  autocorrect="off"
+  spellcheck="false"
+/>
   <div class="search-results" id="searchResults"></div>
 </div>
 
@@ -2359,6 +2393,8 @@ function closePoModal() {
   clearOrderBtn.addEventListener('click', () => {
   order.length = 0;
   renderOrder();
+  clearSearchBox();
+  clearFloatingSearch();
 });
 
   // swipe down from top = open
