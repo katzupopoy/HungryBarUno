@@ -747,19 +747,19 @@
   }, { passive: true });
 
   bookShell.addEventListener('touchend', (e) => {
-    if (!isTouching) return;
+  if (!isTouching) return;
 
-    const t = e.changedTouches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - startX;
+  const dy = t.clientY - startY;
 
-    isTouching = false;
+  isTouching = false;
 
-    if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) next();
-      else prev();
-    }
-  }, { passive: true });
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+    if (dx < 0) next();
+    else prev();
+  }
+}, { passive: true });
 
   let mouseStartX = 0;
   let isMouseDown = false;
