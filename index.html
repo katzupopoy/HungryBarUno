@@ -1446,6 +1446,12 @@ body::before{
   }
 }
 
+.promo-page-img{
+  object-fit:cover;
+  object-position:center;
+  background:#000;
+}
+
   </style>
 </head>
 <body>
@@ -1635,27 +1641,14 @@ body::before{
 
           <!-- END PAGE -->
           <section class="page" data-page="13">
-            <div class="page-face page-front">
-              <div class="cover-content">
-                <div class="cover-top">
-                  <div class="cover-logo">THANK<br>YOU</div>
-                  <div class="cover-chip">See you at The Hungry Bar</div>
-                </div>
-                <div class="cover-main">
-                  <h2>ORDER<br>NOW</h2>
-                  <p>You can replace this last page with your branch address, contact number, Facebook page, QR code, or delivery details.</p>
-                </div>
-                <div class="cover-bottom">
-                  <div class="swipe-pill">Customize this final page anytime</div>
-                  <div>End of menu</div>
-                </div>
-              </div>
-              <div class="page-number">14</div>
-            </div>
-            <div class="page-face page-back">
-              <div class="page-back-inner">Thank You</div>
-            </div>
-          </section>
+  <div class="page-face page-front">
+    <img class="page-img promo-page-img" src="images/ads-last-page.jpg" alt="Hungry Bar promo packages and barkada ad">
+    <div class="page-number">14</div>
+  </div>
+  <div class="page-face page-back">
+    <div class="page-back-inner">Promos</div>
+  </div>
+</section>
 
         </div>
       </div>
@@ -2396,7 +2389,7 @@ function playPaperFlipSynth() {
 
     for (let i = 0; i < bufferSize; i++) {
       const fade = 1 - (i / bufferSize);
-      data[i] = (Math.random() * 2 - 1) * fade * 0.18;
+      data[i] = (Math.random() * 2 - 1) * fade * 0.20;
     }
 
     const noise = ctx.createBufferSource();
@@ -2409,7 +2402,7 @@ function playPaperFlipSynth() {
 
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.28, now + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
 
     noise.connect(filter);
