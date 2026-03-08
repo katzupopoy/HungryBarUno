@@ -820,10 +820,6 @@ body::before{
   100%{ box-shadow:0 0 0 0 rgba(243,200,106,0), 0 18px 40px rgba(0,0,0,.35); }
 }
 
-.search-wrap{
-  position:relative;
-}
-
 .menu-search{
   width:100%;
   height:48px;
@@ -1673,20 +1669,6 @@ body::before{
     </div>
   </div>
 
-  <div class="search-wrap">
-  <input
-  type="text"
-  id="menuSearch"
-  class="menu-search"
-  placeholder="Search item... example: burger, milk tea, fries"
-  autocomplete="off"
-  autocapitalize="off"
-  autocorrect="off"
-  spellcheck="false"
-/>
-  <div class="search-results" id="searchResults"></div>
-</div>
-
   <div class="tray-body" id="trayBody">
     <div class="empty-order" id="emptyOrder">No items yet.</div>
   </div>
@@ -2216,8 +2198,6 @@ const MENU_ITEMS = [
   const topCart = document.getElementById('topCart');
   const cartFab = document.getElementById('cartFab');
   const cartCount = document.getElementById('cartCount');
-  const menuSearch = document.getElementById('menuSearch');
-  const searchResults = document.getElementById('searchResults');
   const trayBody = document.getElementById('trayBody');
   const emptyOrder = document.getElementById('emptyOrder');
   const trayTotal = document.getElementById('trayTotal');
@@ -2453,7 +2433,6 @@ function closePoModal() {
   clearOrderBtn.addEventListener('click', () => {
   order.length = 0;
   renderOrder();
-  clearSearchBox();
   clearFloatingSearch();
 });
 
@@ -2984,61 +2963,6 @@ function searchMenuItems(query) {
     .slice(0, 12)
     .map(x => x.item);
 }
-
-function renderSearchResults(query) {
-  const results = searchMenuItems(query);
-
-  if (!query.trim()) {
-    searchResults.innerHTML = '';
-    return;
-  }
-
-  if (!results.length) {
-    searchResults.innerHTML = `<div class="search-empty">No matching item found.</div>`;
-    return;
-  }
-
-  searchResults.innerHTML = results.map(item => `
-    <div class="search-item" data-item-name="${escapeHtml(item.name)}">
-      <div class="search-item-info">
-        <div class="search-item-name">${escapeHtml(item.name)}</div>
-        <div class="search-item-meta">${escapeHtml(item.category || '')} • ${peso(item.price)}</div>
-      </div>
-      <div class="search-item-meta">Add</div>
-    </div>
-  `).join('');
-}
-
-function clearSearchBox() {
-  menuSearch.value = '';
-  searchResults.innerHTML = '';
-}
-
-if (menuSearch) {
-  menuSearch.addEventListener('input', () => {
-    renderSearchResults(menuSearch.value);
-  });
-
-  menuSearch.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      clearSearchBox();
-      menuSearch.blur();
-    }
-  });
-}
-
-if (searchResults) {
-  searchResults.addEventListener('click', (e) => {
-    const card = e.target.closest('[data-item-name]');
-    if (!card) return;
-
-    const itemName = card.dataset.itemName;
-    addItemByName(itemName, 1);
-    openCart();
-    clearSearchBox();
-  });
-}
-  renderOrder();
 
   function openFloatingSearch() {
   searchFloat.classList.add('open');
