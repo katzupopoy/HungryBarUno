@@ -178,9 +178,12 @@ body::before{
   inset:0;
   transform-origin:left center;
   transform-style:preserve-3d;
+  -webkit-transform-style:preserve-3d;
   transition:transform 1.45s cubic-bezier(.2,.7,.2,1), filter .25s ease;
   cursor:grab;
   will-change:transform;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 
     .page.flipped{
@@ -191,6 +194,7 @@ body::before{
   position:absolute;
   inset:0;
   backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
   overflow:hidden;
   border-radius:28px;
   box-shadow:
@@ -200,7 +204,10 @@ body::before{
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
     linear-gradient(90deg, rgba(255,255,255,.03), rgba(0,0,0,.04)),
     #101010;
+
   border:1px solid rgba(255,255,255,.08);
+  transform:translateZ(0);
+  -webkit-transform:translateZ(0);
 }
 
 .page::before{
@@ -264,6 +271,12 @@ body::before{
   object-position:center;
   display:block;
   background:#111;
+
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  transform:translateZ(0);
+  -webkit-transform:translateZ(0);
+  will-change:transform;
 }
 
     .cover-content{
