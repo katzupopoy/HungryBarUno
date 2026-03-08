@@ -1558,6 +1558,7 @@ const MENU_ITEMS = [
     }
 
     renderOrder();
+    playAddSound();
     return true;
   }
 
@@ -1609,6 +1610,37 @@ const MENU_ITEMS = [
     trayTotal.textContent = peso(getTotal());
     refreshPOOutput();
   }
+
+  function playAddSound() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.08);
+
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.16);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.16);
+
+    osc.onended = () => {
+      try { ctx.close(); } catch (e) {}
+    };
+  } catch (err) {
+    console.log('Add sound failed:', err);
+  }
+}
 
   function generatePOText() {
     const now = new Date();
