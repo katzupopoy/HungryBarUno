@@ -2586,6 +2586,24 @@ if (base.includes('hotsilog')) {
   return [...aliases].filter(Boolean);
 }
 
+function speakMessage(message) {
+  try {
+    if (!('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(message);
+    utter.lang = 'en-PH';
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    window.speechSynthesis.speak(utter);
+  } catch (err) {
+    console.log('Speech synthesis failed:', err);
+  }
+}
+
 function scoreMenuItem(item, spoken) {
   const itemText = normalizeText(item.name);
   const aliases = buildAliases(item);
@@ -2752,10 +2770,11 @@ function parseVoiceOrder(text) {
 
     const bestItem = findBestMenuMatch(cleanPart);
 
-    if (!bestItem) {
-      misses.push(part);
-      continue;
-    }
+if (!bestItem) {
+  speakMessage(`Sorry, ${part} is not available on the menu.`);
+  misses.push(part);
+  continue;
+}
 
     if (action === 'remove') {
       const removed = removeMatchedItem(bestItem.name, qty);
@@ -2772,9 +2791,10 @@ function parseVoiceOrder(text) {
   }
 
   if (successCount === 0) {
-    alert('No matching menu item found from voice input.');
-    return;
-  }
+  speakMessage('Sorry, I could not find that item on the menu. Please try again.');
+  alert('No matching menu item found from voice input.');
+  return;
+}
 
   if (misses.length) {
     console.log('Unmatched voice parts:', misses);
@@ -2809,12 +2829,19 @@ voiceBtn.style.opacity = '.6';
   console.log('Voice heard:', transcript);
   console.log('Voice fixed:', fixedTranscript);
 
+  if (!fixedTranscript.trim()) {
+    speakMessage('Sorry, I did not catch that. Please say your order again.');
+    return;
+  }
+
   parseVoiceOrder(fixedTranscript);
 });
 
     recognition.addEventListener('error', (event) => {
   voiceBtn.classList.remove('listening');
   voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
+
+  speakMessage('Sorry, I could not hear you clearly. Please try again.');
   alert('Voice recognition failed: ' + (event.error || 'unknown error'));
 });
   }
