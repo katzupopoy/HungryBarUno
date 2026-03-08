@@ -1089,19 +1089,359 @@
     // =========================
   // ORDER CART + PO + VOICE
   // =========================
-  const MENU_ITEMS = [
-    { name: 'Classic Burger', price: 120 },
-    { name: 'Cheese Burger', price: 135 },
-    { name: 'Combo Meal A', price: 199 },
-    { name: 'Fries', price: 80 },
-    { name: 'Nachos', price: 95 },
-    { name: 'Chicken Wings', price: 220 },
-    { name: 'Carbonara Pasta', price: 180 },
-    { name: 'Mango Graham Frappe', price: 140 },
-    { name: 'Milk Tea', price: 95 },
-    { name: 'Fruit Tea', price: 90 }
-  ];
+  const STORE_NAME = 'THE HUNGRY BAR';
 
+const MENU_ITEMS = [
+  // QUARTER POUNDS
+  { name: 'Aloha Quarter Pound', price: 185, category: 'Quarter Pounds' },
+  { name: 'Creamy Spinach Quarter Pound', price: 185, category: 'Quarter Pounds' },
+  { name: 'Triple Cheese Quarter Pound', price: 185, category: 'Quarter Pounds' },
+  { name: '4 Cheese Quarter Pound', price: 185, category: 'Quarter Pounds' },
+  { name: 'Bacon Cream Cheese Quarter Pound', price: 185, category: 'Quarter Pounds' },
+
+  // BURGERS
+  { name: 'Cheesy Bacon Burger', price: 115, category: 'Burgers' },
+  { name: 'TLC Burger', price: 115, category: 'Burgers' },
+  { name: 'Triple Double Burger', price: 155, category: 'Burgers' },
+  { name: 'Hungry Burger', price: 100, category: 'Burgers' },
+
+  // COMBO MEAL
+  { name: 'Combo Meal 1', price: 180, category: 'Combo Meal' },
+  { name: 'Combo Meal 2', price: 160, category: 'Combo Meal' },
+  { name: 'Combo Meal 3', price: 175, category: 'Combo Meal' },
+  { name: 'Combo Meal 4', price: 155, category: 'Combo Meal' },
+  { name: 'Combo Meal 5', price: 180, category: 'Combo Meal' },
+  { name: 'Combo Meal 6', price: 155, category: 'Combo Meal' },
+  { name: 'Combo Meal 7', price: 190, category: 'Combo Meal' },
+  { name: 'Combo Meal 8', price: 180, category: 'Combo Meal' },
+
+  // FRAPPES
+  { name: 'Cappuccino Frappe Medium', price: 99, category: 'Frappes' },
+  { name: 'Cappuccino Frappe Large', price: 119, category: 'Frappes' },
+  { name: 'Strawberry Frappe Medium', price: 99, category: 'Frappes' },
+  { name: 'Strawberry Frappe Large', price: 119, category: 'Frappes' },
+  { name: 'Choco Kisses Frappe Medium', price: 99, category: 'Frappes' },
+  { name: 'Choco Kisses Frappe Large', price: 119, category: 'Frappes' },
+  { name: 'Rocky Road Frappe Medium', price: 99, category: 'Frappes' },
+  { name: 'Rocky Road Frappe Large', price: 119, category: 'Frappes' },
+  { name: 'Cookies n Cream Frappe Medium', price: 105, category: 'Frappes' },
+  { name: 'Cookies n Cream Frappe Large', price: 125, category: 'Frappes' },
+  { name: 'Choco Strawberry Frappe Medium', price: 99, category: 'Frappes' },
+  { name: 'Choco Strawberry Frappe Large', price: 119, category: 'Frappes' },
+
+  // SPECIAL FRAPPES
+  { name: 'Dark Choco Nutella Frappe Large', price: 140, category: 'Special Frappes' },
+  { name: 'Oreo Nutella Frappe Large', price: 150, category: 'Special Frappes' },
+  { name: 'Dark & White Frappe Large', price: 140, category: 'Special Frappes' },
+  { name: 'Ube Macapuno Frappe Large', price: 140, category: 'Special Frappes' },
+  { name: 'Ube Keso Frappe Large', price: 140, category: 'Special Frappes' },
+  { name: 'Matcha Frappe Large', price: 150, category: 'Special Frappes' },
+
+  // D' MANGO SPECIAL
+  { name: 'Mango Supreme Medium', price: 110, category: "D' Mango Special" },
+  { name: 'Mango Supreme Large', price: 125, category: "D' Mango Special" },
+  { name: 'Mango Extreme Medium', price: 115, category: "D' Mango Special" },
+  { name: 'Mango Extreme Large', price: 130, category: "D' Mango Special" },
+  { name: 'Mango Overload Medium', price: 120, category: "D' Mango Special" },
+  { name: 'Mango Overload Large', price: 140, category: "D' Mango Special" },
+
+  // D' MANGO SERIES
+  { name: 'Mango Graham Shake Medium', price: 95, category: "D' Mango Series" },
+  { name: 'Mango Graham Shake Large', price: 110, category: "D' Mango Series" },
+  { name: 'Mango Graham Caramel Medium', price: 105, category: "D' Mango Series" },
+  { name: 'Mango Graham Caramel Large', price: 115, category: "D' Mango Series" },
+  { name: 'Mango Graham with Oreo Medium', price: 105, category: "D' Mango Series" },
+  { name: 'Mango Graham with Oreo Large', price: 115, category: "D' Mango Series" },
+  { name: 'Mango Banana Graham Shake Medium', price: 115, category: "D' Mango Series" },
+  { name: 'Mango Banana Graham Shake Large', price: 125, category: "D' Mango Series" },
+
+  // LEMON SERIES
+  { name: 'Classic Lemon Medium', price: 65, category: 'Lemon Series' },
+  { name: 'Classic Lemon Large', price: 80, category: 'Lemon Series' },
+  { name: 'Honey Lemon Medium', price: 75, category: 'Lemon Series' },
+  { name: 'Honey Lemon Large', price: 90, category: 'Lemon Series' },
+  { name: 'Lemon with Yakult Medium', price: 80, category: 'Lemon Series' },
+  { name: 'Lemon with Yakult Large', price: 95, category: 'Lemon Series' },
+  { name: 'Lemon Cucumber Medium', price: 80, category: 'Lemon Series' },
+  { name: 'Lemon Cucumber Large', price: 95, category: 'Lemon Series' },
+  { name: 'Ginger Honey Lemon Medium', price: 85, category: 'Lemon Series' },
+  { name: 'Ginger Honey Lemon Large', price: 100, category: 'Lemon Series' },
+  { name: 'Strawberry Lemon Medium', price: 75, category: 'Lemon Series' },
+  { name: 'Strawberry Lemon Large', price: 90, category: 'Lemon Series' },
+  { name: 'Lychee Lemon Medium', price: 75, category: 'Lemon Series' },
+  { name: 'Lychee Lemon Large', price: 90, category: 'Lemon Series' },
+  { name: 'Mango Lemon Medium', price: 75, category: 'Lemon Series' },
+  { name: 'Mango Lemon Large', price: 90, category: 'Lemon Series' },
+
+  // FRUIT TEAS
+  { name: 'Green Apple Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Green Apple Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+  { name: 'Blueberry Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Blueberry Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+  { name: 'Strawberry Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Strawberry Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+  { name: 'Passion Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Passion Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+  { name: 'Mango Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Mango Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+  { name: 'Lychee Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Lychee Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+  { name: 'Kiwi Fruit Tea Medium', price: 75, category: 'Fruit Teas' },
+  { name: 'Kiwi Fruit Tea Large', price: 90, category: 'Fruit Teas' },
+
+  // HUNGRY MEAL BOX
+  { name: 'HMB1', price: 180, category: 'Hungry Meal Box' },
+  { name: 'HMB2', price: 220, category: 'Hungry Meal Box' },
+  { name: 'HMB3', price: 285, category: 'Hungry Meal Box' },
+
+  // HUNGRY PIZZAS
+  { name: 'Hawaiian Pizza 10"', price: 230, category: 'Hungry Pizzas' },
+  { name: 'Hawaiian Pizza 12"', price: 265, category: 'Hungry Pizzas' },
+  { name: 'Bacon Mushroom Pizza 10"', price: 235, category: 'Hungry Pizzas' },
+  { name: 'Bacon Mushroom Pizza 12"', price: 275, category: 'Hungry Pizzas' },
+  { name: 'Pepperoni Pizza 10"', price: 230, category: 'Hungry Pizzas' },
+  { name: 'Pepperoni Pizza 12"', price: 265, category: 'Hungry Pizzas' },
+  { name: 'Four Cheese Pizza 10"', price: 235, category: 'Hungry Pizzas' },
+  { name: 'Four Cheese Pizza 12"', price: 285, category: 'Hungry Pizzas' },
+  { name: 'Overload Pizza 10"', price: 265, category: 'Hungry Pizzas' },
+  { name: 'Overload Pizza 12"', price: 320, category: 'Hungry Pizzas' },
+
+  // CHICKEN WINGS
+  { name: 'Parmesan Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Parmesan Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Parmesan Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Parmesan Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Hickory BBQ Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Hickory BBQ Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Hickory BBQ Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Hickory BBQ Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Spicy Salted Egg Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Spicy Salted Egg Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Spicy Salted Egg Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Spicy Salted Egg Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Buffalo Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Buffalo Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Buffalo Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Buffalo Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Garlic Parmesan Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Garlic Parmesan Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Garlic Parmesan Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Garlic Parmesan Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Honey Lemon Glazed Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Honey Lemon Glazed Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Honey Lemon Glazed Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Honey Lemon Glazed Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Teriyaki Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Teriyaki Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Teriyaki Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Teriyaki Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Spicy BBQ Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Spicy BBQ Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Spicy BBQ Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Spicy BBQ Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Soy Garlic Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Soy Garlic Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Soy Garlic Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Soy Garlic Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Sweet & Sour Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Sweet & Sour Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Sweet & Sour Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Sweet & Sour Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Cheesy Cheese Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Cheesy Cheese Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Cheesy Cheese Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Cheesy Cheese Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Supery Cheesy Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Supery Cheesy Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Supery Cheesy Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Supery Cheesy Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Mango Habanero Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Mango Habanero Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Mango Habanero Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Mango Habanero Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  { name: 'Sriracha Wings with Rice 3pcs', price: 125, category: 'Chicken Wings' },
+  { name: 'Sriracha Wings w/o Rice 6pcs', price: 195, category: 'Chicken Wings' },
+  { name: 'Sriracha Wings w/o Rice 8pcs', price: 245, category: 'Chicken Wings' },
+  { name: 'Sriracha Wings w/o Rice 12pcs', price: 330, category: 'Chicken Wings' },
+
+  // CREAM CHEESE
+  { name: 'Winter Melon Cream Cheese Medium', price: 100, category: 'Cream Cheese' },
+  { name: 'Winter Melon Cream Cheese Large', price: 130, category: 'Cream Cheese' },
+  { name: 'Winter Melon Cream Cheese Grande', price: 150, category: 'Cream Cheese' },
+  { name: 'Taro Cream Cheese Medium', price: 100, category: 'Cream Cheese' },
+  { name: 'Taro Cream Cheese Large', price: 130, category: 'Cream Cheese' },
+  { name: 'Taro Cream Cheese Grande', price: 150, category: 'Cream Cheese' },
+  { name: 'Matcha Cream Cheese Medium', price: 105, category: 'Cream Cheese' },
+  { name: 'Matcha Cream Cheese Large', price: 135, category: 'Cream Cheese' },
+  { name: 'Matcha Cream Cheese Grande', price: 155, category: 'Cream Cheese' },
+  { name: 'Red Velvet Cream Cheese Medium', price: 100, category: 'Cream Cheese' },
+  { name: 'Red Velvet Cream Cheese Large', price: 130, category: 'Cream Cheese' },
+  { name: 'Red Velvet Cream Cheese Grande', price: 150, category: 'Cream Cheese' },
+  { name: "Oreo Cookies N' Cream Cheese Medium", price: 105, category: 'Cream Cheese' },
+  { name: "Oreo Cookies N' Cream Cheese Large", price: 135, category: 'Cream Cheese' },
+  { name: "Oreo Cookies N' Cream Cheese Grande", price: 155, category: 'Cream Cheese' },
+  { name: 'Matcha Oreo Cream Cheese Medium', price: 105, category: 'Cream Cheese' },
+  { name: 'Matcha Oreo Cream Cheese Large', price: 135, category: 'Cream Cheese' },
+  { name: 'Matcha Oreo Cream Cheese Grande', price: 155, category: 'Cream Cheese' },
+  { name: 'Dark Chocolate Cream Cheese Medium', price: 105, category: 'Cream Cheese' },
+  { name: 'Dark Chocolate Cream Cheese Large', price: 135, category: 'Cream Cheese' },
+  { name: 'Dark Chocolate Cream Cheese Grande', price: 155, category: 'Cream Cheese' },
+  { name: 'Chocolate Cream Cheese Medium', price: 100, category: 'Cream Cheese' },
+  { name: 'Chocolate Cream Cheese Large', price: 130, category: 'Cream Cheese' },
+  { name: 'Chocolate Cream Cheese Grande', price: 150, category: 'Cream Cheese' },
+  { name: 'Okinawa Cream Cheese Medium', price: 100, category: 'Cream Cheese' },
+  { name: 'Okinawa Cream Cheese Large', price: 130, category: 'Cream Cheese' },
+  { name: 'Okinawa Cream Cheese Grande', price: 150, category: 'Cream Cheese' },
+
+  // MILKTEA
+  { name: 'Winter Melon Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Winter Melon Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Winter Melon Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: 'Taro Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Taro Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Taro Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: 'Matcha Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Matcha Milk Tea Large', price: 100, category: 'Milk Tea' },
+  { name: 'Matcha Milk Tea Grande', price: 135, category: 'Milk Tea' },
+  { name: 'Red Velvet Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Red Velvet Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Red Velvet Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: 'Hokkaido Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Hokkaido Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Hokkaido Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: 'Chocolate Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Chocolate Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Chocolate Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: "Oreo Cookies N' Cream Milk Tea Medium", price: 85, category: 'Milk Tea' },
+  { name: "Oreo Cookies N' Cream Milk Tea Large", price: 100, category: 'Milk Tea' },
+  { name: "Oreo Cookies N' Cream Milk Tea Grande", price: 135, category: 'Milk Tea' },
+  { name: 'Matcha Oreo Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Matcha Oreo Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Matcha Oreo Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: 'Choco Matcha Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Choco Matcha Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Choco Matcha Milk Tea Grande', price: 129, category: 'Milk Tea' },
+  { name: 'Dark Chocolate Milk Tea Medium', price: 85, category: 'Milk Tea' },
+  { name: 'Dark Chocolate Milk Tea Large', price: 100, category: 'Milk Tea' },
+  { name: 'Dark Chocolate Milk Tea Grande', price: 135, category: 'Milk Tea' },
+  { name: 'Okinawa Milk Tea Medium', price: 80, category: 'Milk Tea' },
+  { name: 'Okinawa Milk Tea Large', price: 95, category: 'Milk Tea' },
+  { name: 'Okinawa Milk Tea Grande', price: 129, category: 'Milk Tea' },
+
+  // SINKERS
+  { name: 'Pearls Sinker', price: 25, category: 'Sinkers' },
+  { name: 'Cream Cheese Sinker', price: 35, category: 'Sinkers' },
+
+  // NACHOS
+  { name: 'Cheesy Beef Fries', price: 90, category: 'Nachos' },
+  { name: 'Cheesy Beef Nacho Fries', price: 90, category: 'Nachos' },
+  { name: 'Cheesy Beef Nachos', price: 90, category: 'Nachos' },
+
+  // FRIES
+  { name: 'Regular Fries Small', price: 60, category: 'Fries' },
+  { name: 'Regular Fries Medium', price: 75, category: 'Fries' },
+  { name: 'Regular Fries Large', price: 90, category: 'Fries' },
+  { name: 'Cheese Fries Small', price: 60, category: 'Fries' },
+  { name: 'Cheese Fries Medium', price: 75, category: 'Fries' },
+  { name: 'Cheese Fries Large', price: 90, category: 'Fries' },
+  { name: 'BBQ Fries Small', price: 60, category: 'Fries' },
+  { name: 'BBQ Fries Medium', price: 75, category: 'Fries' },
+  { name: 'BBQ Fries Large', price: 90, category: 'Fries' },
+  { name: 'Sourcream Fries Small', price: 60, category: 'Fries' },
+  { name: 'Sourcream Fries Medium', price: 75, category: 'Fries' },
+  { name: 'Sourcream Fries Large', price: 90, category: 'Fries' },
+  { name: 'Chili BBQ Fries Small', price: 60, category: 'Fries' },
+  { name: 'Chili BBQ Fries Medium', price: 75, category: 'Fries' },
+  { name: 'Chili BBQ Fries Large', price: 90, category: 'Fries' },
+
+  // SANDWICH
+  { name: 'Cheesy Beef Hotdog', price: 95, category: 'Sandwich' },
+  { name: 'Cheesy Bacon Hotdog', price: 95, category: 'Sandwich' },
+  { name: 'Cheesy Hungarian', price: 119, category: 'Sandwich' },
+
+  // CHICKEN WINGS BILAO
+  { name: 'Parmesan Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Parmesan Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Parmesan Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Hickory BBQ Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Hickory BBQ Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Hickory BBQ Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Spicy Salted Egg Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Spicy Salted Egg Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Spicy Salted Egg Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Buffalo Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Buffalo Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Buffalo Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Garlic Parmesan Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Garlic Parmesan Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Garlic Parmesan Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Honey Lemon Glazed Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Honey Lemon Glazed Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Honey Lemon Glazed Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Teriyaki Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Teriyaki Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Teriyaki Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Spicy BBQ Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Spicy BBQ Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Spicy BBQ Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Soy Garlic Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Soy Garlic Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Soy Garlic Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Sweet & Sour Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Sweet & Sour Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Sweet & Sour Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Cheesy Cheese Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Cheesy Cheese Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Cheesy Cheese Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Supery Cheesy Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Supery Cheesy Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Supery Cheesy Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Mango Habanero Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Mango Habanero Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Mango Habanero Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  { name: 'Sriracha Wings Bilao 24pcs', price: 639, category: 'Chicken Wings Bilao' },
+  { name: 'Sriracha Wings Bilao 32pcs', price: 839, category: 'Chicken Wings Bilao' },
+  { name: 'Sriracha Wings Bilao 40pcs', price: 1029, category: 'Chicken Wings Bilao' },
+
+  // PASTA
+  { name: 'Spaghetti Solo', price: 129, category: 'Pasta' },
+  { name: 'Spaghetti Platters', price: 289, category: 'Pasta' },
+  { name: 'Carbonara Solo', price: 139, category: 'Pasta' },
+  { name: 'Carbonara Platters', price: 329, category: 'Pasta' },
+
+  // ALL DAY BREAKFAST
+  { name: 'Bacon Silog', price: 119, category: 'All Day Breakfast' },
+  { name: 'Hungarian Silog', price: 129, category: 'All Day Breakfast' },
+  { name: 'Hotsilog', price: 109, category: 'All Day Breakfast' },
+  { name: 'Burger Steak', price: 129, category: 'All Day Breakfast' },
+  { name: 'Chicken Bites with Rice', price: 119, category: 'All Day Breakfast' }
+];
   const order = [];
 
   const topCart = document.getElementById('topCart');
@@ -1218,7 +1558,7 @@
   function generatePOText() {
     const now = new Date();
     const lines = [];
-    lines.push('THE HUNGRY BAR');
+    lines.push(STORE_NAME);
     lines.push('PURCHASE ORDER');
     lines.push('------------------------------');
 
