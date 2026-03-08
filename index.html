@@ -734,6 +734,59 @@
   }
 }
 
+.speak-fab{
+  position:fixed;
+  right:14px;
+  bottom:18px;
+  z-index:3200;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg, #f3c86a, #ffd98c);
+  color:#111;
+  font-weight:800;
+  font-size:14px;
+  box-shadow:0 18px 40px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+
+.speak-fab:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 22px 46px rgba(0,0,0,.42);
+}
+
+.speak-fab:active{
+  transform:scale(.98);
+}
+
+.speak-fab.listening{
+  background:linear-gradient(135deg, #ffb347, #ffcf70);
+  animation:voicePulse 1s ease-in-out infinite;
+}
+
+@keyframes voicePulse{
+  0%{ box-shadow:0 0 0 0 rgba(243,200,106,.40), 0 18px 40px rgba(0,0,0,.35); }
+  70%{ box-shadow:0 0 0 18px rgba(243,200,106,0), 0 18px 40px rgba(0,0,0,.35); }
+  100%{ box-shadow:0 0 0 0 rgba(243,200,106,0), 0 18px 40px rgba(0,0,0,.35); }
+}
+
+@media (max-width:860px){
+  .speak-fab{
+    right:10px;
+    bottom:14px;
+    padding:13px 16px;
+    font-size:13px;
+  }
+
+  .speak-fab span{
+    display:none;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -960,7 +1013,6 @@
       <p>Swipe down from top to open • swipe up to close</p>
     </div>
     <div class="tray-actions">
-      <button class="action-btn secondary" id="voiceBtn" type="button">🎤 Speak Order</button>
       <button class="action-btn" id="clearOrderBtn" type="button">Clear</button>
     </div>
   </div>
@@ -985,6 +1037,10 @@
     </div>
   </div>
 </aside>
+
+  <button class="speak-fab" id="voiceBtn" type="button" aria-label="Speak Order">
+  🎤 <span>Speak Order</span>
+</button>
 
   <script>
   const pages = [...document.querySelectorAll('.page')];
@@ -1908,7 +1964,8 @@ function parseVoiceOrder(text) {
 if (voiceBtn) {
   if (!SpeechRecognition) {
     voiceBtn.disabled = true;
-    voiceBtn.textContent = 'Voice not supported';
+voiceBtn.innerHTML = '🎤 <span>Voice not supported</span>';
+voiceBtn.style.opacity = '.6';
   } else {
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-PH';
@@ -1917,11 +1974,12 @@ if (voiceBtn) {
     recognition.maxAlternatives = 3;
 
     voiceBtn.addEventListener('click', () => {
-      try {
-        recognition.start();
-        voiceBtn.textContent = 'Listening...';
-      } catch (err) {}
-    });
+  try {
+    recognition.start();
+    voiceBtn.classList.add('listening');
+    voiceBtn.innerHTML = '🎤 <span>Listening...</span>';
+  } catch (err) {}
+});
 
     recognition.addEventListener('result', (event) => {
       const results = Array.from(event.results[0] || []);
@@ -1931,13 +1989,15 @@ if (voiceBtn) {
     });
 
     recognition.addEventListener('end', () => {
-      voiceBtn.textContent = '🎤 Speak Order';
-    });
+  voiceBtn.classList.remove('listening');
+  voiceBtn.innerHTML = '🎤 <span>Speak Order</span>';
+});
 
     recognition.addEventListener('error', (event) => {
-      voiceBtn.textContent = '🎤 Speak Order';
-      alert('Voice recognition failed: ' + (event.error || 'unknown error'));
-    });
+  voiceBtn.classList.remove('listening');
+  voiceBtn.innerHTML = '🎤 <span>Speak Order</span>';
+  alert('Voice recognition failed: ' + (event.error || 'unknown error'));
+});
   }
 }
 
