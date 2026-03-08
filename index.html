@@ -2567,6 +2567,22 @@ function buildAliases(item) {
     aliases.add('chicken rice');
   }
 
+  if (base.includes('bacon silog')) {
+  aliases.add('baconsilog');
+  aliases.add('silog bacon');
+}
+
+if (base.includes('hungarian silog')) {
+  aliases.add('hungariansilog');
+  aliases.add('silog hungarian');
+}
+
+if (base.includes('hotsilog')) {
+  aliases.add('hot silog');
+  aliases.add('hotdog silog');
+  aliases.add('silog hotdog');
+}
+
   return [...aliases].filter(Boolean);
 }
 
@@ -2654,17 +2670,22 @@ function normalizeVoiceTranscript(text) {
     [/\bsi lug\b/g, 'silog'],
     [/\bsee lug\b/g, 'silog'],
     [/\bsilogs\b/g, 'silog'],
+    [/\bsilug\b/g, 'silog'],
+    [/\bsylog\b/g, 'silog'],
 
     [/\bhot silog\b/g, 'hotsilog'],
     [/\bhot si log\b/g, 'hotsilog'],
     [/\bhat silog\b/g, 'hotsilog'],
     [/\bhotdog silog\b/g, 'hotsilog'],
+    [/\bhot سیlog\b/g, 'hotsilog'],
 
     [/\bbacon silog\b/g, 'bacon silog'],
     [/\bbacon si log\b/g, 'bacon silog'],
+    [/\bbaconsilog\b/g, 'bacon silog'],
 
     [/\bhungarian silog\b/g, 'hungarian silog'],
     [/\bhungarian si log\b/g, 'hungarian silog'],
+    [/\bhungariansilog\b/g, 'hungarian silog'],
 
     // common menu mishears
     [/\bmilk t\b/g, 'milk tea'],
