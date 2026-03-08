@@ -1658,59 +1658,288 @@ const MENU_ITEMS = [
   // voice order
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  function parseVoiceOrder(text) {
-    const clean = text.toLowerCase().replace(/,/g, ' ');
-    let matchedAny = false;
+function normalizeText(text) {
+  return String(text || '')
+    .toLowerCase()
+    .replace(/[“”"]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/w\/o/g, 'without')
+    .replace(/w\//g, 'with')
+    .replace(/pcs?/g, ' pcs ')
+    .replace(/["]/g, ' inch ')
+    .replace(/-/g, ' ')
+    .replace(/[.,]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
-    MENU_ITEMS.forEach(item => {
-      const escaped = item.name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp('(\\d+)?\\s*' + escaped, 'i');
-      const match = clean.match(regex);
+function wordsToNumber(word) {
+  const map = {
+    'zero': 0,
+    'one': 1,
+    'isa': 1,
+    'isang': 1,
+    'two': 2,
+    'dalawa': 2,
+    'dalawang': 2,
+    'three': 3,
+    'tatlo': 3,
+    'tatlong': 3,
+    'four': 4,
+    'apat': 4,
+    'apat na': 4,
+    'five': 5,
+    'lima': 5,
+    'six': 6,
+    'anim': 6,
+    'seven': 7,
+    'pito': 7,
+    'eight': 8,
+    'walo': 8,
+    'nine': 9,
+    'siyam': 9,
+    'ten': 10,
+    'sampu': 10
+  };
+  return map[word] ?? null;
+}
 
-      if (match) {
-        const qty = Number(match[1] || 1);
-        addItemByName(item.name, qty);
-        matchedAny = true;
-      }
-    });
+function extractQuantity(text) {
+  const directNum = text.match(/\b(\d+)\b/);
+  if (directNum) return Number(directNum[1]);
 
-    if (!matchedAny) {
-      alert('No matching menu item found from voice input.');
-    } else {
-      openCart();
+  const words = [
+    'isang', 'isa',
+    'dalawang', 'dalawa',
+    'tatlong', 'tatlo',
+    'apat na', 'apat',
+    'lima', 'anim', 'pito', 'walo', 'siyam', 'sampu',
+    'one', 'two', 'three', 'four', 'five',
+    'six', 'seven', 'eight', 'nine', 'ten'
+  ];
+
+  for (const w of words) {
+    if (text.includes(w)) {
+      const n = wordsToNumber(w);
+      if (n != null) return n;
     }
   }
 
-  if (voiceBtn) {
-    if (!SpeechRecognition) {
-      voiceBtn.disabled = true;
-      voiceBtn.textContent = 'Voice not supported';
-    } else {
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'en-PH';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
+  return 1;
+}
 
-      voiceBtn.addEventListener('click', () => {
+function extractAction(text) {
+  if (/\b(remove|delete|minus|bawas|tanggal|tanggalin)\b/.test(text)) return 'remove';
+  return 'add';
+}
+
+function extractSize(text) {
+  if (/\bgrande\b/.test(text)) return 'grande';
+  if (/\blarge\b/.test(text)) return 'large';
+  if (/\bmedium\b/.test(text)) return 'medium';
+  if (/\bsmall\b/.test(text)) return 'small';
+  return '';
+}
+
+function extractPieces(text) {
+  const m = text.match(/\b(3|6|8|12|24|32|40)\s*pcs?\b/);
+  return m ? m[1] + 'pcs' : '';
+}
+
+function extractRiceMode(text) {
+  if (/\b(without rice|no rice|walang rice|w o rice|wo rice)\b/.test(text)) return 'without rice';
+  if (/\b(with rice|may rice)\b/.test(text)) return 'with rice';
+  return '';
+}
+
+function buildAliases(item) {
+  const base = normalizeText(item.name);
+  const aliases = new Set([base]);
+
+  // common cleanup aliases
+  aliases.add(base.replace(/\bmilk tea\b/g, 'milktea'));
+  aliases.add(base.replace(/\bfrappe\b/g, ''));
+  aliases.add(base.replace(/\bcream cheese\b/g, ''));
+  aliases.add(base.replace(/\bwings\b/g, ''));
+  aliases.add(base.replace(/\bpizza\b/g, ''));
+  aliases.add(base.replace(/\bquarter pound\b/g, ''));
+  aliases.add(base.replace(/\s+/g, ' ').trim());
+
+  // extra shortcuts
+  if (base.includes('hungry meal box')) {
+    aliases.add(base.replace('hungry meal box', '').trim());
+  }
+
+  if (/\bhmb\d+\b/.test(base)) aliases.add(base);
+
+  if (base.includes('winter melon')) aliases.add('winter melon');
+  if (base.includes('matcha oreo')) aliases.add('matcha oreo');
+  if (base.includes('dark chocolate')) aliases.add('dark chocolate');
+  if (base.includes('oreo')) aliases.add('oreo');
+  if (base.includes('buffalo')) aliases.add('buffalo');
+  if (base.includes('parmesan')) aliases.add('parmesan');
+  if (base.includes('carbonara')) aliases.add('carbonara');
+  if (base.includes('spaghetti')) aliases.add('spaghetti');
+  if (base.includes('fries')) aliases.add(base.replace(/\bsmall\b|\bmedium\b|\blarge\b/g, '').trim());
+  if (base.includes('fruit tea')) aliases.add(base.replace('fruit tea', '').trim());
+  if (base.includes('milk tea')) aliases.add(base.replace('milk tea', '').trim());
+  if (base.includes('cream cheese')) aliases.add(base.replace('cream cheese', '').trim());
+
+  return [...aliases].filter(Boolean);
+}
+
+function scoreMenuItem(item, spoken) {
+  const itemText = normalizeText(item.name);
+  const aliases = buildAliases(item);
+
+  let score = 0;
+
+  for (const alias of aliases) {
+    if (!alias) continue;
+
+    if (spoken === alias) score += 120;
+    if (spoken.includes(alias)) score += Math.min(80, alias.length * 3);
+    if (alias.includes(spoken) && spoken.length >= 4) score += 35;
+  }
+
+  const size = extractSize(spoken);
+  if (size && itemText.includes(size)) score += 25;
+  if (size && !itemText.includes(size)) score -= 12;
+
+  const pcs = extractPieces(spoken);
+  if (pcs && itemText.includes(pcs)) score += 25;
+  if (pcs && !itemText.includes(pcs)) score -= 10;
+
+  const riceMode = extractRiceMode(spoken);
+  if (riceMode === 'with rice' && itemText.includes('with rice')) score += 25;
+  if (riceMode === 'with rice' && itemText.includes('without rice')) score -= 15;
+  if (riceMode === 'without rice' && itemText.includes('without rice')) score += 25;
+  if (riceMode === 'without rice' && itemText.includes('with rice')) score -= 15;
+
+  // reward important tokens
+  const importantTokens = spoken.split(' ').filter(w =>
+    w.length > 2 &&
+    !['add','remove','delete','minus','medium','large','grande','small','with','without','rice','pcs','piece','pieces','and'].includes(w) &&
+    !/^\d+$/.test(w)
+  );
+
+  for (const token of importantTokens) {
+    if (itemText.includes(token)) score += 6;
+  }
+
+  return score;
+}
+
+function findBestMenuMatch(spoken) {
+  const ranked = MENU_ITEMS
+    .map(item => ({ item, score: scoreMenuItem(item, spoken) }))
+    .sort((a, b) => b.score - a.score);
+
+  if (!ranked.length) return null;
+  if (ranked[0].score < 18) return null;
+
+  return ranked[0].item;
+}
+
+function splitVoiceCommands(text) {
+  return normalizeText(text)
+    .split(/\b(?: and | then | pati | saka | plus )\b/g)
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function addMatchedItem(itemName, qty) {
+  addItemByName(itemName, qty);
+}
+
+function removeMatchedItem(itemName, qty) {
+  const existing = order.find(x => x.name === itemName);
+  if (!existing) return false;
+  changeQty(itemName, -qty);
+  return true;
+}
+
+function parseVoiceOrder(text) {
+  const raw = String(text || '').trim();
+  const parts = splitVoiceCommands(raw);
+
+  if (!parts.length) {
+    alert('No voice command detected.');
+    return;
+  }
+
+  let successCount = 0;
+  const misses = [];
+
+  for (const part of parts) {
+    const action = extractAction(part);
+    const qty = extractQuantity(part);
+    const bestItem = findBestMenuMatch(part);
+
+    if (!bestItem) {
+      misses.push(part);
+      continue;
+    }
+
+    if (action === 'remove') {
+      const removed = removeMatchedItem(bestItem.name, qty);
+      if (removed) successCount++;
+      else misses.push(part);
+    } else {
+      addMatchedItem(bestItem.name, qty);
+      successCount++;
+    }
+  }
+
+  if (successCount > 0) {
+    openCart();
+  }
+
+  if (successCount === 0) {
+    alert('No matching menu item found from voice input.');
+    return;
+  }
+
+  if (misses.length) {
+    console.log('Unmatched voice parts:', misses);
+  }
+}
+
+if (voiceBtn) {
+  if (!SpeechRecognition) {
+    voiceBtn.disabled = true;
+    voiceBtn.textContent = 'Voice not supported';
+  } else {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-PH';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 3;
+
+    voiceBtn.addEventListener('click', () => {
+      try {
         recognition.start();
         voiceBtn.textContent = 'Listening...';
-      });
+      } catch (err) {}
+    });
 
-      recognition.addEventListener('result', (event) => {
-        const text = event.results[0][0].transcript || '';
-        parseVoiceOrder(text);
-      });
+    recognition.addEventListener('result', (event) => {
+      const results = Array.from(event.results[0] || []);
+      const transcript = results.map(r => r.transcript).join(' ') || '';
+      console.log('Voice heard:', transcript);
+      parseVoiceOrder(transcript);
+    });
 
-      recognition.addEventListener('end', () => {
-        voiceBtn.textContent = '🎤 Speak Order';
-      });
+    recognition.addEventListener('end', () => {
+      voiceBtn.textContent = '🎤 Speak Order';
+    });
 
-      recognition.addEventListener('error', () => {
-        voiceBtn.textContent = '🎤 Speak Order';
-        alert('Voice recognition failed.');
-      });
-    }
+    recognition.addEventListener('error', (event) => {
+      voiceBtn.textContent = '🎤 Speak Order';
+      alert('Voice recognition failed: ' + (event.error || 'unknown error'));
+    });
   }
+}
 
   renderQuickMenu();
   renderOrder();
