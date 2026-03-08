@@ -471,6 +471,269 @@
     font-size:clamp(15px,4vw,20px);
   }
 }
+
+/* ===== FLOATING TOP CART ===== */
+.cart-fab{
+  position:fixed;
+  top:14px;
+  right:14px;
+  z-index:3000;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 16px;
+  border-radius:999px;
+  background:rgba(20,20,20,.88);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 14px 34px rgba(0,0,0,.35);
+  backdrop-filter:blur(12px);
+  font-weight:700;
+  cursor:pointer;
+  user-select:none;
+}
+
+.cart-badge{
+  min-width:24px;
+  height:24px;
+  padding:0 7px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:var(--gold);
+  color:#111;
+  font-size:12px;
+  font-weight:900;
+}
+
+.top-cart{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:2999;
+  height:min(82dvh, 760px);
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  background:rgba(18,18,18,.97);
+  border-bottom-left-radius:26px;
+  border-bottom-right-radius:26px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 24px 60px rgba(0,0,0,.45);
+  backdrop-filter:blur(16px);
+  transform:translateY(-102%);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+}
+
+.top-cart.open{
+  transform:translateY(0);
+}
+
+.top-cart-handle{
+  width:72px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.22);
+  margin:2px auto 6px;
+}
+
+.tray-head h3{
+  margin:0;
+  font-size:22px;
+}
+
+.tray-head p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.tray-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.action-btn{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  padding:12px 14px;
+  border-radius:14px;
+  font-weight:700;
+  background:var(--gold);
+  color:#111;
+}
+
+.action-btn.secondary{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.quick-menu{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  overflow:auto;
+  max-height:210px;
+  padding-right:4px;
+}
+
+.quick-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.quick-item-info{
+  min-width:0;
+}
+
+.quick-item-name{
+  font-weight:700;
+  font-size:14px;
+}
+
+.quick-item-price{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.quick-add{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  padding:10px 12px;
+  border-radius:12px;
+  font-weight:700;
+  background:var(--gold);
+  color:#111;
+  flex:0 0 auto;
+}
+
+.tray-body{
+  flex:1;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding-right:4px;
+}
+
+.empty-order{
+  color:var(--muted);
+  text-align:center;
+  padding:20px 10px;
+}
+
+.order-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.order-name{
+  font-weight:700;
+  font-size:14px;
+}
+
+.order-sub{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.qty-btn{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:18px;
+}
+
+.qty-num{
+  min-width:24px;
+  text-align:center;
+  font-weight:700;
+}
+
+.tray-foot{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.tray-total{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:16px;
+}
+
+.po-output{
+  width:100%;
+  min-height:140px;
+  resize:vertical;
+  border:none;
+  outline:none;
+  border-radius:16px;
+  padding:14px;
+  background:#0f0f0f;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  font-family:monospace;
+}
+
+.tray-buttons{
+  display:flex;
+  gap:8px;
+}
+
+.tray-buttons .action-btn{
+  flex:1;
+}
+
+@media (max-width:860px){
+  .cart-fab{
+    top:10px;
+    right:10px;
+    padding:10px 14px;
+  }
+
+  .top-cart{
+    height:78dvh;
+    padding:12px;
+  }
+
+  .po-output{
+    min-height:110px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -683,6 +946,46 @@
     </div>
   </div>
 
+  <div class="cart-fab" id="cartFab">
+  🛒 Cart
+  <span class="cart-badge" id="cartCount">0</span>
+</div>
+
+<aside class="top-cart" id="topCart">
+  <div class="top-cart-handle"></div>
+
+  <div class="tray-head">
+    <div>
+      <h3>Order Cart</h3>
+      <p>Swipe down from top to open • swipe up to close</p>
+    </div>
+    <div class="tray-actions">
+      <button class="action-btn secondary" id="voiceBtn" type="button">🎤 Speak Order</button>
+      <button class="action-btn" id="clearOrderBtn" type="button">Clear</button>
+    </div>
+  </div>
+
+  <div class="quick-menu" id="quickMenu"></div>
+
+  <div class="tray-body" id="trayBody">
+    <div class="empty-order" id="emptyOrder">No items yet.</div>
+  </div>
+
+  <div class="tray-foot">
+    <div class="tray-total">
+      <span>Total</span>
+      <strong id="trayTotal">₱0</strong>
+    </div>
+
+    <textarea id="poOutput" class="po-output" placeholder="Generated purchase order will appear here..."></textarea>
+
+    <div class="tray-buttons">
+      <button class="action-btn" id="generatePoBtn" type="button">Generate PO</button>
+      <button class="action-btn secondary" id="copyPoBtn" type="button">Copy PO</button>
+    </div>
+  </div>
+</aside>
+
   <script>
   const pages = [...document.querySelectorAll('.page')];
   const prevBtn = document.getElementById('prevBtn');
@@ -782,6 +1085,295 @@
   });
 
   updateBook();
+
+    // =========================
+  // ORDER CART + PO + VOICE
+  // =========================
+  const MENU_ITEMS = [
+    { name: 'Classic Burger', price: 120 },
+    { name: 'Cheese Burger', price: 135 },
+    { name: 'Combo Meal A', price: 199 },
+    { name: 'Fries', price: 80 },
+    { name: 'Nachos', price: 95 },
+    { name: 'Chicken Wings', price: 220 },
+    { name: 'Carbonara Pasta', price: 180 },
+    { name: 'Mango Graham Frappe', price: 140 },
+    { name: 'Milk Tea', price: 95 },
+    { name: 'Fruit Tea', price: 90 }
+  ];
+
+  const order = [];
+
+  const topCart = document.getElementById('topCart');
+  const cartFab = document.getElementById('cartFab');
+  const cartCount = document.getElementById('cartCount');
+  const quickMenu = document.getElementById('quickMenu');
+  const trayBody = document.getElementById('trayBody');
+  const emptyOrder = document.getElementById('emptyOrder');
+  const trayTotal = document.getElementById('trayTotal');
+  const poOutput = document.getElementById('poOutput');
+  const generatePoBtn = document.getElementById('generatePoBtn');
+  const copyPoBtn = document.getElementById('copyPoBtn');
+  const clearOrderBtn = document.getElementById('clearOrderBtn');
+  const voiceBtn = document.getElementById('voiceBtn');
+
+  function openCart() {
+    topCart.classList.add('open');
+  }
+
+  function closeCart() {
+    topCart.classList.remove('open');
+  }
+
+  function toggleCart() {
+    topCart.classList.toggle('open');
+  }
+
+  function peso(n) {
+    return '₱' + Number(n || 0).toLocaleString('en-PH', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+  }
+
+  function renderQuickMenu() {
+    quickMenu.innerHTML = MENU_ITEMS.map(item => `
+      <div class="quick-item">
+        <div class="quick-item-info">
+          <div class="quick-item-name">${item.name}</div>
+          <div class="quick-item-price">${peso(item.price)}</div>
+        </div>
+        <button class="quick-add" type="button" data-add="${item.name}">Add</button>
+      </div>
+    `).join('');
+  }
+
+  function addItemByName(name, qty = 1) {
+    const foundMenu = MENU_ITEMS.find(x => x.name.toLowerCase() === name.toLowerCase());
+    if (!foundMenu) return false;
+
+    const foundOrder = order.find(x => x.name === foundMenu.name);
+    if (foundOrder) {
+      foundOrder.qty += qty;
+    } else {
+      order.push({
+        name: foundMenu.name,
+        price: foundMenu.price,
+        qty
+      });
+    }
+
+    renderOrder();
+    return true;
+  }
+
+  function changeQty(name, delta) {
+    const item = order.find(x => x.name === name);
+    if (!item) return;
+
+    item.qty += delta;
+
+    if (item.qty <= 0) {
+      const idx = order.findIndex(x => x.name === name);
+      if (idx >= 0) order.splice(idx, 1);
+    }
+
+    renderOrder();
+  }
+
+  function getTotal() {
+    return order.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  }
+
+  function renderOrder() {
+    const totalCount = order.reduce((sum, item) => sum + item.qty, 0);
+    cartCount.textContent = totalCount;
+
+    if (!order.length) {
+      emptyOrder.style.display = 'block';
+      trayBody.innerHTML = '';
+      trayBody.appendChild(emptyOrder);
+      trayTotal.textContent = peso(0);
+      return;
+    }
+
+    emptyOrder.style.display = 'none';
+    trayBody.innerHTML = order.map(item => `
+      <div class="order-row">
+        <div>
+          <div class="order-name">${item.name}</div>
+          <div class="order-sub">${peso(item.price)} each • ${peso(item.price * item.qty)}</div>
+        </div>
+        <div class="qty-box">
+          <button class="qty-btn" type="button" data-dec="${item.name}">−</button>
+          <div class="qty-num">${item.qty}</div>
+          <button class="qty-btn" type="button" data-inc="${item.name}">+</button>
+        </div>
+      </div>
+    `).join('');
+
+    trayTotal.textContent = peso(getTotal());
+  }
+
+  function generatePOText() {
+    const now = new Date();
+    const lines = [];
+    lines.push('THE HUNGRY BAR');
+    lines.push('PURCHASE ORDER');
+    lines.push('------------------------------');
+
+    if (!order.length) {
+      lines.push('No items selected');
+    } else {
+      order.forEach(item => {
+        lines.push(`${item.qty} x ${item.name} - ${peso(item.price * item.qty)}`);
+      });
+      lines.push('------------------------------');
+      lines.push(`TOTAL: ${peso(getTotal())}`);
+    }
+
+    lines.push('------------------------------');
+    lines.push('Customer: Walk-in');
+    lines.push(`Date: ${now.toLocaleDateString('en-PH')} ${now.toLocaleTimeString('en-PH')}`);
+
+    return lines.join('\n');
+  }
+
+  if (cartFab) {
+    cartFab.addEventListener('click', toggleCart);
+  }
+
+  quickMenu.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-add]');
+    if (!btn) return;
+
+    addItemByName(btn.dataset.add, 1);
+    openCart();
+  });
+
+  trayBody.addEventListener('click', (e) => {
+    const inc = e.target.closest('[data-inc]');
+    const dec = e.target.closest('[data-dec]');
+
+    if (inc) changeQty(inc.dataset.inc, 1);
+    if (dec) changeQty(dec.dataset.dec, -1);
+  });
+
+  generatePoBtn.addEventListener('click', () => {
+    poOutput.value = generatePOText();
+    openCart();
+  });
+
+  copyPoBtn.addEventListener('click', async () => {
+    try {
+      if (!poOutput.value.trim()) {
+        poOutput.value = generatePOText();
+      }
+      await navigator.clipboard.writeText(poOutput.value);
+      copyPoBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyPoBtn.textContent = 'Copy PO';
+      }, 1200);
+    } catch (err) {
+      alert('Copy failed. Please copy manually.');
+    }
+  });
+
+  clearOrderBtn.addEventListener('click', () => {
+    order.length = 0;
+    poOutput.value = '';
+    renderOrder();
+  });
+
+  // swipe down from top = open
+  // swipe up while cart open = close
+  let topStartY = 0;
+  let topStartX = 0;
+  let topTouching = false;
+
+  window.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    topStartY = t.clientY;
+    topStartX = t.clientX;
+    topTouching = true;
+  }, { passive: true });
+
+  window.addEventListener('touchend', (e) => {
+    if (!topTouching) return;
+
+    const t = e.changedTouches[0];
+    const dy = t.clientY - topStartY;
+    const dx = t.clientX - topStartX;
+    topTouching = false;
+
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 70) {
+      if (topStartY < 80 && dy > 0) {
+        openCart();
+      } else if (topCart.classList.contains('open') && dy < 0) {
+        closeCart();
+      }
+    }
+  }, { passive: true });
+
+  // voice order
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function parseVoiceOrder(text) {
+    const clean = text.toLowerCase().replace(/,/g, ' ');
+    let matchedAny = false;
+
+    MENU_ITEMS.forEach(item => {
+      const escaped = item.name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp('(\\d+)?\\s*' + escaped, 'i');
+      const match = clean.match(regex);
+
+      if (match) {
+        const qty = Number(match[1] || 1);
+        addItemByName(item.name, qty);
+        matchedAny = true;
+      }
+    });
+
+    if (!matchedAny) {
+      alert('No matching menu item found from voice input.');
+    } else {
+      openCart();
+    }
+  }
+
+  if (voiceBtn) {
+    if (!SpeechRecognition) {
+      voiceBtn.disabled = true;
+      voiceBtn.textContent = 'Voice not supported';
+    } else {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-PH';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      voiceBtn.addEventListener('click', () => {
+        recognition.start();
+        voiceBtn.textContent = 'Listening...';
+      });
+
+      recognition.addEventListener('result', (event) => {
+        const text = event.results[0][0].transcript || '';
+        parseVoiceOrder(text);
+      });
+
+      recognition.addEventListener('end', () => {
+        voiceBtn.textContent = '🎤 Speak Order';
+      });
+
+      recognition.addEventListener('error', () => {
+        voiceBtn.textContent = '🎤 Speak Order';
+        alert('Voice recognition failed.');
+      });
+    }
+  }
+
+  renderQuickMenu();
+  renderOrder();
 </script>
 </body>
 </html>
