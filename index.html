@@ -83,28 +83,30 @@
       text-align:right;
     }
 
-    .book-stage{
-  width:100vw;
-  height:100dvh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    .book-shell{
   position:relative;
+  width:min(88vw, 620px);
+  height:min(90dvh, 920px);
+  aspect-ratio:3 / 4.3;
+  perspective:2200px;
+  touch-action:pan-y;
+  user-select:none;
+  margin:0 auto;
 }
 
-    .nav-btn{
+   .nav-btn{
   appearance:none;
   border:none;
   cursor:pointer;
   width:58px;
   height:58px;
   border-radius:50%;
-  background:rgba(255,255,255,.10);
+  background:rgba(255,255,255,.08);
   color:white;
   font-size:30px;
   font-weight:700;
   box-shadow:0 18px 40px rgba(0,0,0,.35);
-  transition:background .2s ease, opacity .2s ease;
+  transition:transform .2s ease, background .2s ease, opacity .2s ease;
   backdrop-filter:blur(8px);
   position:absolute;
   top:50%;
@@ -113,16 +115,18 @@
 }
 
 .nav-btn:hover{
-  background:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.16);
+  transform:translateY(-50%) scale(1.05);
 }
 
 .nav-btn:disabled{
   opacity:.35;
   cursor:not-allowed;
+  transform:translateY(-50%);
 }
 
-#prevBtn{ left:18px; }
-#nextBtn{ right:18px; }
+#prevBtn{ left:14px; }
+#nextBtn{ right:14px; }
    
     .book-shell{
   position:relative;
@@ -135,7 +139,15 @@
 }
 
     .book-shadow{
-  display:none;
+  position:absolute;
+  left:6%;
+  right:6%;
+  bottom:-10px;
+  height:34px;
+  border-radius:50%;
+  filter:blur(28px);
+  background:rgba(0,0,0,.55);
+  pointer-events:none;
 }
 
     .book{
@@ -164,10 +176,12 @@
   inset:0;
   backface-visibility:hidden;
   overflow:hidden;
-  border-radius:0;
-  box-shadow:none;
+  border-radius:28px;
+  box-shadow:
+    0 30px 70px rgba(0,0,0,.55),
+    0 10px 24px rgba(0,0,0,.28);
   background:#101010;
-  border:none;
+  border:1px solid rgba(255,255,255,.08);
 }
 
     .page-front::after,
@@ -396,11 +410,7 @@
 
     @media (max-width:860px){
   .book-stage{
-    width:100vw;
-    height:100dvh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    padding:14px;
   }
 
   .nav-btn{
@@ -408,8 +418,13 @@
   }
 
   .book-shell{
-    width:100vw;
-    height:100dvh;
+    width:min(94vw, 420px);
+    height:min(84dvh, 760px);
+    aspect-ratio:3 / 4.5;
+  }
+
+  .page-face{
+    border-radius:22px;
   }
 
   .cover-logo{
@@ -419,12 +434,12 @@
   }
 
   .cover-main h2{
-    font-size:clamp(40px,14vw,82px);
+    font-size:clamp(32px,12vw,60px);
   }
 
   .cover-main p{
     max-width:none;
-    font-size:clamp(16px,4vw,22px);
+    font-size:clamp(15px,4vw,20px);
   }
 }
   </style>
