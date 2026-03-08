@@ -1032,7 +1032,6 @@
     <textarea id="poOutput" class="po-output" placeholder="Generated purchase order will appear here..."></textarea>
 
     <div class="tray-buttons">
-      <button class="action-btn" id="generatePoBtn" type="button">Generate PO</button>
       <button class="action-btn secondary" id="copyPoBtn" type="button">Copy PO</button>
     </div>
   </div>
@@ -1508,7 +1507,6 @@ const MENU_ITEMS = [
   const emptyOrder = document.getElementById('emptyOrder');
   const trayTotal = document.getElementById('trayTotal');
   const poOutput = document.getElementById('poOutput');
-  const generatePoBtn = document.getElementById('generatePoBtn');
   const copyPoBtn = document.getElementById('copyPoBtn');
   const clearOrderBtn = document.getElementById('clearOrderBtn');
   const voiceBtn = document.getElementById('voiceBtn');
@@ -1609,6 +1607,7 @@ const MENU_ITEMS = [
     `).join('');
 
     trayTotal.textContent = peso(getTotal());
+    refreshPOOutput();
   }
 
   function generatePOText() {
@@ -1655,11 +1654,6 @@ const MENU_ITEMS = [
     if (dec) changeQty(dec.dataset.dec, -1);
   });
 
-  generatePoBtn.addEventListener('click', () => {
-    poOutput.value = generatePOText();
-    openCart();
-  });
-
   copyPoBtn.addEventListener('click', async () => {
     try {
       if (!poOutput.value.trim()) {
@@ -1674,6 +1668,10 @@ const MENU_ITEMS = [
       alert('Copy failed. Please copy manually.');
     }
   });
+
+  function refreshPOOutput() {
+  poOutput.value = generatePOText();
+}
 
   clearOrderBtn.addEventListener('click', () => {
     order.length = 0;
