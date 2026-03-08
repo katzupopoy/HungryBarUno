@@ -451,7 +451,7 @@ body::before{
 
     @media (max-width:860px){
   .book-stage{
-    padding:14px;
+    padding:0;
   }
 
   .nav-btn{
@@ -459,9 +459,12 @@ body::before{
   }
 
   .book-shell{
-    width:min(94vw, 420px);
-    height:min(84dvh, 760px);
-    aspect-ratio:3 / 4.5;
+    width:calc(100vw - 10px);
+    height:calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 18px);
+    max-width:100vw;
+    max-height:100dvh;
+    aspect-ratio:auto;
+    margin:0 auto;
   }
 
   .page-face{
@@ -1145,11 +1148,14 @@ body::before{
 
 @media (max-width:860px){
   .app{
-    padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 110px);
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding:0;
+    padding-bottom:0;
   }
 
   .cover-content{
-    padding-bottom:calc(24px + env(safe-area-inset-bottom, 0px) + 50px);
+    padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px) + 58px);
   }
 }
 
