@@ -771,8 +771,12 @@
     font-size:13px;
   }
 
-  .speak-fab span{
+  .speak-fab .speak-label{
     display:none;
+  }
+
+  .speak-fab.listening .speak-label{
+    display:inline-block;
   }
 }
 
@@ -1126,6 +1130,44 @@
   }
 }
 
+.speak-fab{
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+.speak-fab .speak-label{
+  display:inline-block;
+  transition:transform .22s ease, opacity .22s ease;
+}
+
+.speak-fab.listening{
+  min-width:190px;
+  justify-content:center;
+}
+
+.speak-fab.listening .speak-label{
+  animation:speakTextPop .9s ease-in-out infinite alternate;
+}
+
+.speak-fab .mic-icon{
+  display:inline-block;
+  transition:transform .2s ease;
+}
+
+.speak-fab.listening .mic-icon{
+  animation:micBounce .8s ease-in-out infinite;
+}
+
+@keyframes micBounce{
+  0%{ transform:scale(1) translateY(0); }
+  50%{ transform:scale(1.08) translateY(-1px); }
+  100%{ transform:scale(1) translateY(0); }
+}
+
+@keyframes speakTextPop{
+  0%{ opacity:.88; transform:translateY(0); }
+  100%{ opacity:1; transform:translateY(-1px); }
+}
   </style>
 </head>
 <body>
@@ -1384,7 +1426,8 @@
 </aside>
 
   <button class="speak-fab" id="voiceBtn" type="button" aria-label="Speak Order">
-  🎤 <span>Speak Order</span>
+  <span class="mic-icon">🎤</span>
+  <span class="speak-label">Speak Order</span>
 </button>
 
 <button class="search-fab" id="searchFab" type="button" aria-label="Search Order">
@@ -2467,7 +2510,7 @@ voiceBtn.style.opacity = '.6';
   try {
     recognition.start();
     voiceBtn.classList.add('listening');
-    voiceBtn.innerHTML = '🎤 <span>Listening...</span>';
+    voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Say your order now</span>';
   } catch (err) {}
 });
 
@@ -2480,12 +2523,12 @@ voiceBtn.style.opacity = '.6';
 
     recognition.addEventListener('end', () => {
   voiceBtn.classList.remove('listening');
-  voiceBtn.innerHTML = '🎤 <span>Speak Order</span>';
+  voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
 });
 
     recognition.addEventListener('error', (event) => {
   voiceBtn.classList.remove('listening');
-  voiceBtn.innerHTML = '🎤 <span>Speak Order</span>';
+  voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
   alert('Voice recognition failed: ' + (event.error || 'unknown error'));
 });
   }
