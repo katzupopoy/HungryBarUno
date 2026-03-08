@@ -1781,18 +1781,20 @@ body::before{
   }
 
   function next() {
-    if (current < logicalPages - 1) {
-      current++;
-      updateBook();
-    }
+  if (current < logicalPages - 1) {
+    current++;
+    playPaperFlipSynth();
+    updateBook();
   }
+}
 
-  function prev() {
-    if (current > 0) {
-      current--;
-      updateBook();
-    }
+function prev() {
+  if (current > 0) {
+    current--;
+    playPaperFlipSynth();
+    updateBook();
   }
+}
 
   if (prevBtn) prevBtn.addEventListener('click', prev);
   if (nextBtn) nextBtn.addEventListener('click', next);
@@ -2377,6 +2379,51 @@ const MENU_ITEMS = [
     };
   } catch (err) {
     console.log('Add sound failed:', err);
+  }
+}
+
+function playPaperFlipSynth() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+
+    const bufferSize = ctx.sampleRate * 0.12;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      const fade = 1 - (i / bufferSize);
+      data[i] = (Math.random() * 2 - 1) * fade * 0.18;
+    }
+
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1400, now);
+    filter.Q.setValueAtTime(0.8, now);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    noise.start(now);
+    noise.stop(now + 0.14);
+
+    noise.onended = () => {
+      try { ctx.close(); } catch (e) {}
+    };
+  } catch (err) {
+    console.log('Paper synth failed:', err);
   }
 }
 
