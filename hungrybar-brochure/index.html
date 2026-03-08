@@ -30,7 +30,7 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:20px;
+  padding:0;
 }
 
     .topbar{
@@ -84,10 +84,12 @@
     }
 
     .book-stage{
-  width:100%;
+  width:100vw;
+  height:100dvh;
   display:flex;
   align-items:center;
   justify-content:center;
+  position:relative;
 }
 
     .nav-btn{
@@ -116,11 +118,12 @@
       cursor:not-allowed;
       transform:none;
     }
-
+   
     .book-shell{
   position:relative;
-  width:min(92vw, 500px);
-  aspect-ratio:3 / 4.45;
+  width:min(92vw, 860px);
+  height:min(94dvh, 1220px);
+  aspect-ratio:3 / 4.4;
   perspective:2200px;
   touch-action:pan-y;
   user-select:none;
@@ -394,20 +397,38 @@
     }
 
     @media (max-width:860px){
-  .book-stage{grid-template-columns:1fr;gap:10px}
-  .nav-btn{display:none}
-  .book-shell{
-    width:min(92vw, 380px);
-    aspect-ratio:3 / 4.5;
-    max-height:78dvh;
+  .book-stage{
+    width:100vw;
+    height:100dvh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .cover-logo{width:72px;height:72px;font-size:15px}
-  .cover-main h2{font-size:clamp(28px,10vw,48px)}
-  .cover-main p{max-width:none}
-  .topbar,.bottom-ui{justify-content:center;text-align:center}
-  .brand{justify-content:center}
-  .hint{text-align:center}
-  .thumb{width:58px;height:78px}
+
+  .nav-btn{
+    display:none;
+  }
+
+  .book-shell{
+    width:96vw;
+    height:88dvh;
+    aspect-ratio:3 / 4.5;
+  }
+
+  .cover-logo{
+    width:72px;
+    height:72px;
+    font-size:15px;
+  }
+
+  .cover-main h2{
+    font-size:clamp(32px,12vw,68px);
+  }
+
+  .cover-main p{
+    max-width:none;
+    font-size:clamp(16px,4vw,22px);
+  }
 }
   </style>
 </head>
