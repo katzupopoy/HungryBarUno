@@ -26,14 +26,12 @@
     }
 
     .app{
-      min-height:100dvh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      gap:14px;
-    }
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
 
     .topbar{
       width:min(1200px,100%);
@@ -86,12 +84,11 @@
     }
 
     .book-stage{
-      width:min(1200px,100%);
-      display:grid;
-      grid-template-columns:58px 1fr 58px;
-      align-items:center;
-      gap:12px;
-    }
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
     .nav-btn{
       appearance:none;
@@ -121,13 +118,14 @@
     }
 
     .book-shell{
-      position:relative;
-      width:100%;
-      aspect-ratio:16 / 9.6;
-      perspective:2200px;
-      touch-action:pan-y;
-      user-select:none;
-    }
+  position:relative;
+  width:min(92vw, 500px);
+  aspect-ratio:3 / 4.45;
+  perspective:2200px;
+  touch-action:pan-y;
+  user-select:none;
+  margin:0 auto;
+}
 
     .book-shadow{
       position:absolute;
@@ -203,14 +201,14 @@
     }
 
     .page-img{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      background:#111;
-    }
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  background:#111;
+}
 
     .cover-content{
       position:absolute;
@@ -372,17 +370,17 @@
     }
 
     .thumb{
-      flex:0 0 auto;
-      width:80px;
-      height:52px;
-      border-radius:12px;
-      border:2px solid transparent;
-      overflow:hidden;
-      cursor:pointer;
-      background:#111;
-      box-shadow:0 8px 20px rgba(0,0,0,.25);
-      padding:0;
-    }
+  flex:0 0 auto;
+  width:58px;
+  height:78px;
+  border-radius:12px;
+  border:2px solid transparent;
+  overflow:hidden;
+  cursor:pointer;
+  background:#111;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  padding:0;
+}
 
     .thumb img{
       width:100%;
@@ -396,35 +394,26 @@
     }
 
     @media (max-width:860px){
-      .book-stage{grid-template-columns:1fr;gap:10px}
-      .nav-btn{display:none}
-      .book-shell{
-        aspect-ratio:3 / 4.5;
-        max-height:72dvh;
-        width:100%;
-      }
-      .cover-logo{width:72px;height:72px;font-size:15px}
-      .cover-main h2{font-size:clamp(32px,12vw,58px)}
-      .cover-main p{max-width:none}
-      .topbar,.bottom-ui{justify-content:center;text-align:center}
-      .brand{justify-content:center}
-      .hint{text-align:center}
-      .thumb{width:68px;height:44px}
-    }
+  .book-stage{grid-template-columns:1fr;gap:10px}
+  .nav-btn{display:none}
+  .book-shell{
+    width:min(92vw, 380px);
+    aspect-ratio:3 / 4.5;
+    max-height:78dvh;
+  }
+  .cover-logo{width:72px;height:72px;font-size:15px}
+  .cover-main h2{font-size:clamp(28px,10vw,48px)}
+  .cover-main p{max-width:none}
+  .topbar,.bottom-ui{justify-content:center;text-align:center}
+  .brand{justify-content:center}
+  .hint{text-align:center}
+  .thumb{width:58px;height:78px}
+}
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-badge">THE<br>HUNGRY<br>BAR</div>
-        <div>
-          <h1>Flipbook Menu</h1>
-          <p>Book-style restaurant menu with one menu per sheet</p>
-        </div>
-      </div>
-      <div class="hint">Swipe left/right on mobile • Use arrows or keyboard on desktop</div>
-    </div>
+    
 
     <div class="book-stage">
       <button class="nav-btn" id="prevBtn" aria-label="Previous page">‹</button>
@@ -631,165 +620,107 @@
       <button class="nav-btn" id="nextBtn" aria-label="Next page">›</button>
     </div>
 
-    <div class="bottom-ui">
-      <div class="counter" id="counter">Page 1 of 14</div>
-      <div class="dots" id="dots"></div>
-      <div class="thumb-strip" id="thumbStrip"></div>
-    </div>
-  </div>
+    
 
   <script>
-    const pages = [...document.querySelectorAll('.page')];
-    const dotsWrap = document.getElementById('dots');
-    const thumbStrip = document.getElementById('thumbStrip');
-    const counter = document.getElementById('counter');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const bookShell = document.getElementById('bookShell');
+  const pages = [...document.querySelectorAll('.page')];
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const bookShell = document.getElementById('bookShell');
 
-    const logicalPages = pages.length;
-    let current = 0;
+  const logicalPages = pages.length;
+  let current = 0;
 
-    const thumbs = [
-      { label: 'Cover', img: 'images/01-burgers.jpeg' },
-      { label: 'Burgers', img: 'images/01-burgers.jpeg' },
-      { label: 'Combo', img: 'images/02-combo-meals.jpeg' },
-      { label: 'Frappes', img: 'images/03-frappes.jpeg' },
-      { label: 'Mango', img: 'images/04-mango-lemon.jpeg' },
-      { label: 'Fruit Tea', img: 'images/05-fruit-teas.jpeg' },
-      { label: 'HMB', img: 'images/06-hungry-meal-box.jpeg' },
-      { label: 'Pizza', img: 'images/07-pizza-wings.jpeg' },
-      { label: 'Milk Tea', img: 'images/08-milktea-cream-cheese.jpeg' },
-      { label: 'Nachos', img: 'images/09-nachos-sandwich.jpeg' },
-      { label: 'Bilao', img: 'images/10-wings-bilao.jpeg' },
-      { label: 'Pasta', img: 'images/11-pasta.jpeg' },
-      { label: 'Breakfast', img: 'images/12-all-day-breakfast.jpeg' },
-      { label: 'End', img: 'images/12-all-day-breakfast.jpeg' }
-    ];
+  function updateBook() {
+    pages.forEach((page, i) => {
+      const shouldFlip = i < current;
+      page.classList.toggle('flipped', shouldFlip);
 
-    function buildUI() {
-      dotsWrap.innerHTML = '';
-      thumbStrip.innerHTML = '';
-
-      for (let i = 0; i < logicalPages; i++) {
-        const dot = document.createElement('button');
-        dot.className = 'dot';
-        dot.type = 'button';
-        dot.setAttribute('aria-label', `Go to page ${i + 1}`);
-        dot.addEventListener('click', () => goTo(i));
-        dotsWrap.appendChild(dot);
-
-        const thumb = document.createElement('button');
-        thumb.className = 'thumb';
-        thumb.type = 'button';
-        thumb.title = `Go to page ${i + 1} - ${thumbs[i].label}`;
-        thumb.innerHTML = `<img src="${thumbs[i].img}" alt="${thumbs[i].label}">`;
-        thumb.addEventListener('click', () => goTo(i));
-        thumbStrip.appendChild(thumb);
+      if (shouldFlip) {
+        page.style.zIndex = String(i + 1);
+      } else {
+        page.style.zIndex = String(100 + (pages.length - i));
       }
-    }
+    });
 
-    function updateBook() {
-      pages.forEach((page, i) => {
-        const shouldFlip = i < current;
-        page.classList.toggle('flipped', shouldFlip);
+    if (prevBtn) prevBtn.disabled = current <= 0;
+    if (nextBtn) nextBtn.disabled = current >= logicalPages - 1;
+  }
 
-        if (shouldFlip) {
-          page.style.zIndex = String(i + 1);
-        } else {
-          page.style.zIndex = String(100 + (pages.length - i));
-        }
-      });
+  function goTo(pageIndex) {
+    current = Math.max(0, Math.min(logicalPages - 1, pageIndex));
+    updateBook();
+  }
 
-      counter.textContent = `Page ${current + 1} of ${logicalPages}`;
-
-      [...dotsWrap.children].forEach((dot, i) => {
-        dot.classList.toggle('active', i === current);
-      });
-
-      [...thumbStrip.children].forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === current);
-      });
-
-      prevBtn.disabled = current <= 0;
-      nextBtn.disabled = current >= logicalPages - 1;
-    }
-
-    function goTo(pageIndex) {
-      current = Math.max(0, Math.min(logicalPages - 1, pageIndex));
+  function next() {
+    if (current < logicalPages - 1) {
+      current++;
       updateBook();
     }
+  }
 
-    function next() {
-      if (current < logicalPages - 1) {
-        current++;
-        updateBook();
-      }
+  function prev() {
+    if (current > 0) {
+      current--;
+      updateBook();
     }
+  }
 
-    function prev() {
-      if (current > 0) {
-        current--;
-        updateBook();
-      }
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+  if (nextBtn) nextBtn.addEventListener('click', next);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  let startX = 0;
+  let startY = 0;
+  let isTouching = false;
+
+  bookShell.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    isTouching = true;
+  }, { passive: true });
+
+  bookShell.addEventListener('touchend', (e) => {
+    if (!isTouching) return;
+
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+
+    isTouching = false;
+
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) next();
+      else prev();
     }
+  }, { passive: true });
 
-    prevBtn.addEventListener('click', prev);
-    nextBtn.addEventListener('click', next);
+  let mouseStartX = 0;
+  let isMouseDown = false;
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') next();
-      if (e.key === 'ArrowLeft') prev();
-    });
+  bookShell.addEventListener('mousedown', (e) => {
+    mouseStartX = e.clientX;
+    isMouseDown = true;
+  });
 
-    let startX = 0;
-    let startY = 0;
-    let isTouching = false;
+  window.addEventListener('mouseup', (e) => {
+    if (!isMouseDown) return;
 
-    bookShell.addEventListener('touchstart', (e) => {
-      const t = e.touches[0];
-      startX = t.clientX;
-      startY = t.clientY;
-      isTouching = true;
-    }, { passive: true });
+    const dx = e.clientX - mouseStartX;
+    isMouseDown = false;
 
-    bookShell.addEventListener('touchend', (e) => {
-      if (!isTouching) return;
+    if (Math.abs(dx) > 70) {
+      if (dx < 0) next();
+      else prev();
+    }
+  });
 
-      const t = e.changedTouches[0];
-      const dx = t.clientX - startX;
-      const dy = t.clientY - startY;
-
-      isTouching = false;
-
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) next();
-        else prev();
-      }
-    }, { passive: true });
-
-    let mouseStartX = 0;
-    let isMouseDown = false;
-
-    bookShell.addEventListener('mousedown', (e) => {
-      mouseStartX = e.clientX;
-      isMouseDown = true;
-    });
-
-    window.addEventListener('mouseup', (e) => {
-      if (!isMouseDown) return;
-
-      const dx = e.clientX - mouseStartX;
-      isMouseDown = false;
-
-      if (Math.abs(dx) > 70) {
-        if (dx < 0) next();
-        else prev();
-      }
-    });
-
-    buildUI();
-    updateBook();
-  </script>
+  updateBook();
+</script>
 </body>
 </html>
