@@ -1807,18 +1807,18 @@ body::before{
     updateBook();
   }
 
- async function next() {
+ function next() {
   if (current < logicalPages - 1) {
-    await unlockAudio();
+    unlockAudio(); // do not await
     current++;
     updateBook();
     playPaperFlipSynth();
   }
 }
 
-async function prev() {
+function prev() {
   if (current > 0) {
-    await unlockAudio();
+    unlockAudio(); // do not await
     current--;
     updateBook();
     playPaperFlipSynth();
@@ -1838,11 +1838,12 @@ async function prev() {
   let isTouching = false;
 
   bookShell.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    startX = t.clientX;
-    startY = t.clientY;
-    isTouching = true;
-  }, { passive: true });
+  unlockAudio();
+  const t = e.touches[0];
+  startX = t.clientX;
+  startY = t.clientY;
+  isTouching = true;
+}, { passive: true });
 
   bookShell.addEventListener('touchend', (e) => {
   if (!isTouching) return;
@@ -2436,6 +2437,10 @@ async function unlockAudio() {
     console.log('Audio unlock failed:', err);
   }
 }
+
+document.addEventListener('touchstart', unlockAudio, { passive: true });
+document.addEventListener('pointerdown', unlockAudio, { passive: true });
+document.addEventListener('click', unlockAudio);
 
 function playPaperFlipSynth() {
   try {
