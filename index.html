@@ -1807,19 +1807,21 @@ body::before{
     updateBook();
   }
 
-  function next() {
+ async function next() {
   if (current < logicalPages - 1) {
+    await unlockAudio();
     current++;
-    playPaperFlipSynth();
     updateBook();
+    playPaperFlipSynth();
   }
 }
 
-function prev() {
+async function prev() {
   if (current > 0) {
+    await unlockAudio();
     current--;
-    playPaperFlipSynth();
     updateBook();
+    playPaperFlipSynth();
   }
 }
 
@@ -2409,20 +2411,50 @@ const MENU_ITEMS = [
   }
 }
 
+let audioCtx = null;
+
+function getAudioCtx() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+
+  if (!audioCtx) {
+    audioCtx = new AudioContextClass();
+  }
+
+  return audioCtx;
+}
+
+async function unlockAudio() {
+  try {
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+
+    if (ctx.state === 'suspended') {
+      await ctx.resume();
+    }
+  } catch (err) {
+    console.log('Audio unlock failed:', err);
+  }
+}
+
+document.addEventListener('touchstart', unlockAudio, { passive: true });
+document.addEventListener('click', unlockAudio);
+document.addEventListener('pointerdown', unlockAudio);
+
+
 function playPaperFlipSynth() {
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
+    const ctx = getAudioCtx();
+    if (!ctx) return;
 
-    const ctx = new AudioContextClass();
+    if (ctx.state === 'suspended') return;
+
     const now = ctx.currentTime;
 
-    // master louder output
     const master = ctx.createGain();
-    master.gain.setValueAtTime(0.95, now);
+    master.gain.setValueAtTime(1.4, now);
     master.connect(ctx.destination);
 
-    // ===== PAPER NOISE =====
     const bufferSize = Math.floor(ctx.sampleRate * 0.18);
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
@@ -2450,7 +2482,6 @@ function playPaperFlipSynth() {
     paperFilter.connect(paperGain);
     paperGain.connect(master);
 
-    // ===== LOW WHOOSH BODY =====
     const whoosh = ctx.createOscillator();
     const whooshGain = ctx.createGain();
     whoosh.type = 'triangle';
@@ -2464,7 +2495,6 @@ function playPaperFlipSynth() {
     whoosh.connect(whooshGain);
     whooshGain.connect(master);
 
-    // ===== PAGE SNAP / CLICK =====
     const snap = ctx.createOscillator();
     const snapGain = ctx.createGain();
     snap.type = 'square';
@@ -2485,10 +2515,6 @@ function playPaperFlipSynth() {
     noise.stop(now + 0.19);
     whoosh.stop(now + 0.19);
     snap.stop(now + 0.06);
-
-    noise.onended = () => {
-      try { ctx.close(); } catch (e) {}
-    };
   } catch (err) {
     console.log('Paper synth failed:', err);
   }
