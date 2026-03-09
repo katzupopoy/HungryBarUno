@@ -2354,7 +2354,7 @@ const MENU_ITEMS = [
     const now = ctx.currentTime;
 
     const master = ctx.createGain();
-    master.gain.setValueAtTime(0.34, now); // louder overall
+    master.gain.setValueAtTime(1.4, now);
     master.connect(ctx.destination);
 
     // main soft pop
@@ -2417,34 +2417,74 @@ function playPaperFlipSynth() {
     const ctx = new AudioContextClass();
     const now = ctx.currentTime;
 
-    const bufferSize = ctx.sampleRate * 0.12;
+    // master louder output
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.95, now);
+    master.connect(ctx.destination);
+
+    // ===== PAPER NOISE =====
+    const bufferSize = Math.floor(ctx.sampleRate * 0.18);
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
 
     for (let i = 0; i < bufferSize; i++) {
-      const fade = 1 - (i / bufferSize);
-      data[i] = (Math.random() * 2 - 1) * fade * 0.20;
+      const t = i / bufferSize;
+      const fade = Math.pow(1 - t, 1.4);
+      data[i] = (Math.random() * 2 - 1) * fade * 0.45;
     }
 
     const noise = ctx.createBufferSource();
     noise.buffer = buffer;
 
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(1400, now);
-    filter.Q.setValueAtTime(0.8, now);
+    const paperFilter = ctx.createBiquadFilter();
+    paperFilter.type = 'bandpass';
+    paperFilter.frequency.setValueAtTime(1700, now);
+    paperFilter.Q.setValueAtTime(0.9, now);
 
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.001, now);
-    gain.gain.exponentialRampToValueAtTime(0.28, now + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+    const paperGain = ctx.createGain();
+    paperGain.gain.setValueAtTime(0.001, now);
+    paperGain.gain.exponentialRampToValueAtTime(0.75, now + 0.01);
+    paperGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
 
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
+    noise.connect(paperFilter);
+    paperFilter.connect(paperGain);
+    paperGain.connect(master);
+
+    // ===== LOW WHOOSH BODY =====
+    const whoosh = ctx.createOscillator();
+    const whooshGain = ctx.createGain();
+    whoosh.type = 'triangle';
+    whoosh.frequency.setValueAtTime(220, now);
+    whoosh.frequency.exponentialRampToValueAtTime(120, now + 0.16);
+
+    whooshGain.gain.setValueAtTime(0.001, now);
+    whooshGain.gain.exponentialRampToValueAtTime(0.16, now + 0.015);
+    whooshGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+    whoosh.connect(whooshGain);
+    whooshGain.connect(master);
+
+    // ===== PAGE SNAP / CLICK =====
+    const snap = ctx.createOscillator();
+    const snapGain = ctx.createGain();
+    snap.type = 'square';
+    snap.frequency.setValueAtTime(900, now);
+    snap.frequency.exponentialRampToValueAtTime(420, now + 0.035);
+
+    snapGain.gain.setValueAtTime(0.001, now);
+    snapGain.gain.exponentialRampToValueAtTime(0.08, now + 0.004);
+    snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+    snap.connect(snapGain);
+    snapGain.connect(master);
 
     noise.start(now);
-    noise.stop(now + 0.14);
+    whoosh.start(now);
+    snap.start(now);
+
+    noise.stop(now + 0.19);
+    whoosh.stop(now + 0.19);
+    snap.stop(now + 0.06);
 
     noise.onended = () => {
       try { ctx.close(); } catch (e) {}
