@@ -3009,28 +3009,34 @@ function parseVoiceOrder(text) {
   const parts = splitVoiceCommands(raw);
 
   if (!parts.length) {
-    alert('No voice command detected.');
-    return;
+    return {
+      successCount: 0,
+      addedItems: [],
+      removedItems: [],
+      misses: [],
+      cleared: false
+    };
   }
 
   let successCount = 0;
+  let cleared = false;
   const misses = [];
+  const addedItems = [];
+  const removedItems = [];
 
   for (const part of parts) {
     const cleanPart = normalizeText(part);
     const action = extractAction(cleanPart);
     const qty = extractQuantity(cleanPart);
 
-    // clear whole cart
     if (action === 'clear') {
       order.length = 0;
       renderOrder();
       successCount++;
+      cleared = true;
       continue;
     }
 
-    // phrases like "cancel 1 order" or "remove 1 item"
-    // remove last added item if no specific item was spoken
     if (
       action === 'remove' &&
       isGenericVoiceCommand(cleanPart) &&
@@ -3039,6 +3045,7 @@ function parseVoiceOrder(text) {
       if (order.length) {
         const lastItem = order[order.length - 1];
         changeQty(lastItem.name, -qty);
+        removedItems.push({ name: lastItem.name, qty });
         successCount++;
       } else {
         misses.push(part);
@@ -3048,18 +3055,22 @@ function parseVoiceOrder(text) {
 
     const bestItem = findBestMenuMatch(cleanPart);
 
-if (!bestItem) {
-  speakMessage(`Sorry, ${part} is not available on the menu.`);
-  misses.push(part);
-  continue;
-}
+    if (!bestItem) {
+      misses.push(part);
+      continue;
+    }
 
     if (action === 'remove') {
       const removed = removeMatchedItem(bestItem.name, qty);
-      if (removed) successCount++;
-      else misses.push(part);
+      if (removed) {
+        removedItems.push({ name: bestItem.name, qty });
+        successCount++;
+      } else {
+        misses.push(part);
+      }
     } else {
       addMatchedItem(bestItem.name, qty);
+      addedItems.push({ name: bestItem.name, qty });
       successCount++;
     }
   }
@@ -3068,22 +3079,75 @@ if (!bestItem) {
     openCart();
   }
 
-  if (successCount === 0) {
-  speakMessage('Sorry, I could not find that item on the menu. Please try again.');
-  alert('No matching menu item found from voice input.');
-  return;
+  return {
+    successCount,
+    addedItems,
+    removedItems,
+    misses,
+    cleared
+  };
 }
 
-  if (misses.length) {
-    console.log('Unmatched voice parts:', misses);
+let voiceSessionActive = false;
+let recognitionBusy = false;
+
+function setVoiceBtnIdle() {
+  voiceBtn.classList.remove('listening');
+  voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
+}
+
+function setVoiceBtnListening(label = 'Say your order now') {
+  voiceBtn.classList.add('listening');
+  voiceBtn.innerHTML = `<span class="mic-icon">🎤</span><span class="speak-label">${label}</span>`;
+}
+
+function speakAndThen(text, callback) {
+  try {
+    if (!('speechSynthesis' in window)) {
+      callback?.();
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-PH';
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    utter.onend = () => {
+      callback?.();
+    };
+
+    window.speechSynthesis.speak(utter);
+  } catch (err) {
+    console.log('speakAndThen failed:', err);
+    callback?.();
   }
+}
+
+function isVoiceStopCommand(text) {
+  return /\b(no|nope|stop|done|finish|finished|that'?s all|thats all|okay done|ok done|wala na|yun lang|iyon lang)\b/i.test(text);
+}
+
+function buildAddedVoiceSummary(itemsAdded) {
+  if (!itemsAdded.length) return 'I could not find that item on the menu. Please try again.';
+
+  if (itemsAdded.length === 1) {
+    const item = itemsAdded[0];
+    return `Added ${item.qty} ${item.name}. Anything else?`;
+  }
+
+  const parts = itemsAdded.map(item => `${item.qty} ${item.name}`);
+  return `Added ${parts.join(', ')}. Anything else?`;
 }
 
 if (voiceBtn) {
   if (!SpeechRecognition) {
     voiceBtn.disabled = true;
-voiceBtn.innerHTML = '🎤 <span>Voice not supported</span>';
-voiceBtn.style.opacity = '.6';
+    voiceBtn.innerHTML = '🎤 <span>Voice not supported</span>';
+    voiceBtn.style.opacity = '.6';
   } else {
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-PH';
@@ -3091,37 +3155,104 @@ voiceBtn.style.opacity = '.6';
     recognition.continuous = false;
     recognition.maxAlternatives = 3;
 
+    function startListening() {
+      try {
+        recognitionBusy = true;
+        recognition.start();
+        setVoiceBtnListening('Say your order now');
+      } catch (err) {
+        console.log('Recognition start failed:', err);
+        recognitionBusy = false;
+      }
+    }
+
+    function askForOrder() {
+      voiceSessionActive = true;
+      setVoiceBtnListening('Listening...');
+      speakAndThen('What is your order?', () => {
+        startListening();
+      });
+    }
+
+    function askAnythingElse() {
+      setVoiceBtnListening('Listening...');
+      speakAndThen('Anything else?', () => {
+        startListening();
+      });
+    }
+
     voiceBtn.addEventListener('click', () => {
-  try {
-    recognition.start();
-    voiceBtn.classList.add('listening');
-    voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Say your order now</span>';
-  } catch (err) {}
-});
+      if (recognitionBusy) return;
+      askForOrder();
+    });
 
     recognition.addEventListener('result', (event) => {
-  const results = Array.from(event.results[0] || []);
-  const transcript = results.map(r => r.transcript).join(' ') || '';
-  const fixedTranscript = normalizeVoiceTranscript(transcript);
+      const results = Array.from(event.results[0] || []);
+      const transcript = results.map(r => r.transcript).join(' ') || '';
+      const fixedTranscript = normalizeVoiceTranscript(transcript).trim();
 
-  console.log('Voice heard:', transcript);
-  console.log('Voice fixed:', fixedTranscript);
+      console.log('Voice heard:', transcript);
+      console.log('Voice fixed:', fixedTranscript);
 
-  if (!fixedTranscript.trim()) {
-    speakMessage('Sorry, I did not catch that. Please say your order again.');
-    return;
-  }
+      recognitionBusy = false;
 
-  parseVoiceOrder(fixedTranscript);
-});
+      if (!fixedTranscript) {
+        speakAndThen('Sorry, I did not catch that. Please say your order again.', () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      if (isVoiceStopCommand(fixedTranscript)) {
+        voiceSessionActive = false;
+        speakAndThen('Okay. Your order is ready.', () => {
+          setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      const parsed = parseVoiceOrder(fixedTranscript);
+
+      if (parsed.cleared) {
+        speakAndThen('Your cart has been cleared. Anything else?', () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      if (parsed.successCount === 0) {
+        speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      const reply = buildAddedVoiceSummary(parsed.addedItems);
+      speakAndThen(reply, () => {
+        if (voiceSessionActive) startListening();
+        else setVoiceBtnIdle();
+      });
+    });
 
     recognition.addEventListener('error', (event) => {
-  voiceBtn.classList.remove('listening');
-  voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
+      recognitionBusy = false;
+      console.log('Voice recognition failed:', event.error || 'unknown error');
 
-  speakMessage('Sorry, I could not hear you clearly. Please try again.');
-  alert('Voice recognition failed: ' + (event.error || 'unknown error'));
-});
+      speakAndThen('Sorry, I could not hear you clearly. Please try again.', () => {
+        if (voiceSessionActive) {
+          startListening();
+        } else {
+          setVoiceBtnIdle();
+        }
+      });
+    });
+
+    recognition.addEventListener('end', () => {
+      recognitionBusy = false;
+    });
   }
 }
 
