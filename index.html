@@ -1495,6 +1495,42 @@ body::before{
   }
 }
 
+.po-form{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.po-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.po-field label{
+  font-size:13px;
+  font-weight:700;
+  color:#f3c86a;
+}
+
+.po-field input{
+  width:100%;
+  height:46px;
+  border:none;
+  outline:none;
+  border-radius:14px;
+  padding:0 14px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  font-size:14px;
+}
+
+.po-field input::placeholder{
+  color:rgba(255,255,255,.45);
+}
+
   </style>
 </head>
 <body>
@@ -1772,6 +1808,28 @@ body::before{
 
     <div class="po-guide">
       Please copy this order, then paste it into <strong>Hungry Bar Messenger</strong> to send your order.
+    </div>
+
+    <div class="po-form">
+      <div class="po-field">
+        <label for="customerName">Customer Name</label>
+        <input id="customerName" type="text" placeholder="Enter customer name" />
+      </div>
+
+      <div class="po-field">
+        <label for="contactNumber">Contact Number</label>
+        <input id="contactNumber" type="text" placeholder="Enter contact number" />
+      </div>
+
+      <div class="po-field">
+        <label for="addressPickup">Address / Pickup</label>
+        <input id="addressPickup" type="text" placeholder="Enter address or pickup" />
+      </div>
+
+      <div class="po-field">
+        <label for="tableNumber">Table Number</label>
+        <input id="tableNumber" type="text" placeholder="Enter table number" />
+      </div>
     </div>
 
     <pre class="po-preview" id="poPreview"></pre>
@@ -2305,6 +2363,10 @@ const MENU_ITEMS = [
   const poCloseBtn = document.getElementById('poCloseBtn');
   const poDoneBtn = document.getElementById('poDoneBtn');
   const poCopyNowBtn = document.getElementById('poCopyNowBtn');
+  const customerNameInput = document.getElementById('customerName');
+  const contactNumberInput = document.getElementById('contactNumber');
+  const addressPickupInput = document.getElementById('addressPickup');
+  const tableNumberInput = document.getElementById('tableNumber');
 
   function openCart() {
   topCart.classList.add('open');
@@ -2559,6 +2621,12 @@ function closePoModal() {
   function generatePOText() {
   const now = new Date();
   const lines = [];
+
+  const customerName = customerNameInput?.value?.trim() || '';
+  const contactNumber = contactNumberInput?.value?.trim() || '';
+  const addressPickup = addressPickupInput?.value?.trim() || '';
+  const tableNumber = tableNumberInput?.value?.trim() || '';
+
   lines.push(STORE_NAME);
   lines.push('ORDER REQUEST');
   lines.push('------------------------------');
@@ -2574,15 +2642,20 @@ function closePoModal() {
   }
 
   lines.push('------------------------------');
-  lines.push('Customer Name:');
-  lines.push('Contact Number:');
-  lines.push('Address / Pickup:');
-  lines.push('Table Number:');
+  lines.push(`Customer Name: ${customerName}`);
+  lines.push(`Contact Number: ${contactNumber}`);
+  lines.push(`Address / Pickup: ${addressPickup}`);
+  lines.push(`Table Number: ${tableNumber}`);
   lines.push(`Date: ${now.toLocaleDateString('en-PH')} ${now.toLocaleTimeString('en-PH')}`);
   lines.push('------------------------------');
   lines.push('Send this order to Hungry Bar Messenger.');
 
   return lines.join('\n');
+}
+
+function refreshPoPreview() {
+  if (!poPreview) return;
+  poPreview.textContent = generatePOText();
 }
 
   if (cartFab) {
@@ -2597,16 +2670,17 @@ function closePoModal() {
     if (dec) changeQty(dec.dataset.dec, -1);
   });
 
+  if (copyPoBtn) {
   copyPoBtn.addEventListener('click', () => {
-  const text = generatePOText();
+    if (!order.length) {
+      alert('Your cart is empty.');
+      return;
+    }
 
-  if (!order.length) {
-    alert('Your cart is empty.');
-    return;
-  }
-
-  openPoModal(text);
-});
+    refreshPoPreview();
+    openPoModal(generatePOText());
+  });
+}
 
   clearOrderBtn.addEventListener('click', () => {
   order.length = 0;
