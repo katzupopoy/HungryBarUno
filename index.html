@@ -3131,16 +3131,32 @@ function isVoiceStopCommand(text) {
   return /\b(no|nope|stop|done|finish|finished|that'?s all|thats all|okay done|ok done|wala na|yun lang|iyon lang)\b/i.test(text);
 }
 
-function buildAddedVoiceSummary(itemsAdded) {
-  if (!itemsAdded.length) return 'I could not find that item on the menu. Please try again.';
-
-  if (itemsAdded.length === 1) {
-    const item = itemsAdded[0];
-    return `Added ${item.qty} ${item.name}. Anything else?`;
+function buildVoiceSummary(parsed) {
+  if (!parsed || parsed.successCount === 0) {
+    return 'Sorry, I could not find that item on the menu. Please try again.';
   }
 
-  const parts = itemsAdded.map(item => `${item.qty} ${item.name}`);
-  return `Added ${parts.join(', ')}. Anything else?`;
+  if (parsed.cleared && !parsed.addedItems.length && !parsed.removedItems.length) {
+    return 'Cleared your cart.';
+  }
+
+  const parts = [];
+
+  if (parsed.addedItems?.length) {
+    const addedText = parsed.addedItems
+      .map(item => `Added ${item.qty} ${item.name}`)
+      .join(' and ');
+    parts.push(addedText);
+  }
+
+  if (parsed.removedItems?.length) {
+    const removedText = parsed.removedItems
+      .map(item => `removed ${item.qty} ${item.name}`)
+      .join(' and ');
+    parts.push(removedText);
+  }
+
+  return parts.join(' and ') + '.';
 }
 
 if (voiceBtn) {
@@ -3214,28 +3230,19 @@ if (voiceBtn) {
 
       const parsed = parseVoiceOrder(fixedTranscript);
 
-      if (parsed.cleared) {
-        speakAndThen('Your cart has been cleared. Anything else?', () => {
-          if (voiceSessionActive) startListening();
-          else setVoiceBtnIdle();
-        });
-        return;
-      }
-
       if (parsed.successCount === 0) {
-        speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
-          if (voiceSessionActive) startListening();
-          else setVoiceBtnIdle();
-        });
-        return;
-      }
+  speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
+    if (voiceSessionActive) startListening();
+    else setVoiceBtnIdle();
+  });
+  return;
+}
 
-      const reply = buildAddedVoiceSummary(parsed.addedItems);
-      speakAndThen(reply, () => {
-        if (voiceSessionActive) startListening();
-        else setVoiceBtnIdle();
-      });
-    });
+const reply = buildVoiceSummary(parsed);
+speakAndThen(`${reply} Anything else?`, () => {
+  if (voiceSessionActive) startListening();
+  else setVoiceBtnIdle();
+});
 
     recognition.addEventListener('error', (event) => {
       recognitionBusy = false;
