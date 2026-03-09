@@ -2437,11 +2437,6 @@ async function unlockAudio() {
   }
 }
 
-document.addEventListener('touchstart', unlockAudio, { passive: true });
-document.addEventListener('click', unlockAudio);
-document.addEventListener('pointerdown', unlockAudio);
-
-
 function playPaperFlipSynth() {
   try {
     const ctx = getAudioCtx();
