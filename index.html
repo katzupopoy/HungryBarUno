@@ -1777,6 +1777,10 @@ body::before{
   </div>
 </div>
 
+<audio id="flipSound" preload="auto" playsinline">
+  <source src="sounds/page-flip.mp3" type="audio/mpeg">
+</audio>
+
   <script>
   const pages = [...document.querySelectorAll('.page')];
   const prevBtn = document.getElementById('prevBtn');
@@ -1807,21 +1811,37 @@ body::before{
     updateBook();
   }
 
+  const flipSound = document.getElementById('flipSound');
+
+function playRealFlipSound() {
+  try {
+    if (!flipSound) return;
+    flipSound.pause();
+    flipSound.currentTime = 0;
+    flipSound.volume = 1.0;
+    flipSound.play().catch(err => {
+      console.log('Flip sound failed:', err);
+    });
+  } catch (err) {
+    console.log('Flip sound error:', err);
+  }
+}
+
  function next() {
   if (current < logicalPages - 1) {
-    unlockAudio(); // do not await
+    unlockAudio();
     current++;
     updateBook();
-    playPaperFlipSynth();
+    playRealFlipSound();
   }
 }
 
 function prev() {
   if (current > 0) {
-    unlockAudio(); // do not await
+    unlockAudio();
     current--;
     updateBook();
-    playPaperFlipSynth();
+    playRealFlipSound();
   }
 }
 
