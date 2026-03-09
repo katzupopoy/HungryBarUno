@@ -2657,11 +2657,21 @@ function normalizeText(text) {
     .replace(/\bsi log\b/g, 'silog')
     .replace(/\bsee log\b/g, 'silog')
     .replace(/\bsi lug\b/g, 'silog')
+    .replace(/\bsea lowg\b/g, 'silog')
+    .replace(/\bse lowg\b/g, 'silog')
+    .replace(/\bsea-lowg\b/g, 'silog')
+    .replace(/\bse-lowg\b/g, 'silog')
     .replace(/\bhot silog\b/g, 'hotsilog')
     .replace(/\bmilk t\b/g, 'milk tea')
     .replace(/\bmilkte\b/g, 'milk tea')
     .replace(/\bberger\b/g, 'burger')
     .replace(/\bburjer\b/g, 'burger')
+    .replace(/\bb la o\b/g, 'bilao')
+    .replace(/\bbi la o\b/g, 'bilao')
+    .replace(/\bb-la-o\b/g, 'bilao')
+    .replace(/\bbi-la-o\b/g, 'bilao')
+    .replace(/\bbee la o\b/g, 'bilao')
+    .replace(/\bbee-la-o\b/g, 'bilao')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -2943,6 +2953,12 @@ function normalizeVoiceTranscript(text) {
     [/\bsi lowg\b/g, 'silog'],
     [/\bsee lohg\b/g, 'silog'],
     [/\bsi lohg\b/g, 'silog'],
+    [/\bsea lowg\b/g, 'silog'],
+    [/\bse lowg\b/g, 'silog'],
+    [/\bsea-lowg\b/g, 'silog'],
+    [/\bse-lowg\b/g, 'silog'],
+    [/\bsea lohg\b/g, 'silog'], 
+    [/\bse lohg\b/g, 'silog'],
 
     [/\bhot silog\b/g, 'hotsilog'],
     [/\bhot si log\b/g, 'hotsilog'],
@@ -2957,6 +2973,15 @@ function normalizeVoiceTranscript(text) {
     [/\bhungarian silog\b/g, 'hungarian silog'],
     [/\bhungarian si log\b/g, 'hungarian silog'],
     [/\bhungariansilog\b/g, 'hungarian silog'],
+
+      // bilao family
+    [/\bb la o\b/g, 'bilao'],
+    [/\bbi la o\b/g, 'bilao'],
+    [/\bb-la-o\b/g, 'bilao'],
+    [/\bbi-la-o\b/g, 'bilao'],
+    [/\bbee la o\b/g, 'bilao'],
+    [/\bbee-la-o\b/g, 'bilao'],
+    [/\bbilao\b/g, 'bilao'],
 
     // common menu mishears
     [/\bmilk t\b/g, 'milk tea'],
