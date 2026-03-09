@@ -1453,6 +1453,38 @@ body::before{
   padding:8px;
 }
 
+.order-fab .fab-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  line-height:1;
+}
+
+.order-fab .fab-text{
+  display:inline-block;
+  line-height:1;
+}
+
+@media (max-width:860px){
+  .order-fab{
+    width:58px;
+    height:58px;
+    padding:0;
+    border-radius:50%;
+    justify-content:center;
+    gap:0;
+  }
+
+  .order-fab .fab-text{
+    display:none;
+  }
+
+  .order-fab .fab-icon{
+    font-size:24px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -1697,8 +1729,9 @@ body::before{
   <span class="speak-label">Speak Order</span>
 </button>
 
-<button class="search-fab" id="searchFab" type="button" aria-label="Order Food">
-  🔎 <span>Order Food</span>
+<button class="search-fab order-fab" id="searchFab" type="button" aria-label="Order Food">
+  <span class="fab-icon">🧾</span>
+  <span class="fab-text">Order Food</span>
 </button>
 
 <div class="search-float" id="searchFloat">
