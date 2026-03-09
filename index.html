@@ -24,16 +24,18 @@
   min-height:100%;
   width:100%;
   font-family:Arial, Helvetica, sans-serif;
-  background:#0b0b0b;
   color:var(--text);
-  overflow:hidden;
+  background:
+    radial-gradient(circle at top, #383838 0%, #171717 38%, #0b0b0b 100%);
+  overscroll-behavior-y:contain;
+  overscroll-behavior-x:none;
 }
 
 body{
   min-height:100svh;
   min-height:100dvh;
-  background:
-    radial-gradient(circle at top, #383838 0%, #171717 38%, #0b0b0b 100%);
+  overflow-x:hidden;
+  overflow-y:auto;
   padding-top:env(safe-area-inset-top, 0px);
   padding-bottom:env(safe-area-inset-bottom, 0px);
 }
@@ -54,6 +56,7 @@ body::before{
   align-items:center;
   justify-content:center;
   padding:0;
+  background:transparent;
 }
 
     .topbar{
@@ -148,6 +151,7 @@ body::before{
   touch-action:pan-y;
   user-select:none;
   margin:0;
+  background:transparent;
 }
 
     .book-shadow{
