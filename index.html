@@ -2676,6 +2676,13 @@ function normalizeText(text) {
     .replace(/\bbi-la-o\b/g, 'bilao')
     .replace(/\bbee la o\b/g, 'bilao')
     .replace(/\bbee-la-o\b/g, 'bilao')
+    .replace(/\bbbq\b/g, 'bbq')
+    .replace(/\bbarbecue\b/g, 'bbq')
+    .replace(/\bbarbeque\b/g, 'bbq')
+    .replace(/\bbar b q\b/g, 'bbq')
+    .replace(/\bbar be que\b/g, 'bbq')
+    .replace(/\bbar be cue\b/g, 'bbq')
+    .replace(/\bbarbie q\b/g, 'bbq')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -2846,6 +2853,11 @@ if (base.includes('hotsilog')) {
   aliases.add('silog hotdog');
 }
 
+if (base.includes('bbq')) {
+  aliases.add(base.replace(/\bbbq\b/g, 'barbeque').trim());
+  aliases.add(base.replace(/\bbbq\b/g, 'barbecue').trim());
+}
+
   return [...aliases].filter(Boolean);
 }
 
@@ -2999,6 +3011,12 @@ function normalizeVoiceTranscript(text) {
     [/\bnacho's\b/g, 'nachos'],
     [/\bspageti\b/g, 'spaghetti'],
     [/\bcarbonarra\b/g, 'carbonara']
+    [/\bbarbecue\b/g, 'bbq'],
+    [/\bbarbeque\b/g, 'bbq'],
+    [/\bbar b q\b/g, 'bbq'],
+    [/\bbar be que\b/g, 'bbq'],
+    [/\bbar be cue\b/g, 'bbq'],
+    [/\bbarbie q\b/g, 'bbq'],
   ];
 
   fixes.forEach(([pattern, replacement]) => {
