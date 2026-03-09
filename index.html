@@ -1630,6 +1630,93 @@ body::before{
   }
 }
 
+.thanks-modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10050;
+  padding: 16px;
+}
+
+.thanks-modal.open{
+  display: flex;
+}
+
+.thanks-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.74);
+  backdrop-filter: blur(6px);
+}
+
+.thanks-card{
+  position: relative;
+  z-index: 2;
+  width: min(92vw, 430px);
+  background: linear-gradient(180deg, #171717 0%, #101010 100%);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  padding: 22px 18px;
+  text-align: center;
+}
+
+.thanks-icon{
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+.thanks-title{
+  margin: 0 0 8px;
+  font-size: 24px;
+  color: #f3c86a;
+  font-weight: 800;
+}
+
+.thanks-text{
+  margin: 0 0 14px;
+  color: #dddddd;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.thanks-guide{
+  text-align: left;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.thanks-line{
+  font-size: 14px;
+  line-height: 1.6;
+  color: #fff;
+}
+
+.thanks-line + .thanks-line{
+  margin-top: 6px;
+}
+
+.thanks-note{
+  font-size: 13px;
+  color: #bdbdbd;
+  margin-bottom: 16px;
+}
+
+.thanks-actions{
+  display: flex;
+  justify-content: center;
+}
+
+#thanksOkBtn{
+  min-width: 120px;
+}
+
   </style>
 </head>
 <body>
@@ -1940,6 +2027,33 @@ body::before{
     <div class="po-modal-actions">
       <button class="action-btn secondary" id="poDoneBtn" type="button">Close</button>
       <button class="action-btn" id="poCopyNowBtn" type="button">Copy Now</button>
+    </div>
+  </div>
+</div>
+
+<div id="thanksModal" class="thanks-modal" aria-hidden="true">
+  <div class="thanks-backdrop" id="thanksBackdrop"></div>
+
+  <div class="thanks-card">
+    <div class="thanks-icon">🎉</div>
+    <h3 class="thanks-title">Thank You!</h3>
+    <p class="thanks-text">
+      Thank you for your order. Please send the copied message to Hungry Bar Messenger so we can confirm it.
+   </p>
+
+    <div class="thanks-guide">
+      <div class="thanks-line"><strong>Step 1:</strong> Open Hungry Bar Messenger</div>
+      <div class="thanks-line"><strong>Step 2:</strong> Paste your copied order</div>
+      <div class="thanks-line"><strong>Step 3:</strong> Send the message</div>
+      <div class="thanks-line"><strong>Step 4:</strong> Wait for our confirmation reply</div>
+    </div>
+
+    <div class="thanks-note">
+      Please do not forget to send the copied order in Messenger.
+    </div>
+
+    <div class="thanks-actions">
+      <button type="button" class="action-btn" id="thanksOkBtn">OK</button>
     </div>
   </div>
 </div>
@@ -2465,6 +2579,9 @@ const MENU_ITEMS = [
   const contactNumberInput = document.getElementById('contactNumber');
   const addressPickupInput = document.getElementById('addressPickup');
   const tableNumberInput = document.getElementById('tableNumber');
+  const thanksModal = document.getElementById('thanksModal');
+  const thanksBackdrop = document.getElementById('thanksBackdrop');
+  const thanksOkBtn = document.getElementById('thanksOkBtn');
 
   function openCart() {
   topCart.classList.add('open');
@@ -2721,6 +2838,19 @@ function closePoModal() {
   document.body.style.overflow = '';
   document.documentElement.style.overflow = '';
 }
+
+function openThanksModal() {
+  if (!thanksModal) return;
+  thanksModal.classList.add('open');
+  thanksModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeThanksModal() {
+  if (!thanksModal) return;
+  thanksModal.classList.remove('open');
+  thanksModal.setAttribute('aria-hidden', 'true');
+}
+
 
   function generatePOText() {
   const now = new Date();
@@ -3829,10 +3959,15 @@ async function copyGeneratedPO() {
     await navigator.clipboard.writeText(freshText);
     playSuccessChimeSound();
 
-    poCopyNowBtn.textContent = 'Copied!';
-    setTimeout(() => {
-      poCopyNowBtn.textContent = 'Copy Now';
-    }, 1200);
+    if (poCopyNowBtn) {
+      poCopyNowBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        poCopyNowBtn.textContent = 'Copy Now';
+      }, 1200);
+    }
+
+    closePoModal();
+    openThanksModal();
   } catch (err) {
     alert('Copy failed. Please copy manually.');
   }
@@ -3852,6 +3987,14 @@ if (poDoneBtn) {
 
 if (poModalBackdrop) {
   poModalBackdrop.addEventListener('click', closePoModal);
+}
+
+if (thanksOkBtn) {
+  thanksOkBtn.addEventListener('click', closeThanksModal);
+}
+
+if (thanksBackdrop) {
+  thanksBackdrop.addEventListener('click', closeThanksModal);
 }
 </script>
 </body>
