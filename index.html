@@ -3020,6 +3020,16 @@ function normalizeText(text) {
     .replace(/\bh-m-b-1\b/g, 'hmb1')
     .replace(/\bh-m-b-2\b/g, 'hmb2')
     .replace(/\bh-m-b-3\b/g, 'hmb3')
+    .replace(/\bly chee\b/g, 'lychee')
+    .replace(/\bly-chee\b/g, 'lychee')
+    .replace(/\bli chee\b/g, 'lychee')
+    .replace(/\bli-chee\b/g, 'lychee')
+    .replace(/\blee chee\b/g, 'lychee')
+    .replace(/\blee-chee\b/g, 'lychee')
+    .replace(/\bki wi\b/g, 'kiwi')
+    .replace(/\bki-wi\b/g, 'kiwi')
+    .replace(/\bkee wee\b/g, 'kiwi')
+    .replace(/\bkee-wee\b/g, 'kiwi')
     .trim();
 }
 
@@ -3290,6 +3300,24 @@ if (base.includes('hmb3')) {
   aliases.add('meal box 3');
 }
 
+if (base.includes('lychee')) {
+  aliases.add('lychee');
+  aliases.add('ly chee');
+  aliases.add('ly-chee');
+  aliases.add('li chee');
+  aliases.add('li-chee');
+  aliases.add('lee chee');
+  aliases.add('lee-chee');
+}
+
+if (base.includes('kiwi')) {
+  aliases.add('kiwi');
+  aliases.add('ki wi');
+  aliases.add('ki-wi');
+  aliases.add('kee wee');
+  aliases.add('kee-wee');
+}
+
   return [...aliases].filter(Boolean);
 }
 
@@ -3492,6 +3520,21 @@ function normalizeVoiceTranscript(text) {
     [/\bbee la o\b/g, 'bilao'],
     [/\bbee-la-o\b/g, 'bilao'],
     [/\bbilao\b/g, 'bilao'],
+
+    [/\bly chee\b/g, 'lychee'],
+[/\bly-chee\b/g, 'lychee'],
+[/\bli chee\b/g, 'lychee'],
+[/\bli-chee\b/g, 'lychee'],
+[/\blitchi\b/g, 'lychee'],
+[/\blee chee\b/g, 'lychee'],
+[/\blee-chee\b/g, 'lychee'],
+
+[/\bki wi\b/g, 'kiwi'],
+[/\bki-wi\b/g, 'kiwi'],
+[/\bkee wee\b/g, 'kiwi'],
+[/\bkee-wee\b/g, 'kiwi'],
+[/\bkeywee\b/g, 'kiwi'],
+[/\bkiwee\b/g, 'kiwi'],
 
 [/\bcombo mill 1\b/g, 'combo meal 1'],
 [/\bcombo mill 2\b/g, 'combo meal 2'],
