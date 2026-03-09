@@ -1787,6 +1787,18 @@ body::before{
   <source src="sounds/page-flip.mp3" type="audio/mpeg">
 </audio>
 
+<audio id="addItemPopSound" preload="auto" playsinline>
+  <source src="sounds/add-item-pop.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="cartClickSound" preload="auto" playsinline>
+  <source src="sounds/cart-click.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="successChimeSound" preload="auto" playsinline>
+  <source src="sounds/success-chime.mp3" type="audio/mpeg">
+</audio>
+
   <script>
   const pages = [...document.querySelectorAll('.page')];
   const prevBtn = document.getElementById('prevBtn');
@@ -1818,6 +1830,9 @@ body::before{
   }
 
   const flipSound = document.getElementById('flipSound');
+  const addItemPopSound = document.getElementById('addItemPopSound');
+  const cartClickSound = document.getElementById('cartClickSound');
+  const successChimeSound = document.getElementById('successChimeSound');
 
 function playRealFlipSound() {
   try {
@@ -2288,16 +2303,18 @@ const MENU_ITEMS = [
   const poCopyNowBtn = document.getElementById('poCopyNowBtn');
 
   function openCart() {
-    topCart.classList.add('open');
-  }
+  topCart.classList.add('open');
+  playCartClickSound();
+}
 
   function closeCart() {
-    topCart.classList.remove('open');
-  }
+  topCart.classList.remove('open');
+}
 
   function toggleCart() {
-    topCart.classList.toggle('open');
-  }
+  topCart.classList.toggle('open');
+  playCartClickSound();
+}
 
   function peso(n) {
     return '₱' + Number(n || 0).toLocaleString('en-PH', {
@@ -2376,65 +2393,43 @@ const MENU_ITEMS = [
 
   function playAddSound() {
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-
-    const ctx = new AudioContextClass();
-    const now = ctx.currentTime;
-
-    const master = ctx.createGain();
-    master.gain.setValueAtTime(1.4, now);
-    master.connect(ctx.destination);
-
-    // main soft pop
-    const osc1 = ctx.createOscillator();
-    const gain1 = ctx.createGain();
-    osc1.type = 'triangle';
-    osc1.frequency.setValueAtTime(720, now);
-    osc1.frequency.exponentialRampToValueAtTime(480, now + 0.12);
-    gain1.gain.setValueAtTime(0.0001, now);
-    gain1.gain.exponentialRampToValueAtTime(0.9, now + 0.012);
-    gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
-    osc1.connect(gain1);
-    gain1.connect(master);
-
-    // airy top click
-    const osc2 = ctx.createOscillator();
-    const gain2 = ctx.createGain();
-    osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(1320, now);
-    osc2.frequency.exponentialRampToValueAtTime(980, now + 0.07);
-    gain2.gain.setValueAtTime(0.0001, now);
-    gain2.gain.exponentialRampToValueAtTime(0.22, now + 0.008);
-    gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
-    osc2.connect(gain2);
-    gain2.connect(master);
-
-    // tiny low body for premium feel
-    const osc3 = ctx.createOscillator();
-    const gain3 = ctx.createGain();
-    osc3.type = 'sine';
-    osc3.frequency.setValueAtTime(220, now);
-    osc3.frequency.exponentialRampToValueAtTime(170, now + 0.16);
-    gain3.gain.setValueAtTime(0.0001, now);
-    gain3.gain.exponentialRampToValueAtTime(0.16, now + 0.01);
-    gain3.gain.exponentialRampToValueAtTime(0.0001, now + 0.20);
-    osc3.connect(gain3);
-    gain3.connect(master);
-
-    osc1.start(now);
-    osc2.start(now);
-    osc3.start(now);
-
-    osc1.stop(now + 0.20);
-    osc2.stop(now + 0.11);
-    osc3.stop(now + 0.22);
-
-    osc3.onended = () => {
-      try { ctx.close(); } catch (e) {}
-    };
+    if (!addItemPopSound) return;
+    addItemPopSound.pause();
+    addItemPopSound.currentTime = 0;
+    addItemPopSound.volume = 1.0;
+    addItemPopSound.play().catch(err => {
+      console.log('Add item sound failed:', err);
+    });
   } catch (err) {
-    console.log('Add sound failed:', err);
+    console.log('Add item sound error:', err);
+  }
+}
+
+function playCartClickSound() {
+  try {
+    if (!cartClickSound) return;
+    cartClickSound.pause();
+    cartClickSound.currentTime = 0;
+    cartClickSound.volume = 1.0;
+    cartClickSound.play().catch(err => {
+      console.log('Cart click sound failed:', err);
+    });
+  } catch (err) {
+    console.log('Cart click sound error:', err);
+  }
+}
+
+function playSuccessChimeSound() {
+  try {
+    if (!successChimeSound) return;
+    successChimeSound.pause();
+    successChimeSound.currentTime = 0;
+    successChimeSound.volume = 1.0;
+    successChimeSound.play().catch(err => {
+      console.log('Success chime sound failed:', err);
+    });
+  } catch (err) {
+    console.log('Success chime sound error:', err);
   }
 }
 
@@ -3227,6 +3222,8 @@ async function copyGeneratedPO() {
     if (!text.trim()) return;
 
     await navigator.clipboard.writeText(text);
+    playSuccessChimeSound();
+
     poCopyNowBtn.textContent = 'Copied!';
     setTimeout(() => {
       poCopyNowBtn.textContent = 'Copy Now';
