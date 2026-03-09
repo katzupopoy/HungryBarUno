@@ -3142,14 +3142,14 @@ function buildVoiceSummary(parsed) {
 
   const parts = [];
 
-  if (parsed.addedItems?.length) {
+  if (parsed.addedItems && parsed.addedItems.length) {
     const addedText = parsed.addedItems
       .map(item => `Added ${item.qty} ${item.name}`)
       .join(' and ');
     parts.push(addedText);
   }
 
-  if (parsed.removedItems?.length) {
+  if (parsed.removedItems && parsed.removedItems.length) {
     const removedText = parsed.removedItems
       .map(item => `removed ${item.qty} ${item.name}`)
       .join(' and ');
@@ -3231,18 +3231,19 @@ if (voiceBtn) {
       const parsed = parseVoiceOrder(fixedTranscript);
 
       if (parsed.successCount === 0) {
-  speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
-    if (voiceSessionActive) startListening();
-    else setVoiceBtnIdle();
-  });
-  return;
-}
+        speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+        return;
+      }
 
-const reply = buildVoiceSummary(parsed);
-speakAndThen(`${reply} Anything else?`, () => {
-  if (voiceSessionActive) startListening();
-  else setVoiceBtnIdle();
-});
+      const reply = buildVoiceSummary(parsed);
+      speakAndThen(`${reply} Anything else?`, () => {
+        if (voiceSessionActive) startListening();
+        else setVoiceBtnIdle();
+      });
+    });
 
     recognition.addEventListener('error', (event) => {
       recognitionBusy = false;
