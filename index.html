@@ -1940,36 +1940,35 @@ function prev() {
   let startY = 0;
   let isTouching = false;
 
+  if (bookShell) {
   bookShell.addEventListener('touchstart', (e) => {
-  unlockAudio();
-  const t = e.touches[0];
-  startX = t.clientX;
-  startY = t.clientY;
-  isTouching = true;
-}, { passive: true });
+    unlockAudio();
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    isTouching = true;
+  }, { passive: true });
 
   bookShell.addEventListener('touchend', (e) => {
-  if (!isTouching) return;
+    if (!isTouching) return;
 
-  const t = e.changedTouches[0];
-  const dx = t.clientX - startX;
-  const dy = t.clientY - startY;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
 
-  isTouching = false;
+    isTouching = false;
 
-  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
-    if (dx < 0) next();
-    else prev();
-  }
-}, { passive: true });
-
-  let mouseStartX = 0;
-  let isMouseDown = false;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) next();
+      else prev();
+    }
+  }, { passive: true });
 
   bookShell.addEventListener('mousedown', (e) => {
     mouseStartX = e.clientX;
     isMouseDown = true;
   });
+}
 
   window.addEventListener('mouseup', (e) => {
     if (!isMouseDown) return;
@@ -3047,14 +3046,13 @@ function normalizeVoiceTranscript(text) {
     [/\bse lowg\b/g, 'silog'],
     [/\bsea-lowg\b/g, 'silog'],
     [/\bse-lowg\b/g, 'silog'],
-    [/\bsea lohg\b/g, 'silog'], 
+    [/\bsea lohg\b/g, 'silog'],
     [/\bse lohg\b/g, 'silog'],
 
     [/\bhot silog\b/g, 'hotsilog'],
     [/\bhot si log\b/g, 'hotsilog'],
     [/\bhat silog\b/g, 'hotsilog'],
     [/\bhotdog silog\b/g, 'hotsilog'],
-    [/\bhot سیlog\b/g, 'hotsilog'],
 
     [/\bbacon silog\b/g, 'bacon silog'],
     [/\bbacon si log\b/g, 'bacon silog'],
@@ -3064,7 +3062,7 @@ function normalizeVoiceTranscript(text) {
     [/\bhungarian si log\b/g, 'hungarian silog'],
     [/\bhungariansilog\b/g, 'hungarian silog'],
 
-      // bilao family
+    // bilao family
     [/\bb la o\b/g, 'bilao'],
     [/\bbi la o\b/g, 'bilao'],
     [/\bb-la-o\b/g, 'bilao'],
@@ -3084,13 +3082,13 @@ function normalizeVoiceTranscript(text) {
     [/\bcombo mill\b/g, 'combo meal'],
     [/\bnacho's\b/g, 'nachos'],
     [/\bspageti\b/g, 'spaghetti'],
-    [/\bcarbonarra\b/g, 'carbonara']
+    [/\bcarbonarra\b/g, 'carbonara'],
     [/\bbarbecue\b/g, 'bbq'],
     [/\bbarbeque\b/g, 'bbq'],
     [/\bbar b q\b/g, 'bbq'],
     [/\bbar be que\b/g, 'bbq'],
     [/\bbar be cue\b/g, 'bbq'],
-    [/\bbarbie q\b/g, 'bbq'],
+    [/\bbarbie q\b/g, 'bbq']
   ];
 
   fixes.forEach(([pattern, replacement]) => {
@@ -3188,11 +3186,13 @@ let voiceSessionActive = false;
 let recognitionBusy = false;
 
 function setVoiceBtnIdle() {
+  if (!voiceBtn) return;
   voiceBtn.classList.remove('listening');
   voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
 }
 
 function setVoiceBtnListening(label = 'Say your order now') {
+  if (!voiceBtn) return;
   voiceBtn.classList.add('listening');
   voiceBtn.innerHTML = `<span class="mic-icon">🎤</span><span class="speak-label">${label}</span>`;
 }
