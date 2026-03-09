@@ -3052,6 +3052,75 @@ if (base.includes('bbq')) {
   aliases.add(base.replace(/\bbbq\b/g, 'barbecue').trim());
 }
 
+if (base.includes('4 cheese quarter pound')) {
+  aliases.add('4 cheese');
+  aliases.add('four cheese');
+  aliases.add('4-cheese');
+  aliases.add('four-cheese');
+  aliases.add('four cheese quarter pound');
+}
+
+if (base.includes('combo meal 1')) {
+  aliases.add('combo 1');
+  aliases.add('combo meal one');
+  aliases.add('meal 1');
+}
+if (base.includes('combo meal 2')) {
+  aliases.add('combo 2');
+  aliases.add('combo meal two');
+  aliases.add('meal 2');
+}
+if (base.includes('combo meal 3')) {
+  aliases.add('combo 3');
+  aliases.add('combo meal three');
+  aliases.add('meal 3');
+}
+if (base.includes('combo meal 4')) {
+  aliases.add('combo 4');
+  aliases.add('combo meal four');
+  aliases.add('meal 4');
+}
+if (base.includes('combo meal 5')) {
+  aliases.add('combo 5');
+  aliases.add('combo meal five');
+  aliases.add('meal 5');
+}
+if (base.includes('combo meal 6')) {
+  aliases.add('combo 6');
+  aliases.add('combo meal six');
+  aliases.add('meal 6');
+}
+if (base.includes('combo meal 7')) {
+  aliases.add('combo 7');
+  aliases.add('combo meal seven');
+  aliases.add('meal 7');
+}
+if (base.includes('combo meal 8')) {
+  aliases.add('combo 8');
+  aliases.add('combo meal eight');
+  aliases.add('meal 8');
+}
+
+if (base.includes('ube macapuno')) {
+  aliases.add('ube macapuno');
+  aliases.add('oo beh macapuno');
+  aliases.add('oo beh mah kah poo noh');
+  aliases.add('ube makapuno');
+}
+
+if (base.includes('ube keso')) {
+  aliases.add('ube keso');
+  aliases.add('oo beh keso');
+  aliases.add('oo beh ke so');
+  aliases.add('ube ke so');
+}
+
+if (base.includes('matcha')) {
+  aliases.add('matcha');
+  aliases.add('ma tsa');
+  aliases.add('ma-tsa');
+}
+
   return [...aliases].filter(Boolean);
 }
 
@@ -3191,6 +3260,97 @@ function normalizeVoiceTranscript(text) {
     [/\bbee la o\b/g, 'bilao'],
     [/\bbee-la-o\b/g, 'bilao'],
     [/\bbilao\b/g, 'bilao'],
+
+    [/\b4 cheese\b/g, 'four cheese'],
+[/\b4-cheese\b/g, 'four cheese'],
+[/\bfour cheese\b/g, 'four cheese'],
+[/\bfour-cheese\b/g, 'four cheese'],
+
+[/\bcombo mill 1\b/g, 'combo meal 1'],
+[/\bcombo mill 2\b/g, 'combo meal 2'],
+[/\bcombo mill 3\b/g, 'combo meal 3'],
+[/\bcombo mill 4\b/g, 'combo meal 4'],
+[/\bcombo mill 5\b/g, 'combo meal 5'],
+[/\bcombo mill 6\b/g, 'combo meal 6'],
+[/\bcombo mill 7\b/g, 'combo meal 7'],
+[/\bcombo mill 8\b/g, 'combo meal 8'],
+
+[/\bcombo male 1\b/g, 'combo meal 1'],
+[/\bcombo male 2\b/g, 'combo meal 2'],
+[/\bcombo male 3\b/g, 'combo meal 3'],
+[/\bcombo male 4\b/g, 'combo meal 4'],
+[/\bcombo male 5\b/g, 'combo meal 5'],
+[/\bcombo male 6\b/g, 'combo meal 6'],
+[/\bcombo male 7\b/g, 'combo meal 7'],
+[/\bcombo male 8\b/g, 'combo meal 8'],
+
+[/\bcombo meil 1\b/g, 'combo meal 1'],
+[/\bcombo meil 2\b/g, 'combo meal 2'],
+[/\bcombo meil 3\b/g, 'combo meal 3'],
+[/\bcombo meil 4\b/g, 'combo meal 4'],
+[/\bcombo meil 5\b/g, 'combo meal 5'],
+[/\bcombo meil 6\b/g, 'combo meal 6'],
+[/\bcombo meil 7\b/g, 'combo meal 7'],
+[/\bcombo meil 8\b/g, 'combo meal 8'],
+
+[/\bcombo meal one\b/g, 'combo meal 1'],
+[/\bcombo meal two\b/g, 'combo meal 2'],
+[/\bcombo meal three\b/g, 'combo meal 3'],
+[/\bcombo meal four\b/g, 'combo meal 4'],
+[/\bcombo meal five\b/g, 'combo meal 5'],
+[/\bcombo meal six\b/g, 'combo meal 6'],
+[/\bcombo meal seven\b/g, 'combo meal 7'],
+[/\bcombo meal eight\b/g, 'combo meal 8'],
+
+[/\bcombo one\b/g, 'combo meal 1'],
+[/\bcombo two\b/g, 'combo meal 2'],
+[/\bcombo three\b/g, 'combo meal 3'],
+[/\bcombo four\b/g, 'combo meal 4'],
+[/\bcombo five\b/g, 'combo meal 5'],
+[/\bcombo six\b/g, 'combo meal 6'],
+[/\bcombo seven\b/g, 'combo meal 7'],
+[/\bcombo eight\b/g, 'combo meal 8'],
+
+[/\boo beh\b/g, 'ube'],
+[/\boo-beh\b/g, 'ube'],
+[/\bu beh\b/g, 'ube'],
+[/\bu-beh\b/g, 'ube'],
+
+[/\bmah kah poo noh\b/g, 'macapuno'],
+[/\bmah-kah-poo-noh\b/g, 'macapuno'],
+[/\bmakapuno\b/g, 'macapuno'],
+[/\bmacapuno\b/g, 'macapuno'],
+
+[/\bke so\b/g, 'keso'],
+[/\bke-so\b/g, 'keso'],
+[/\bkeso\b/g, 'keso'],
+
+[/\bma tsa\b/g, 'matcha'],
+[/\bma-tsa\b/g, 'matcha'],
+[/\bmatcha\b/g, 'matcha'],
+
+// normalizeVoiceTranscript fixes
+[/\b4 cheese\b/g, 'four cheese'],
+[/\b4-cheese\b/g, 'four cheese'],
+[/\bfour-cheese\b/g, 'four cheese'],
+
+[/\bcombo meal one\b/g, 'combo meal 1'],
+[/\bcombo meal two\b/g, 'combo meal 2'],
+[/\bcombo meal three\b/g, 'combo meal 3'],
+[/\bcombo meal four\b/g, 'combo meal 4'],
+[/\bcombo meal five\b/g, 'combo meal 5'],
+[/\bcombo meal six\b/g, 'combo meal 6'],
+[/\bcombo meal seven\b/g, 'combo meal 7'],
+[/\bcombo meal eight\b/g, 'combo meal 8'],
+
+[/\boo beh\b/g, 'ube'],
+[/\boo-beh\b/g, 'ube'],
+[/\bmah kah poo noh\b/g, 'macapuno'],
+[/\bmah-kah-poo-noh\b/g, 'macapuno'],
+[/\bke so\b/g, 'keso'],
+[/\bke-so\b/g, 'keso'],
+[/\bma tsa\b/g, 'matcha'],
+[/\bma-tsa\b/g, 'matcha'],
 
     // common menu mishears
     [/\bmilk t\b/g, 'milk tea'],
