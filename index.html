@@ -2152,6 +2152,8 @@ function prev() {
   let startX = 0;
   let startY = 0;
   let isTouching = false;
+  let mouseStartX = 0;
+  let isMouseDown = false;
 
   if (bookShell) {
   bookShell.addEventListener('touchstart', (e) => {
@@ -3293,16 +3295,99 @@ function speakMessage(message) {
 
     window.speechSynthesis.cancel();
 
-    const utter = new SpeechSynthesisUtterance(message);
-    utter.lang = 'en-PH';
-    utter.rate = 1;
-    utter.pitch = 1;
-    utter.volume = 1;
-
+    const utter = createAssistantUtterance(message);
     window.speechSynthesis.speak(utter);
   } catch (err) {
     console.log('Speech synthesis failed:', err);
   }
+}
+
+let assistantVoice = null;
+
+function loadAssistantVoice() {
+  try {
+    const voices = window.speechSynthesis?.getVoices?.() || [];
+    if (!voices.length) return null;
+
+    const preferred = [
+      /english philippines/i,
+      /en-ph/i,
+      /samantha/i,
+      /ava/i,
+      /zira/i,
+      /google us english/i,
+      /google uk english female/i,
+      /female/i
+    ];
+
+    for (const rule of preferred) {
+      const found = voices.find(v => rule.test(v.name) || rule.test(v.lang));
+      if (found) {
+        assistantVoice = found;
+        return found;
+      }
+    }
+
+    const enVoice = voices.find(v => /^en/i.test(v.lang));
+    if (enVoice) {
+      assistantVoice = enVoice;
+      return enVoice;
+    }
+
+    assistantVoice = voices[0] || null;
+    return assistantVoice;
+  } catch (err) {
+    console.log('Voice load failed:', err);
+    return null;
+  }
+}
+
+function createAssistantUtterance(message) {
+  const utter = new SpeechSynthesisUtterance(message);
+
+  if (!assistantVoice) {
+    loadAssistantVoice();
+  }
+
+  if (assistantVoice) {
+    utter.voice = assistantVoice;
+    utter.lang = assistantVoice.lang || 'en-PH';
+  } else {
+    utter.lang = 'en-PH';
+  }
+
+  utter.rate = 0.92;
+  utter.pitch = 1.0;
+  utter.volume = 1;
+
+  return utter;
+}
+
+function speakAndThen(message, callback) {
+  try {
+    if (!('speechSynthesis' in window)) {
+      callback?.();
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utter = createAssistantUtterance(message);
+    utter.onend = () => callback?.();
+    utter.onerror = () => callback?.();
+
+    window.speechSynthesis.speak(utter);
+  } catch (err) {
+    console.log('speakAndThen failed:', err);
+    callback?.();
+  }
+}
+
+if ('speechSynthesis' in window) {
+  loadAssistantVoice();
+  window.speechSynthesis.onvoiceschanged = () => {
+    loadAssistantVoice();
+  };
 }
 
 function scoreMenuItem(item, spoken) {
@@ -3693,6 +3778,36 @@ function speakAndThen(text, callback) {
   }
 }
 
+const finishOrderPhrases = [
+  "that's all",
+  "thats all",
+  "done",
+  "complete",
+  "complete order",
+  "finish order",
+  "no more",
+  "nothing else",
+  "okay that's all",
+  "ok that's all",
+  "ok na",
+  "tapos na",
+  "wala na",
+  "yun lang",
+  "iyon lang"
+];
+
+function getAssistantReply(transcript) {
+  const text = transcript.toLowerCase().trim();
+
+  const isFinished = finishOrderPhrases.some(phrase => text.includes(phrase));
+
+  if (isFinished) {
+    return "Thank you. Ok na ang order mo. Please review your order details, then click Copy Now and send it to us.";
+  }
+
+  return "What else would you like to order?";
+}
+
 function isVoiceStopCommand(text) {
   return /\b(no|nope|stop|done|finish|finished|that'?s all|thats all|okay done|ok done|wala na|yun lang|iyon lang)\b/i.test(text);
 }
@@ -3751,16 +3866,16 @@ if (voiceBtn) {
     function askForOrder() {
       voiceSessionActive = true;
       setVoiceBtnListening('Listening...');
-      speakAndThen('What is your order?', () => {
-        startListening();
-      });
+      speakAndThen('Hi. What would you like to order today?', () => {
+      startListening();
+    }); 
     }
 
     function askAnythingElse() {
       setVoiceBtnListening('Listening...');
-      speakAndThen('Anything else?', () => {
-        startListening();
-      });
+      speakAndThen('Would you like to add anything else?', () => {
+      startListening();
+    });
     }
 
     voiceBtn.addEventListener('click', () => {
@@ -3787,12 +3902,12 @@ if (voiceBtn) {
       }
 
       if (isVoiceStopCommand(fixedTranscript)) {
-        voiceSessionActive = false;
-        speakAndThen('Okay. Your order is ready.', () => {
-          setVoiceBtnIdle();
-        });
-        return;
-      }
+  voiceSessionActive = false;
+  speakAndThen(getAssistantReply(fixedTranscript), () => {
+    setVoiceBtnIdle();
+  });
+  return;
+}
 
       const parsed = parseVoiceOrder(fixedTranscript);
 
