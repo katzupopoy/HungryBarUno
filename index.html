@@ -3478,10 +3478,15 @@ if (floatingSearchResults) {
 
 async function copyGeneratedPO() {
   try {
-    const text = poPreview.textContent || '';
-    if (!text.trim()) return;
+    const freshText = generatePOText();
 
-    await navigator.clipboard.writeText(text);
+    if (!freshText.trim()) return;
+
+    if (poPreview) {
+      poPreview.textContent = freshText;
+    }
+
+    await navigator.clipboard.writeText(freshText);
     playSuccessChimeSound();
 
     poCopyNowBtn.textContent = 'Copied!';
