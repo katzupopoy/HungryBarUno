@@ -2914,6 +2914,7 @@ function refreshPoPreview() {
     cartFab.addEventListener('click', toggleCart);
   }
 
+  if (trayBody) {
   trayBody.addEventListener('click', (e) => {
     const inc = e.target.closest('[data-inc]');
     const dec = e.target.closest('[data-dec]');
@@ -2921,6 +2922,7 @@ function refreshPoPreview() {
     if (inc) changeQty(inc.dataset.inc, 1);
     if (dec) changeQty(dec.dataset.dec, -1);
   });
+}
 
   if (copyPoBtn) {
   copyPoBtn.addEventListener('click', () => {
@@ -2934,11 +2936,13 @@ function refreshPoPreview() {
   });
 }
 
+  if (clearOrderBtn) {
   clearOrderBtn.addEventListener('click', () => {
-  order.length = 0;
-  renderOrder();
-  clearFloatingSearch();
-});
+    order.length = 0;
+    renderOrder();
+    clearFloatingSearch();
+  });
+}
 
   // swipe down from top = open
   // swipe up while cart open = close
@@ -3363,26 +3367,6 @@ function createAssistantUtterance(message) {
   return utter;
 }
 
-function speakAndThen(message, callback) {
-  try {
-    if (!('speechSynthesis' in window)) {
-      callback?.();
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const utter = createAssistantUtterance(message);
-    utter.onend = () => callback?.();
-    utter.onerror = () => callback?.();
-
-    window.speechSynthesis.speak(utter);
-  } catch (err) {
-    console.log('speakAndThen failed:', err);
-    callback?.();
-  }
-}
-
 if ('speechSynthesis' in window) {
   loadAssistantVoice();
   window.speechSynthesis.onvoiceschanged = () => {
@@ -3508,11 +3492,6 @@ function normalizeVoiceTranscript(text) {
     [/\bbee la o\b/g, 'bilao'],
     [/\bbee-la-o\b/g, 'bilao'],
     [/\bbilao\b/g, 'bilao'],
-
-    [/\b4 cheese\b/g, 'four cheese'],
-[/\b4-cheese\b/g, 'four cheese'],
-[/\bfour cheese\b/g, 'four cheese'],
-[/\bfour-cheese\b/g, 'four cheese'],
 
 [/\bcombo mill 1\b/g, 'combo meal 1'],
 [/\bcombo mill 2\b/g, 'combo meal 2'],
@@ -3752,7 +3731,7 @@ function setVoiceBtnListening(label = 'Say your order now') {
   voiceBtn.innerHTML = `<span class="mic-icon">🎤</span><span class="speak-label">${label}</span>`;
 }
 
-function speakAndThen(text, callback) {
+function speakAndThen(message, callback) {
   try {
     if (!('speechSynthesis' in window)) {
       callback?.();
@@ -3761,15 +3740,9 @@ function speakAndThen(text, callback) {
 
     window.speechSynthesis.cancel();
 
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-PH';
-    utter.rate = 1;
-    utter.pitch = 1;
-    utter.volume = 1;
-
-    utter.onend = () => {
-      callback?.();
-    };
+    const utter = createAssistantUtterance(message);
+    utter.onend = () => callback?.();
+    utter.onerror = () => callback?.();
 
     window.speechSynthesis.speak(utter);
   } catch (err) {
