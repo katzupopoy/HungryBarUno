@@ -2878,6 +2878,12 @@ function normalizeText(text) {
     .replace(/\bbar be cue\b/g, 'bbq')
     .replace(/\bbarbie q\b/g, 'bbq')
     .replace(/\s+/g, ' ')
+    .replace(/\bh m b 1\b/g, 'hmb1')
+    .replace(/\bh m b 2\b/g, 'hmb2')
+    .replace(/\bh m b 3\b/g, 'hmb3')
+    .replace(/\bh-m-b-1\b/g, 'hmb1')
+    .replace(/\bh-m-b-2\b/g, 'hmb2')
+    .replace(/\bh-m-b-3\b/g, 'hmb3')
     .trim();
 }
 
@@ -3121,6 +3127,33 @@ if (base.includes('matcha')) {
   aliases.add('ma-tsa');
 }
 
+if (base.includes('hmb1')) {
+  aliases.add('hmb1');
+  aliases.add('hmb 1');
+  aliases.add('h m b 1');
+  aliases.add('h-m-b-1');
+  aliases.add('hungry meal box 1');
+  aliases.add('meal box 1');
+}
+
+if (base.includes('hmb2')) {
+  aliases.add('hmb2');
+  aliases.add('hmb 2');
+  aliases.add('h m b 2');
+  aliases.add('h-m-b-2');
+  aliases.add('hungry meal box 2');
+  aliases.add('meal box 2');
+}
+
+if (base.includes('hmb3')) {
+  aliases.add('hmb3');
+  aliases.add('hmb 3');
+  aliases.add('h m b 3');
+  aliases.add('h-m-b-3');
+  aliases.add('hungry meal box 3');
+  aliases.add('meal box 3');
+}
+
   return [...aliases].filter(Boolean);
 }
 
@@ -3351,6 +3384,32 @@ function normalizeVoiceTranscript(text) {
 [/\bke-so\b/g, 'keso'],
 [/\bma tsa\b/g, 'matcha'],
 [/\bma-tsa\b/g, 'matcha'],
+
+[/\bhmb 1\b/g, 'hmb1'],
+[/\bh m b 1\b/g, 'hmb1'],
+[/\bh-m-b-1\b/g, 'hmb1'],
+[/\bitch m b 1\b/g, 'hmb1'],
+[/\beich em bee 1\b/g, 'hmb1'],
+
+[/\bhmb 2\b/g, 'hmb2'],
+[/\bh m b 2\b/g, 'hmb2'],
+[/\bh-m-b-2\b/g, 'hmb2'],
+[/\bitch m b 2\b/g, 'hmb2'],
+[/\beich em bee 2\b/g, 'hmb2'],
+
+[/\bhmb 3\b/g, 'hmb3'],
+[/\bh m b 3\b/g, 'hmb3'],
+[/\bh-m-b-3\b/g, 'hmb3'],
+[/\bitch m b 3\b/g, 'hmb3'],
+[/\beich em bee 3\b/g, 'hmb3'],
+
+[/\bh m b one\b/g, 'hmb1'],
+[/\bh m b two\b/g, 'hmb2'],
+[/\bh m b three\b/g, 'hmb3'],
+
+[/\bhmb one\b/g, 'hmb1'],
+[/\bhmb two\b/g, 'hmb2'],
+[/\bhmb three\b/g, 'hmb3'],
 
     // common menu mishears
     [/\bmilk t\b/g, 'milk tea'],
