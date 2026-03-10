@@ -3980,67 +3980,6 @@ if (voiceBtn) {
   }
 }
 
-    recognition.addEventListener('result', (event) => {
-      const results = Array.from(event.results[0] || []);
-      const transcript = results.map(r => r.transcript).join(' ') || '';
-      const fixedTranscript = normalizeVoiceTranscript(transcript).trim();
-
-      console.log('Voice heard:', transcript);
-      console.log('Voice fixed:', fixedTranscript);
-
-      recognitionBusy = false;
-
-      if (!fixedTranscript) {
-        speakAndThen('Sorry, I did not catch that. Please say your order again.', () => {
-          if (voiceSessionActive) startListening();
-          else setVoiceBtnIdle();
-        });
-        return;
-      }
-
-      if (isVoiceStopCommand(fixedTranscript)) {
-  voiceSessionActive = false;
-  speakAndThen(getAssistantReply(fixedTranscript), () => {
-    setVoiceBtnIdle();
-  });
-  return;
-}
-
-      const parsed = parseVoiceOrder(fixedTranscript);
-
-      if (parsed.successCount === 0) {
-        speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
-          if (voiceSessionActive) startListening();
-          else setVoiceBtnIdle();
-        });
-        return;
-      }
-
-      const reply = buildVoiceSummary(parsed);
-      speakAndThen(`${reply} Anything else?`, () => {
-        if (voiceSessionActive) startListening();
-        else setVoiceBtnIdle();
-      });
-    });
-
-    recognition.addEventListener('error', (event) => {
-      recognitionBusy = false;
-      console.log('Voice recognition failed:', event.error || 'unknown error');
-
-      speakAndThen('Sorry, I could not hear you clearly. Please try again.', () => {
-        if (voiceSessionActive) {
-          startListening();
-        } else {
-          setVoiceBtnIdle();
-        }
-      });
-    });
-
-    recognition.addEventListener('end', () => {
-      recognitionBusy = false;
-    });
-  }
-}
 
 function escapeHtml(text) {
   return String(text || '')
