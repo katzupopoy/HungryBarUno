@@ -1717,6 +1717,137 @@ body::before{
   min-width: 120px;
 }
 
+.book-stage{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.mobile-page-preview{
+  position:fixed;
+  left:12px;
+  bottom:calc(env(safe-area-inset-bottom, 0px) + 20px);
+  z-index:3198;
+  display:none;
+}
+
+.mobile-page-preview-card{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  width:132px;
+  padding:8px;
+  border-radius:20px;
+  background:rgba(18,18,18,.94);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 20px 42px rgba(0,0,0,.38);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  text-align:left;
+  transition:transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+}
+
+.mobile-page-preview-card:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 24px 50px rgba(0,0,0,.42);
+}
+
+.mobile-page-preview-card:active{
+  transform:scale(.98);
+}
+
+.mobile-page-preview-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:24px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:rgba(243,200,106,.14);
+  color:#f3c86a;
+  border:1px solid rgba(243,200,106,.20);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.mobile-page-preview-img{
+  width:100%;
+  height:122px;
+  object-fit:cover;
+  display:block;
+  border-radius:14px;
+  background:#0f0f0f;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.mobile-page-preview-info{
+  padding:8px 2px 2px;
+}
+
+.mobile-page-preview-title{
+  font-size:13px;
+  font-weight:800;
+  line-height:1.2;
+  color:#fff;
+}
+
+.mobile-page-preview-sub{
+  margin-top:4px;
+  font-size:11px;
+  color:rgba(255,255,255,.68);
+  line-height:1.2;
+}
+
+@media (min-width:861px){
+  .mobile-page-preview{
+    display:none !important;
+  }
+}
+
+@media (max-width:860px){
+  .mobile-page-preview{
+    display:block;
+  }
+
+  .mobile-page-preview{
+    left:10px;
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 18px);
+  }
+
+  .mobile-page-preview-card{
+    width:118px;
+    border-radius:18px;
+    padding:7px;
+  }
+
+  .mobile-page-preview-img{
+    height:108px;
+    border-radius:12px;
+  }
+}
+
+/* move preview above other floating controls on mobile */
+@media (max-width:860px){
+  .mobile-page-preview{
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 86px);
+  }
+}
+
+/* hide preview when overlays are open */
+.mobile-page-preview.hidden{
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(8px);
+}
+
   </style>
 </head>
 <body>
@@ -2058,6 +2189,17 @@ body::before{
   </div>
 </div>
 
+<div class="mobile-page-preview" id="mobilePagePreview" aria-hidden="true">
+  <button class="mobile-page-preview-card" id="mobilePagePreviewCard" type="button" aria-label="Open preview page">
+    <div class="mobile-page-preview-badge" id="mobilePagePreviewBadge">Next Page</div>
+    <img class="mobile-page-preview-img" id="mobilePagePreviewImg" src="" alt="Menu page preview">
+    <div class="mobile-page-preview-info">
+      <div class="mobile-page-preview-title" id="mobilePagePreviewTitle">Preview</div>
+      <div class="mobile-page-preview-sub" id="mobilePagePreviewSub">Tap to open</div>
+    </div>
+  </button>
+</div>
+
 <audio id="flipSound" preload="auto" playsinline">
   <source src="sounds/page-flip.mp3" type="audio/mpeg">
 </audio>
@@ -2079,25 +2221,108 @@ body::before{
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const bookShell = document.getElementById('bookShell');
+  const mobilePagePreview = document.getElementById('mobilePagePreview');
+const mobilePagePreviewCard = document.getElementById('mobilePagePreviewCard');
+const mobilePagePreviewBadge = document.getElementById('mobilePagePreviewBadge');
+const mobilePagePreviewImg = document.getElementById('mobilePagePreviewImg');
+const mobilePagePreviewTitle = document.getElementById('mobilePagePreviewTitle');
+const mobilePagePreviewSub = document.getElementById('mobilePagePreviewSub');
 
   const logicalPages = pages.length;
   let current = 0;
 
-  function updateBook() {
-    pages.forEach((page, i) => {
-      const shouldFlip = i < current;
-      page.classList.toggle('flipped', shouldFlip);
+  function isMobilePreviewMode() {
+  return window.matchMedia('(max-width: 860px)').matches;
+}
 
-      if (shouldFlip) {
-        page.style.zIndex = String(i + 1);
-      } else {
-        page.style.zIndex = String(100 + (pages.length - i));
-      }
-    });
+function getPagePreviewData(pageIndex) {
+  const page = pages[pageIndex];
+  if (!page) return null;
 
-    if (prevBtn) prevBtn.disabled = current <= 0;
-    if (nextBtn) nextBtn.disabled = current >= logicalPages - 1;
+  const img = page.querySelector('.page-front img');
+  const label = page.querySelector('.page-label');
+  const pageNumber = page.querySelector('.page-number');
+
+  return {
+    index: pageIndex,
+    src: img ? img.getAttribute('src') || '' : '',
+    alt: img ? img.getAttribute('alt') || 'Menu page preview' : 'Menu page preview',
+    title: label ? label.textContent.trim() : `Page ${pageIndex + 1}`,
+    number: pageNumber ? pageNumber.textContent.trim() : String(pageIndex + 1)
+  };
+}
+
+function shouldHideMobilePreview() {
+  return !!(
+    topCart?.classList.contains('open') ||
+    searchFloat?.classList.contains('open') ||
+    poModal?.classList.contains('open') ||
+    thanksModal?.classList.contains('open')
+  );
+}
+
+function updateMobilePagePreview() {
+  if (!mobilePagePreview || !mobilePagePreviewCard || !mobilePagePreviewImg) return;
+
+  if (!isMobilePreviewMode()) {
+    mobilePagePreview.style.display = 'none';
+    return;
   }
+
+  mobilePagePreview.style.display = 'block';
+
+  let targetIndex = current + 1;
+  let badgeText = 'Next Page';
+
+  if (targetIndex >= logicalPages) {
+    targetIndex = current - 1;
+    badgeText = 'Previous Page';
+  }
+
+  if (targetIndex < 0 || targetIndex === current) {
+    mobilePagePreview.classList.add('hidden');
+    mobilePagePreviewCard.dataset.targetPage = '';
+    return;
+  }
+
+  const preview = getPagePreviewData(targetIndex);
+  if (!preview || !preview.src) {
+    mobilePagePreview.classList.add('hidden');
+    mobilePagePreviewCard.dataset.targetPage = '';
+    return;
+  }
+
+  mobilePagePreviewBadge.textContent = badgeText;
+  mobilePagePreviewImg.src = preview.src;
+  mobilePagePreviewImg.alt = preview.alt;
+  mobilePagePreviewTitle.textContent = preview.title;
+  mobilePagePreviewSub.textContent = `Page ${preview.number} • Tap to open`;
+  mobilePagePreviewCard.dataset.targetPage = String(preview.index);
+
+  if (shouldHideMobilePreview()) {
+    mobilePagePreview.classList.add('hidden');
+  } else {
+    mobilePagePreview.classList.remove('hidden');
+  }
+}
+
+  function updateBook() {
+  pages.forEach((page, i) => {
+    const shouldFlip = i < current;
+    page.classList.toggle('flipped', shouldFlip);
+
+    if (shouldFlip) {
+      page.style.zIndex = String(i + 1);
+    } else {
+      page.style.zIndex = String(100 + (pages.length - i));
+    }
+  });
+
+  if (prevBtn) prevBtn.disabled = current <= 0;
+  if (nextBtn) nextBtn.disabled = current >= logicalPages - 1;
+
+  updateMobilePagePreview();
+}
 
   function goTo(pageIndex) {
     current = Math.max(0, Math.min(logicalPages - 1, pageIndex));
@@ -2588,15 +2813,18 @@ const MENU_ITEMS = [
   function openCart() {
   topCart.classList.add('open');
   playCartClickSound();
+  updateMobilePagePreview();
 }
 
   function closeCart() {
   topCart.classList.remove('open');
+  updateMobilePagePreview();
 }
 
   function toggleCart() {
   topCart.classList.toggle('open');
   playCartClickSound();
+  updateMobilePagePreview();
 }
 
   function peso(n) {
@@ -2831,6 +3059,7 @@ function openPoModal(text) {
   poModal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
   document.documentElement.style.overflow = 'hidden';
+  updateMobilePagePreview();
 }
 
 function closePoModal() {
@@ -2839,18 +3068,21 @@ function closePoModal() {
   poModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   document.documentElement.style.overflow = '';
+  updateMobilePagePreview();
 }
 
 function openThanksModal() {
   if (!thanksModal) return;
   thanksModal.classList.add('open');
   thanksModal.setAttribute('aria-hidden', 'false');
+  updateMobilePagePreview();
 }
 
-function closeThanksModal() {
+function openThanksModal() {
   if (!thanksModal) return;
-  thanksModal.classList.remove('open');
-  thanksModal.setAttribute('aria-hidden', 'true');
+  thanksModal.classList.add('open');
+  thanksModal.setAttribute('aria-hidden', 'false');
+  updateMobilePagePreview();
 }
 
 
@@ -4001,6 +4233,7 @@ function searchMenuItems(query) {
 
   function openFloatingSearch() {
   searchFloat.classList.add('open');
+  updateMobilePagePreview();
   setTimeout(() => {
     try { floatingMenuSearch.focus(); } catch (e) {}
   }, 30);
@@ -4009,6 +4242,7 @@ function searchMenuItems(query) {
 function closeFloatingSearch() {
   searchFloat.classList.remove('open');
   clearFloatingSearch();
+  updateMobilePagePreview();
 }
 
 function toggleFloatingSearch() {
@@ -4034,8 +4268,8 @@ function renderFloatingSearchResults(query) {
     return;
   }
 
-  floatingSearchResults.innerHTML = results.map(item => `
-    <div class="floating-search-item" data-item-name="${escapeHtml(item.name)}">
+  floatingSearchResults.innerHTML = results.map((item, index) => `
+    <div class="floating-search-item" data-item-index="${index}">
       <div class="floating-search-info">
         <div class="floating-search-name">${escapeHtml(item.name)}</div>
         <div class="floating-search-meta">${escapeHtml(item.category || '')} • ${peso(item.price)}</div>
@@ -4043,6 +4277,8 @@ function renderFloatingSearchResults(query) {
       <div class="floating-search-meta">Add</div>
     </div>
   `).join('');
+
+  floatingSearchResults._results = results;
 }
 
 if (searchFab) {
@@ -4067,13 +4303,17 @@ if (floatingMenuSearch) {
 
 if (floatingSearchResults) {
   floatingSearchResults.addEventListener('click', (e) => {
-    const card = e.target.closest('[data-item-name]');
+    const card = e.target.closest('[data-item-index]');
     if (!card) return;
 
-    const itemName = card.dataset.itemName;
-    addItemByName(itemName, 1);
+    const results = floatingSearchResults._results || [];
+    const item = results[Number(card.dataset.itemIndex)];
+    if (!item) return;
+
+    addItemByName(item.name, 1);
     openCart();
     clearFloatingSearch();
+    closeFloatingSearch();
   });
 }
 
@@ -4127,6 +4367,22 @@ if (thanksOkBtn) {
 if (thanksBackdrop) {
   thanksBackdrop.addEventListener('click', closeThanksModal);
 }
+
+if (mobilePagePreviewCard) {
+  mobilePagePreviewCard.addEventListener('click', () => {
+    const targetPage = Number(mobilePagePreviewCard.dataset.targetPage);
+    if (Number.isNaN(targetPage)) return;
+
+    unlockAudio();
+    goTo(targetPage);
+    playRealFlipSound();
+  });
+}
+
+window.addEventListener('resize', updateMobilePagePreview);
+window.addEventListener('orientationchange', updateMobilePagePreview);
+updateMobilePagePreview();
+
 </script>
 </body>
 </html>
