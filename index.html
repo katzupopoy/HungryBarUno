@@ -2075,6 +2075,8 @@ body::before{
 </audio>
 
   <script>
+
+window.addEventListener('load', () => {
   const pages = [...document.querySelectorAll('.page')];
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
@@ -4127,6 +4129,8 @@ if (thanksOkBtn) {
 if (thanksBackdrop) {
   thanksBackdrop.addEventListener('click', closeThanksModal);
 }
+
+});
 </script>
 </body>
 </html>
