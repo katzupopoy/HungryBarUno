@@ -2748,9 +2748,7 @@ async function unlockAudio() {
   }
 }
 
-document.addEventListener('touchstart', unlockAudio, { passive: true });
-document.addEventListener('pointerdown', unlockAudio, { passive: true });
-document.addEventListener('click', unlockAudio);
+// removed global auto-audio unlock for better mobile stability
 
 function playPaperFlipSynth() {
   try {
@@ -3401,11 +3399,18 @@ function createAssistantUtterance(message) {
   return utter;
 }
 
-if ('speechSynthesis' in window) {
+let speechReady = false;
+
+function initSpeechIfNeeded() {
+  if (speechReady) return;
+  if (!('speechSynthesis' in window)) return;
+
   loadAssistantVoice();
   window.speechSynthesis.onvoiceschanged = () => {
     loadAssistantVoice();
   };
+
+  speechReady = true;
 }
 
 function scoreMenuItem(item, spoken) {
@@ -3865,19 +3870,87 @@ function buildVoiceSummary(parsed) {
 if (voiceBtn) {
   if (!SpeechRecognition) {
     voiceBtn.disabled = true;
-    voiceBtn.innerHTML = '🎤 <span>Voice not supported</span>';
+    voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Voice not supported</span>';
     voiceBtn.style.opacity = '.6';
   } else {
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-PH';
-    recognition.interimResults = false;
-    recognition.continuous = false;
-    recognition.maxAlternatives = 3;
+    let recognition = null;
+
+    function getRecognition() {
+      if (recognition) return recognition;
+
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-PH';
+      recognition.interimResults = false;
+      recognition.continuous = false;
+      recognition.maxAlternatives = 3;
+
+      recognition.addEventListener('result', (event) => {
+        const results = Array.from(event.results[0] || []);
+        const transcript = results.map(r => r.transcript).join(' ') || '';
+        const fixedTranscript = normalizeVoiceTranscript(transcript).trim();
+
+        console.log('Voice heard:', transcript);
+        console.log('Voice fixed:', fixedTranscript);
+
+        recognitionBusy = false;
+
+        if (!fixedTranscript) {
+          speakAndThen('Sorry, I did not catch that. Please say your order again.', () => {
+            if (voiceSessionActive) startListening();
+            else setVoiceBtnIdle();
+          });
+          return;
+        }
+
+        if (isVoiceStopCommand(fixedTranscript)) {
+          voiceSessionActive = false;
+          speakAndThen(getAssistantReply(fixedTranscript), () => {
+            setVoiceBtnIdle();
+          });
+          return;
+        }
+
+        const parsed = parseVoiceOrder(fixedTranscript);
+
+        if (parsed.successCount === 0) {
+          speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
+            if (voiceSessionActive) startListening();
+            else setVoiceBtnIdle();
+          });
+          return;
+        }
+
+        const reply = buildVoiceSummary(parsed);
+        speakAndThen(`${reply} Anything else?`, () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+      });
+
+      recognition.addEventListener('error', (event) => {
+        recognitionBusy = false;
+        console.log('Voice recognition failed:', event.error || 'unknown error');
+
+        speakAndThen('Sorry, I could not hear you clearly. Please try again.', () => {
+          if (voiceSessionActive) {
+            startListening();
+          } else {
+            setVoiceBtnIdle();
+          }
+        });
+      });
+
+      recognition.addEventListener('end', () => {
+        recognitionBusy = false;
+      });
+
+      return recognition;
+    }
 
     function startListening() {
       try {
         recognitionBusy = true;
-        recognition.start();
+        getRecognition().start();
         setVoiceBtnListening('Say your order now');
       } catch (err) {
         console.log('Recognition start failed:', err);
@@ -3889,21 +3962,23 @@ if (voiceBtn) {
       voiceSessionActive = true;
       setVoiceBtnListening('Listening...');
       speakAndThen('Hi. What would you like to order today?', () => {
-      startListening();
-    }); 
+        startListening();
+      });
     }
 
-    function askAnythingElse() {
-      setVoiceBtnListening('Listening...');
-      speakAndThen('Would you like to add anything else?', () => {
-      startListening();
-    });
-    }
-
-    voiceBtn.addEventListener('click', () => {
+    voiceBtn.addEventListener('click', async () => {
       if (recognitionBusy) return;
+
+      initSpeechIfNeeded();
+
+      try {
+        await unlockAudio();
+      } catch (e) {}
+
       askForOrder();
     });
+  }
+}
 
     recognition.addEventListener('result', (event) => {
       const results = Array.from(event.results[0] || []);
