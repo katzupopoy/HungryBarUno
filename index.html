@@ -1722,34 +1722,32 @@ body::before{
 }
 
 @media (max-width:860px){
+
   .preview-mobile-btn{
     position:absolute;
-    top:18px;
-    left:18px;
+    top:90px;
+    left:14px;
     z-index:40;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    min-height:38px;
+
     padding:10px 14px;
-    border:none;
     border-radius:999px;
-    background:rgba(12,12,12,.68);
+
+    background:rgba(0,0,0,.65);
     color:#fff;
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:.02em;
-    box-shadow:0 10px 24px rgba(0,0,0,.28);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    font-size:13px;
+    font-weight:700;
+
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:0 10px 24px rgba(0,0,0,.28);
+
     cursor:pointer;
   }
 
-  .preview-mobile-btn:active{
-    transform:scale(.98);
-  }
 }
 
 
@@ -1799,7 +1797,7 @@ body::before{
           <!-- MENU PAGE 1 -->
           <section class="page" data-page="1">
             <div class="page-face page-front">
-              <button class="preview-mobile-btn previewFab" type="button" aria-label="Preview Order">👁 Preview</button>
+              <button class="preview-mobile-btn previewFab" type="button">← Back</button>
               <img class="page-img" src="images/01-burgers.jpeg" alt="Burgers menu">
               <div class="page-label">Burgers</div>
               <div class="page-number">2</div>
@@ -4165,16 +4163,23 @@ if (thanksBackdrop) {
   thanksBackdrop.addEventListener('click', closeThanksModal);
 }
 
-document.querySelectorAll('.previewFab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (typeof updatePOPreview === 'function') {
-        updatePOPreview();
-      }
-      const poModal = document.getElementById('poModal');
-      if (poModal) poModal.classList.add('open');
-    });
-  });
-  
+/* PREVIEW BUTTON FIX */
+document.addEventListener("click", function(e){
+  if(e.target.closest(".previewFab")){
+    
+    const poModal = document.getElementById("poModal");
+    
+    if(typeof updatePOPreview === "function"){
+      updatePOPreview();
+    }
+
+    if(poModal){
+      poModal.classList.add("open");
+    }
+
+  }
+});
+
 </script>
 </body>
 </html>
