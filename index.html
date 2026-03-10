@@ -2077,6 +2077,10 @@ body::before{
   <script>
 
 window.addEventListener('load', () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const isFacebookBrowser = /FBAN|FBAV|Instagram/i.test(navigator.userAgent);
+  const disableVoiceFeatures = isMobile || isFacebookBrowser;
+
   const pages = [...document.querySelectorAll('.page')];
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
