@@ -221,6 +221,10 @@ body::before{
   will-change:transform;
 }
 
+.page-front{
+  position: relative;
+}
+
 .page::before{
   content:"";
   position:absolute;
@@ -1797,7 +1801,7 @@ body::before{
           <!-- MENU PAGE 1 -->
           <section class="page" data-page="1">
             <div class="page-face page-front">
-              <button class="preview-mobile-btn previewFab" type="button">← Back</button>
+              <button class="preview-mobile-btn previewFab" type="button">← Preview</button>
               <img class="page-img" src="images/01-burgers.jpeg" alt="Burgers menu">
               <div class="page-label">Burgers</div>
               <div class="page-number">2</div>
@@ -4164,20 +4168,17 @@ if (thanksBackdrop) {
 }
 
 /* PREVIEW BUTTON FIX */
-document.addEventListener("click", function(e){
-  if(e.target.closest(".previewFab")){
-    
-    const poModal = document.getElementById("poModal");
-    
-    if(typeof updatePOPreview === "function"){
-      updatePOPreview();
-    }
+document.addEventListener('click', function(e) {
+  const previewBtn = e.target.closest('.previewFab');
+  if (!previewBtn) return;
 
-    if(poModal){
-      poModal.classList.add("open");
-    }
-
+  if (!order.length) {
+    alert('Your cart is empty.');
+    return;
   }
+
+  refreshPoPreview();
+  openPoModal(generatePOText());
 });
 
 </script>
