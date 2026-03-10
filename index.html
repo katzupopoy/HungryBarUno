@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0b0b0b" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -1531,192 +1531,6 @@ body::before{
   color:rgba(255,255,255,.45);
 }
 
-/* MOBILE SAFE PO MODAL */
-#poModal{
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  z-index: 9999;
-}
-
-#poModal.open{
-  display: flex;
-}
-
-#poModalBackdrop{
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.72);
-  backdrop-filter: blur(6px);
-}
-
-.po-modal-card{
-  position: relative;
-  z-index: 2;
-  width: min(92vw, 520px);
-  max-height: min(85dvh, 85svh);
-  overflow: auto;
-  background: #121212;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.45);
-  padding: 16px;
-  -webkit-overflow-scrolling: touch;
-}
-
-#poPreview{
-  white-space: pre-wrap;
-  word-break: break-word;
-  background: #0d0d0d;
-  color: #fff;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
-}
-
-#poModal input,
-#poModal textarea,
-#poModal select{
-  width: 100%;
-  min-height: 46px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: #111;
-  color: #fff;
-  font-size: 16px; /* VERY IMPORTANT FOR MOBILE */
-  line-height: 1.2;
-  outline: none;
-  box-shadow: none;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-#poModal input:focus,
-#poModal textarea:focus,
-#poModal select:focus{
-  background: #111;
-  color: #fff;
-  border-color: #f3c86a;
-  box-shadow: 0 0 0 2px rgba(243,200,106,.18);
-}
-
-/* prevent white autofill on mobile webkit */
-#poModal input:-webkit-autofill,
-#poModal input:-webkit-autofill:hover,
-#poModal input:-webkit-autofill:focus,
-#poModal textarea:-webkit-autofill,
-#poModal textarea:-webkit-autofill:focus{
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0 1000px #111 inset;
-  transition: background-color 9999s ease-in-out 0s;
-  caret-color: #fff;
-}
-
-@media (max-width: 768px){
-  #poModal{
-    align-items: flex-start;
-    padding: max(12px, env(safe-area-inset-top)) 10px 10px;
-  }
-
-  .po-modal-card{
-    width: 100%;
-    max-height: calc(100dvh - 24px);
-    border-radius: 18px;
-  }
-}
-
-.thanks-modal{
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10050;
-  padding: 16px;
-}
-
-.thanks-modal.open{
-  display: flex;
-}
-
-.thanks-backdrop{
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.74);
-  backdrop-filter: blur(6px);
-}
-
-.thanks-card{
-  position: relative;
-  z-index: 2;
-  width: min(92vw, 430px);
-  background: linear-gradient(180deg, #171717 0%, #101010 100%);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 22px;
-  box-shadow: 0 24px 60px rgba(0,0,0,.45);
-  padding: 22px 18px;
-  text-align: center;
-}
-
-.thanks-icon{
-  font-size: 36px;
-  margin-bottom: 8px;
-}
-
-.thanks-title{
-  margin: 0 0 8px;
-  font-size: 24px;
-  color: #f3c86a;
-  font-weight: 800;
-}
-
-.thanks-text{
-  margin: 0 0 14px;
-  color: #dddddd;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.thanks-guide{
-  text-align: left;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.thanks-line{
-  font-size: 14px;
-  line-height: 1.6;
-  color: #fff;
-}
-
-.thanks-line + .thanks-line{
-  margin-top: 6px;
-}
-
-.thanks-note{
-  font-size: 13px;
-  color: #bdbdbd;
-  margin-bottom: 16px;
-}
-
-.thanks-actions{
-  display: flex;
-  justify-content: center;
-}
-
-#thanksOkBtn{
-  min-width: 120px;
-}
-
   </style>
 </head>
 <body>
@@ -2031,33 +1845,6 @@ body::before{
   </div>
 </div>
 
-<div id="thanksModal" class="thanks-modal" aria-hidden="true">
-  <div class="thanks-backdrop" id="thanksBackdrop"></div>
-
-  <div class="thanks-card">
-    <div class="thanks-icon">🎉</div>
-    <h3 class="thanks-title">Thank You!</h3>
-    <p class="thanks-text">
-      Thank you for your order. Please send the copied message to Hungry Bar Messenger so we can confirm it.
-   </p>
-
-    <div class="thanks-guide">
-      <div class="thanks-line"><strong>Step 1:</strong> Open Hungry Bar Messenger</div>
-      <div class="thanks-line"><strong>Step 2:</strong> Paste your copied order</div>
-      <div class="thanks-line"><strong>Step 3:</strong> Send the message</div>
-      <div class="thanks-line"><strong>Step 4:</strong> Wait for our confirmation reply</div>
-    </div>
-
-    <div class="thanks-note">
-      Please do not forget to send the copied order in Messenger.
-    </div>
-
-    <div class="thanks-actions">
-      <button type="button" class="action-btn" id="thanksOkBtn">OK</button>
-    </div>
-  </div>
-</div>
-
 <audio id="flipSound" preload="auto" playsinline">
   <source src="sounds/page-flip.mp3" type="audio/mpeg">
 </audio>
@@ -2075,12 +1862,6 @@ body::before{
 </audio>
 
   <script>
-
-window.addEventListener('load', () => {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  const isFacebookBrowser = /FBAN|FBAV|Instagram/i.test(navigator.userAgent);
-  const disableVoiceFeatures = isMobile || isFacebookBrowser;
-
   const pages = [...document.querySelectorAll('.page')];
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
@@ -2158,38 +1939,37 @@ function prev() {
   let startX = 0;
   let startY = 0;
   let isTouching = false;
-  let mouseStartX = 0;
-  let isMouseDown = false;
 
-  if (bookShell) {
   bookShell.addEventListener('touchstart', (e) => {
-    unlockAudio();
-    const t = e.touches[0];
-    startX = t.clientX;
-    startY = t.clientY;
-    isTouching = true;
-  }, { passive: true });
+  unlockAudio();
+  const t = e.touches[0];
+  startX = t.clientX;
+  startY = t.clientY;
+  isTouching = true;
+}, { passive: true });
 
   bookShell.addEventListener('touchend', (e) => {
-    if (!isTouching) return;
+  if (!isTouching) return;
 
-    const t = e.changedTouches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - startX;
+  const dy = t.clientY - startY;
 
-    isTouching = false;
+  isTouching = false;
 
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) next();
-      else prev();
-    }
-  }, { passive: true });
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+    if (dx < 0) next();
+    else prev();
+  }
+}, { passive: true });
+
+  let mouseStartX = 0;
+  let isMouseDown = false;
 
   bookShell.addEventListener('mousedown', (e) => {
     mouseStartX = e.clientX;
     isMouseDown = true;
   });
-}
 
   window.addEventListener('mouseup', (e) => {
     if (!isMouseDown) return;
@@ -2587,9 +2367,6 @@ const MENU_ITEMS = [
   const contactNumberInput = document.getElementById('contactNumber');
   const addressPickupInput = document.getElementById('addressPickup');
   const tableNumberInput = document.getElementById('tableNumber');
-  const thanksModal = document.getElementById('thanksModal');
-  const thanksBackdrop = document.getElementById('thanksBackdrop');
-  const thanksOkBtn = document.getElementById('thanksOkBtn');
 
   function openCart() {
   topCart.classList.add('open');
@@ -2748,7 +2525,9 @@ async function unlockAudio() {
   }
 }
 
-// removed global auto-audio unlock for better mobile stability
+document.addEventListener('touchstart', unlockAudio, { passive: true });
+document.addEventListener('pointerdown', unlockAudio, { passive: true });
+document.addEventListener('click', unlockAudio);
 
 function playPaperFlipSynth() {
   try {
@@ -2829,34 +2608,15 @@ function playPaperFlipSynth() {
 }
 
 function openPoModal(text) {
-  if (!poModal || !poPreview) return;
-  poPreview.textContent = text || '';
+  poPreview.textContent = text;
   poModal.classList.add('open');
   poModal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-  document.documentElement.style.overflow = 'hidden';
 }
 
 function closePoModal() {
-  if (!poModal) return;
   poModal.classList.remove('open');
   poModal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-  document.documentElement.style.overflow = '';
 }
-
-function openThanksModal() {
-  if (!thanksModal) return;
-  thanksModal.classList.add('open');
-  thanksModal.setAttribute('aria-hidden', 'false');
-}
-
-function closeThanksModal() {
-  if (!thanksModal) return;
-  thanksModal.classList.remove('open');
-  thanksModal.setAttribute('aria-hidden', 'true');
-}
-
 
   function generatePOText() {
   const now = new Date();
@@ -2897,28 +2657,11 @@ function refreshPoPreview() {
   if (!poPreview) return;
   poPreview.textContent = generatePOText();
 }
-[customerNameInput, contactNumberInput, addressPickupInput, tableNumberInput].forEach(input => {
-  if (!input) return;
-
-  input.addEventListener('input', refreshPoPreview);
-
-  input.addEventListener('focus', () => {
-    setTimeout(() => {
-      try {
-        input.scrollIntoView({
-          block: 'center',
-          behavior: 'smooth'
-        });
-      } catch (e) {}
-    }, 250);
-  });
-});
 
   if (cartFab) {
     cartFab.addEventListener('click', toggleCart);
   }
 
-  if (trayBody) {
   trayBody.addEventListener('click', (e) => {
     const inc = e.target.closest('[data-inc]');
     const dec = e.target.closest('[data-dec]');
@@ -2926,7 +2669,6 @@ function refreshPoPreview() {
     if (inc) changeQty(inc.dataset.inc, 1);
     if (dec) changeQty(dec.dataset.dec, -1);
   });
-}
 
   if (copyPoBtn) {
   copyPoBtn.addEventListener('click', () => {
@@ -2940,13 +2682,11 @@ function refreshPoPreview() {
   });
 }
 
-  if (clearOrderBtn) {
   clearOrderBtn.addEventListener('click', () => {
-    order.length = 0;
-    renderOrder();
-    clearFloatingSearch();
-  });
-}
+  order.length = 0;
+  renderOrder();
+  clearFloatingSearch();
+});
 
   // swipe down from top = open
   // swipe up while cart open = close
@@ -3018,22 +2758,6 @@ function normalizeText(text) {
     .replace(/\bbar be cue\b/g, 'bbq')
     .replace(/\bbarbie q\b/g, 'bbq')
     .replace(/\s+/g, ' ')
-    .replace(/\bh m b 1\b/g, 'hmb1')
-    .replace(/\bh m b 2\b/g, 'hmb2')
-    .replace(/\bh m b 3\b/g, 'hmb3')
-    .replace(/\bh-m-b-1\b/g, 'hmb1')
-    .replace(/\bh-m-b-2\b/g, 'hmb2')
-    .replace(/\bh-m-b-3\b/g, 'hmb3')
-    .replace(/\bly chee\b/g, 'lychee')
-    .replace(/\bly-chee\b/g, 'lychee')
-    .replace(/\bli chee\b/g, 'lychee')
-    .replace(/\bli-chee\b/g, 'lychee')
-    .replace(/\blee chee\b/g, 'lychee')
-    .replace(/\blee-chee\b/g, 'lychee')
-    .replace(/\bki wi\b/g, 'kiwi')
-    .replace(/\bki-wi\b/g, 'kiwi')
-    .replace(/\bkee wee\b/g, 'kiwi')
-    .replace(/\bkee-wee\b/g, 'kiwi')
     .trim();
 }
 
@@ -3208,120 +2932,6 @@ if (base.includes('bbq')) {
   aliases.add(base.replace(/\bbbq\b/g, 'barbecue').trim());
 }
 
-if (base.includes('4 cheese quarter pound')) {
-  aliases.add('4 cheese');
-  aliases.add('four cheese');
-  aliases.add('4-cheese');
-  aliases.add('four-cheese');
-  aliases.add('four cheese quarter pound');
-}
-
-if (base.includes('combo meal 1')) {
-  aliases.add('combo 1');
-  aliases.add('combo meal one');
-  aliases.add('meal 1');
-}
-if (base.includes('combo meal 2')) {
-  aliases.add('combo 2');
-  aliases.add('combo meal two');
-  aliases.add('meal 2');
-}
-if (base.includes('combo meal 3')) {
-  aliases.add('combo 3');
-  aliases.add('combo meal three');
-  aliases.add('meal 3');
-}
-if (base.includes('combo meal 4')) {
-  aliases.add('combo 4');
-  aliases.add('combo meal four');
-  aliases.add('meal 4');
-}
-if (base.includes('combo meal 5')) {
-  aliases.add('combo 5');
-  aliases.add('combo meal five');
-  aliases.add('meal 5');
-}
-if (base.includes('combo meal 6')) {
-  aliases.add('combo 6');
-  aliases.add('combo meal six');
-  aliases.add('meal 6');
-}
-if (base.includes('combo meal 7')) {
-  aliases.add('combo 7');
-  aliases.add('combo meal seven');
-  aliases.add('meal 7');
-}
-if (base.includes('combo meal 8')) {
-  aliases.add('combo 8');
-  aliases.add('combo meal eight');
-  aliases.add('meal 8');
-}
-
-if (base.includes('ube macapuno')) {
-  aliases.add('ube macapuno');
-  aliases.add('oo beh macapuno');
-  aliases.add('oo beh mah kah poo noh');
-  aliases.add('ube makapuno');
-}
-
-if (base.includes('ube keso')) {
-  aliases.add('ube keso');
-  aliases.add('oo beh keso');
-  aliases.add('oo beh ke so');
-  aliases.add('ube ke so');
-}
-
-if (base.includes('matcha')) {
-  aliases.add('matcha');
-  aliases.add('ma tsa');
-  aliases.add('ma-tsa');
-}
-
-if (base.includes('hmb1')) {
-  aliases.add('hmb1');
-  aliases.add('hmb 1');
-  aliases.add('h m b 1');
-  aliases.add('h-m-b-1');
-  aliases.add('hungry meal box 1');
-  aliases.add('meal box 1');
-}
-
-if (base.includes('hmb2')) {
-  aliases.add('hmb2');
-  aliases.add('hmb 2');
-  aliases.add('h m b 2');
-  aliases.add('h-m-b-2');
-  aliases.add('hungry meal box 2');
-  aliases.add('meal box 2');
-}
-
-if (base.includes('hmb3')) {
-  aliases.add('hmb3');
-  aliases.add('hmb 3');
-  aliases.add('h m b 3');
-  aliases.add('h-m-b-3');
-  aliases.add('hungry meal box 3');
-  aliases.add('meal box 3');
-}
-
-if (base.includes('lychee')) {
-  aliases.add('lychee');
-  aliases.add('ly chee');
-  aliases.add('ly-chee');
-  aliases.add('li chee');
-  aliases.add('li-chee');
-  aliases.add('lee chee');
-  aliases.add('lee-chee');
-}
-
-if (base.includes('kiwi')) {
-  aliases.add('kiwi');
-  aliases.add('ki wi');
-  aliases.add('ki-wi');
-  aliases.add('kee wee');
-  aliases.add('kee-wee');
-}
-
   return [...aliases].filter(Boolean);
 }
 
@@ -3331,86 +2941,16 @@ function speakMessage(message) {
 
     window.speechSynthesis.cancel();
 
-    const utter = createAssistantUtterance(message);
+    const utter = new SpeechSynthesisUtterance(message);
+    utter.lang = 'en-PH';
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+
     window.speechSynthesis.speak(utter);
   } catch (err) {
     console.log('Speech synthesis failed:', err);
   }
-}
-
-let assistantVoice = null;
-
-function loadAssistantVoice() {
-  try {
-    const voices = window.speechSynthesis?.getVoices?.() || [];
-    if (!voices.length) return null;
-
-    const preferred = [
-      /english philippines/i,
-      /en-ph/i,
-      /samantha/i,
-      /ava/i,
-      /zira/i,
-      /google us english/i,
-      /google uk english female/i,
-      /female/i
-    ];
-
-    for (const rule of preferred) {
-      const found = voices.find(v => rule.test(v.name) || rule.test(v.lang));
-      if (found) {
-        assistantVoice = found;
-        return found;
-      }
-    }
-
-    const enVoice = voices.find(v => /^en/i.test(v.lang));
-    if (enVoice) {
-      assistantVoice = enVoice;
-      return enVoice;
-    }
-
-    assistantVoice = voices[0] || null;
-    return assistantVoice;
-  } catch (err) {
-    console.log('Voice load failed:', err);
-    return null;
-  }
-}
-
-function createAssistantUtterance(message) {
-  const utter = new SpeechSynthesisUtterance(message);
-
-  if (!assistantVoice) {
-    loadAssistantVoice();
-  }
-
-  if (assistantVoice) {
-    utter.voice = assistantVoice;
-    utter.lang = assistantVoice.lang || 'en-PH';
-  } else {
-    utter.lang = 'en-PH';
-  }
-
-  utter.rate = 0.92;
-  utter.pitch = 1.0;
-  utter.volume = 1;
-
-  return utter;
-}
-
-let speechReady = false;
-
-function initSpeechIfNeeded() {
-  if (speechReady) return;
-  if (!('speechSynthesis' in window)) return;
-
-  loadAssistantVoice();
-  window.speechSynthesis.onvoiceschanged = () => {
-    loadAssistantVoice();
-  };
-
-  speechReady = true;
 }
 
 function scoreMenuItem(item, spoken) {
@@ -3507,13 +3047,14 @@ function normalizeVoiceTranscript(text) {
     [/\bse lowg\b/g, 'silog'],
     [/\bsea-lowg\b/g, 'silog'],
     [/\bse-lowg\b/g, 'silog'],
-    [/\bsea lohg\b/g, 'silog'],
+    [/\bsea lohg\b/g, 'silog'], 
     [/\bse lohg\b/g, 'silog'],
 
     [/\bhot silog\b/g, 'hotsilog'],
     [/\bhot si log\b/g, 'hotsilog'],
     [/\bhat silog\b/g, 'hotsilog'],
     [/\bhotdog silog\b/g, 'hotsilog'],
+    [/\bhot سیlog\b/g, 'hotsilog'],
 
     [/\bbacon silog\b/g, 'bacon silog'],
     [/\bbacon si log\b/g, 'bacon silog'],
@@ -3523,7 +3064,7 @@ function normalizeVoiceTranscript(text) {
     [/\bhungarian si log\b/g, 'hungarian silog'],
     [/\bhungariansilog\b/g, 'hungarian silog'],
 
-    // bilao family
+      // bilao family
     [/\bb la o\b/g, 'bilao'],
     [/\bbi la o\b/g, 'bilao'],
     [/\bb-la-o\b/g, 'bilao'],
@@ -3531,133 +3072,6 @@ function normalizeVoiceTranscript(text) {
     [/\bbee la o\b/g, 'bilao'],
     [/\bbee-la-o\b/g, 'bilao'],
     [/\bbilao\b/g, 'bilao'],
-
-    [/\bly chee\b/g, 'lychee'],
-[/\bly-chee\b/g, 'lychee'],
-[/\bli chee\b/g, 'lychee'],
-[/\bli-chee\b/g, 'lychee'],
-[/\blitchi\b/g, 'lychee'],
-[/\blee chee\b/g, 'lychee'],
-[/\blee-chee\b/g, 'lychee'],
-
-[/\bki wi\b/g, 'kiwi'],
-[/\bki-wi\b/g, 'kiwi'],
-[/\bkee wee\b/g, 'kiwi'],
-[/\bkee-wee\b/g, 'kiwi'],
-[/\bkeywee\b/g, 'kiwi'],
-[/\bkiwee\b/g, 'kiwi'],
-
-[/\bcombo mill 1\b/g, 'combo meal 1'],
-[/\bcombo mill 2\b/g, 'combo meal 2'],
-[/\bcombo mill 3\b/g, 'combo meal 3'],
-[/\bcombo mill 4\b/g, 'combo meal 4'],
-[/\bcombo mill 5\b/g, 'combo meal 5'],
-[/\bcombo mill 6\b/g, 'combo meal 6'],
-[/\bcombo mill 7\b/g, 'combo meal 7'],
-[/\bcombo mill 8\b/g, 'combo meal 8'],
-
-[/\bcombo male 1\b/g, 'combo meal 1'],
-[/\bcombo male 2\b/g, 'combo meal 2'],
-[/\bcombo male 3\b/g, 'combo meal 3'],
-[/\bcombo male 4\b/g, 'combo meal 4'],
-[/\bcombo male 5\b/g, 'combo meal 5'],
-[/\bcombo male 6\b/g, 'combo meal 6'],
-[/\bcombo male 7\b/g, 'combo meal 7'],
-[/\bcombo male 8\b/g, 'combo meal 8'],
-
-[/\bcombo meil 1\b/g, 'combo meal 1'],
-[/\bcombo meil 2\b/g, 'combo meal 2'],
-[/\bcombo meil 3\b/g, 'combo meal 3'],
-[/\bcombo meil 4\b/g, 'combo meal 4'],
-[/\bcombo meil 5\b/g, 'combo meal 5'],
-[/\bcombo meil 6\b/g, 'combo meal 6'],
-[/\bcombo meil 7\b/g, 'combo meal 7'],
-[/\bcombo meil 8\b/g, 'combo meal 8'],
-
-[/\bcombo meal one\b/g, 'combo meal 1'],
-[/\bcombo meal two\b/g, 'combo meal 2'],
-[/\bcombo meal three\b/g, 'combo meal 3'],
-[/\bcombo meal four\b/g, 'combo meal 4'],
-[/\bcombo meal five\b/g, 'combo meal 5'],
-[/\bcombo meal six\b/g, 'combo meal 6'],
-[/\bcombo meal seven\b/g, 'combo meal 7'],
-[/\bcombo meal eight\b/g, 'combo meal 8'],
-
-[/\bcombo one\b/g, 'combo meal 1'],
-[/\bcombo two\b/g, 'combo meal 2'],
-[/\bcombo three\b/g, 'combo meal 3'],
-[/\bcombo four\b/g, 'combo meal 4'],
-[/\bcombo five\b/g, 'combo meal 5'],
-[/\bcombo six\b/g, 'combo meal 6'],
-[/\bcombo seven\b/g, 'combo meal 7'],
-[/\bcombo eight\b/g, 'combo meal 8'],
-
-[/\boo beh\b/g, 'ube'],
-[/\boo-beh\b/g, 'ube'],
-[/\bu beh\b/g, 'ube'],
-[/\bu-beh\b/g, 'ube'],
-
-[/\bmah kah poo noh\b/g, 'macapuno'],
-[/\bmah-kah-poo-noh\b/g, 'macapuno'],
-[/\bmakapuno\b/g, 'macapuno'],
-[/\bmacapuno\b/g, 'macapuno'],
-
-[/\bke so\b/g, 'keso'],
-[/\bke-so\b/g, 'keso'],
-[/\bkeso\b/g, 'keso'],
-
-[/\bma tsa\b/g, 'matcha'],
-[/\bma-tsa\b/g, 'matcha'],
-[/\bmatcha\b/g, 'matcha'],
-
-// normalizeVoiceTranscript fixes
-[/\b4 cheese\b/g, 'four cheese'],
-[/\b4-cheese\b/g, 'four cheese'],
-[/\bfour-cheese\b/g, 'four cheese'],
-
-[/\bcombo meal one\b/g, 'combo meal 1'],
-[/\bcombo meal two\b/g, 'combo meal 2'],
-[/\bcombo meal three\b/g, 'combo meal 3'],
-[/\bcombo meal four\b/g, 'combo meal 4'],
-[/\bcombo meal five\b/g, 'combo meal 5'],
-[/\bcombo meal six\b/g, 'combo meal 6'],
-[/\bcombo meal seven\b/g, 'combo meal 7'],
-[/\bcombo meal eight\b/g, 'combo meal 8'],
-
-[/\boo beh\b/g, 'ube'],
-[/\boo-beh\b/g, 'ube'],
-[/\bmah kah poo noh\b/g, 'macapuno'],
-[/\bmah-kah-poo-noh\b/g, 'macapuno'],
-[/\bke so\b/g, 'keso'],
-[/\bke-so\b/g, 'keso'],
-[/\bma tsa\b/g, 'matcha'],
-[/\bma-tsa\b/g, 'matcha'],
-
-[/\bhmb 1\b/g, 'hmb1'],
-[/\bh m b 1\b/g, 'hmb1'],
-[/\bh-m-b-1\b/g, 'hmb1'],
-[/\bitch m b 1\b/g, 'hmb1'],
-[/\beich em bee 1\b/g, 'hmb1'],
-
-[/\bhmb 2\b/g, 'hmb2'],
-[/\bh m b 2\b/g, 'hmb2'],
-[/\bh-m-b-2\b/g, 'hmb2'],
-[/\bitch m b 2\b/g, 'hmb2'],
-[/\beich em bee 2\b/g, 'hmb2'],
-
-[/\bhmb 3\b/g, 'hmb3'],
-[/\bh m b 3\b/g, 'hmb3'],
-[/\bh-m-b-3\b/g, 'hmb3'],
-[/\bitch m b 3\b/g, 'hmb3'],
-[/\beich em bee 3\b/g, 'hmb3'],
-
-[/\bh m b one\b/g, 'hmb1'],
-[/\bh m b two\b/g, 'hmb2'],
-[/\bh m b three\b/g, 'hmb3'],
-
-[/\bhmb one\b/g, 'hmb1'],
-[/\bhmb two\b/g, 'hmb2'],
-[/\bhmb three\b/g, 'hmb3'],
 
     // common menu mishears
     [/\bmilk t\b/g, 'milk tea'],
@@ -3670,13 +3084,13 @@ function normalizeVoiceTranscript(text) {
     [/\bcombo mill\b/g, 'combo meal'],
     [/\bnacho's\b/g, 'nachos'],
     [/\bspageti\b/g, 'spaghetti'],
-    [/\bcarbonarra\b/g, 'carbonara'],
+    [/\bcarbonarra\b/g, 'carbonara']
     [/\bbarbecue\b/g, 'bbq'],
     [/\bbarbeque\b/g, 'bbq'],
     [/\bbar b q\b/g, 'bbq'],
     [/\bbar be que\b/g, 'bbq'],
     [/\bbar be cue\b/g, 'bbq'],
-    [/\bbarbie q\b/g, 'bbq']
+    [/\bbarbie q\b/g, 'bbq'],
   ];
 
   fixes.forEach(([pattern, replacement]) => {
@@ -3774,18 +3188,16 @@ let voiceSessionActive = false;
 let recognitionBusy = false;
 
 function setVoiceBtnIdle() {
-  if (!voiceBtn) return;
   voiceBtn.classList.remove('listening');
   voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Speak Order</span>';
 }
 
 function setVoiceBtnListening(label = 'Say your order now') {
-  if (!voiceBtn) return;
   voiceBtn.classList.add('listening');
   voiceBtn.innerHTML = `<span class="mic-icon">🎤</span><span class="speak-label">${label}</span>`;
 }
 
-function speakAndThen(message, callback) {
+function speakAndThen(text, callback) {
   try {
     if (!('speechSynthesis' in window)) {
       callback?.();
@@ -3794,45 +3206,21 @@ function speakAndThen(message, callback) {
 
     window.speechSynthesis.cancel();
 
-    const utter = createAssistantUtterance(message);
-    utter.onend = () => callback?.();
-    utter.onerror = () => callback?.();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-PH';
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    utter.onend = () => {
+      callback?.();
+    };
 
     window.speechSynthesis.speak(utter);
   } catch (err) {
     console.log('speakAndThen failed:', err);
     callback?.();
   }
-}
-
-const finishOrderPhrases = [
-  "that's all",
-  "thats all",
-  "done",
-  "complete",
-  "complete order",
-  "finish order",
-  "no more",
-  "nothing else",
-  "okay that's all",
-  "ok that's all",
-  "ok na",
-  "tapos na",
-  "wala na",
-  "yun lang",
-  "iyon lang"
-];
-
-function getAssistantReply(transcript) {
-  const text = transcript.toLowerCase().trim();
-
-  const isFinished = finishOrderPhrases.some(phrase => text.includes(phrase));
-
-  if (isFinished) {
-    return "Thank you. Ok na ang order mo. Please review your order details, then click Copy Now and send it to us.";
-  }
-
-  return "What else would you like to order?";
 }
 
 function isVoiceStopCommand(text) {
@@ -3870,87 +3258,19 @@ function buildVoiceSummary(parsed) {
 if (voiceBtn) {
   if (!SpeechRecognition) {
     voiceBtn.disabled = true;
-    voiceBtn.innerHTML = '<span class="mic-icon">🎤</span><span class="speak-label">Voice not supported</span>';
+    voiceBtn.innerHTML = '🎤 <span>Voice not supported</span>';
     voiceBtn.style.opacity = '.6';
   } else {
-    let recognition = null;
-
-    function getRecognition() {
-      if (recognition) return recognition;
-
-      recognition = new SpeechRecognition();
-      recognition.lang = 'en-PH';
-      recognition.interimResults = false;
-      recognition.continuous = false;
-      recognition.maxAlternatives = 3;
-
-      recognition.addEventListener('result', (event) => {
-        const results = Array.from(event.results[0] || []);
-        const transcript = results.map(r => r.transcript).join(' ') || '';
-        const fixedTranscript = normalizeVoiceTranscript(transcript).trim();
-
-        console.log('Voice heard:', transcript);
-        console.log('Voice fixed:', fixedTranscript);
-
-        recognitionBusy = false;
-
-        if (!fixedTranscript) {
-          speakAndThen('Sorry, I did not catch that. Please say your order again.', () => {
-            if (voiceSessionActive) startListening();
-            else setVoiceBtnIdle();
-          });
-          return;
-        }
-
-        if (isVoiceStopCommand(fixedTranscript)) {
-          voiceSessionActive = false;
-          speakAndThen(getAssistantReply(fixedTranscript), () => {
-            setVoiceBtnIdle();
-          });
-          return;
-        }
-
-        const parsed = parseVoiceOrder(fixedTranscript);
-
-        if (parsed.successCount === 0) {
-          speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
-            if (voiceSessionActive) startListening();
-            else setVoiceBtnIdle();
-          });
-          return;
-        }
-
-        const reply = buildVoiceSummary(parsed);
-        speakAndThen(`${reply} Anything else?`, () => {
-          if (voiceSessionActive) startListening();
-          else setVoiceBtnIdle();
-        });
-      });
-
-      recognition.addEventListener('error', (event) => {
-        recognitionBusy = false;
-        console.log('Voice recognition failed:', event.error || 'unknown error');
-
-        speakAndThen('Sorry, I could not hear you clearly. Please try again.', () => {
-          if (voiceSessionActive) {
-            startListening();
-          } else {
-            setVoiceBtnIdle();
-          }
-        });
-      });
-
-      recognition.addEventListener('end', () => {
-        recognitionBusy = false;
-      });
-
-      return recognition;
-    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-PH';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 3;
 
     function startListening() {
       try {
         recognitionBusy = true;
-        getRecognition().start();
+        recognition.start();
         setVoiceBtnListening('Say your order now');
       } catch (err) {
         console.log('Recognition start failed:', err);
@@ -3961,25 +3281,84 @@ if (voiceBtn) {
     function askForOrder() {
       voiceSessionActive = true;
       setVoiceBtnListening('Listening...');
-      speakAndThen('Hi. What would you like to order today?', () => {
+      speakAndThen('What is your order?', () => {
         startListening();
       });
     }
 
-    voiceBtn.addEventListener('click', async () => {
+    function askAnythingElse() {
+      setVoiceBtnListening('Listening...');
+      speakAndThen('Anything else?', () => {
+        startListening();
+      });
+    }
+
+    voiceBtn.addEventListener('click', () => {
       if (recognitionBusy) return;
-
-      initSpeechIfNeeded();
-
-      try {
-        await unlockAudio();
-      } catch (e) {}
-
       askForOrder();
+    });
+
+    recognition.addEventListener('result', (event) => {
+      const results = Array.from(event.results[0] || []);
+      const transcript = results.map(r => r.transcript).join(' ') || '';
+      const fixedTranscript = normalizeVoiceTranscript(transcript).trim();
+
+      console.log('Voice heard:', transcript);
+      console.log('Voice fixed:', fixedTranscript);
+
+      recognitionBusy = false;
+
+      if (!fixedTranscript) {
+        speakAndThen('Sorry, I did not catch that. Please say your order again.', () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      if (isVoiceStopCommand(fixedTranscript)) {
+        voiceSessionActive = false;
+        speakAndThen('Okay. Your order is ready.', () => {
+          setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      const parsed = parseVoiceOrder(fixedTranscript);
+
+      if (parsed.successCount === 0) {
+        speakAndThen('Sorry, I could not find that item on the menu. Please try again.', () => {
+          if (voiceSessionActive) startListening();
+          else setVoiceBtnIdle();
+        });
+        return;
+      }
+
+      const reply = buildVoiceSummary(parsed);
+      speakAndThen(`${reply} Anything else?`, () => {
+        if (voiceSessionActive) startListening();
+        else setVoiceBtnIdle();
+      });
+    });
+
+    recognition.addEventListener('error', (event) => {
+      recognitionBusy = false;
+      console.log('Voice recognition failed:', event.error || 'unknown error');
+
+      speakAndThen('Sorry, I could not hear you clearly. Please try again.', () => {
+        if (voiceSessionActive) {
+          startListening();
+        } else {
+          setVoiceBtnIdle();
+        }
+      });
+    });
+
+    recognition.addEventListener('end', () => {
+      recognitionBusy = false;
     });
   }
 }
-
 
 function escapeHtml(text) {
   return String(text || '')
@@ -4110,15 +3489,10 @@ async function copyGeneratedPO() {
     await navigator.clipboard.writeText(freshText);
     playSuccessChimeSound();
 
-    if (poCopyNowBtn) {
-      poCopyNowBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        poCopyNowBtn.textContent = 'Copy Now';
-      }, 1200);
-    }
-
-    closePoModal();
-    openThanksModal();
+    poCopyNowBtn.textContent = 'Copied!';
+    setTimeout(() => {
+      poCopyNowBtn.textContent = 'Copy Now';
+    }, 1200);
   } catch (err) {
     alert('Copy failed. Please copy manually.');
   }
@@ -4139,16 +3513,6 @@ if (poDoneBtn) {
 if (poModalBackdrop) {
   poModalBackdrop.addEventListener('click', closePoModal);
 }
-
-if (thanksOkBtn) {
-  thanksOkBtn.addEventListener('click', closeThanksModal);
-}
-
-if (thanksBackdrop) {
-  thanksBackdrop.addEventListener('click', closeThanksModal);
-}
-
-});
 </script>
 </body>
 </html>
