@@ -1717,45 +1717,6 @@ body::before{
   min-width: 120px;
 }
 
-.mobile-prev-fab{
-  display:none;
-}
-
-@media (max-width:860px){
-  .mobile-prev-fab{
-    position:fixed;
-    left:12px;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:3205;
-    width:52px;
-    height:52px;
-    border:none;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
-    background:rgba(255,255,255,.10);
-    color:#fff;
-    font-size:32px;
-    font-weight:800;
-    line-height:1;
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    box-shadow:0 12px 28px rgba(0,0,0,.28);
-    cursor:pointer;
-  }
-
-  .mobile-prev-fab:active{
-    transform:translateY(-50%) scale(.96);
-  }
-
-  .mobile-prev-fab:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-  }
-}
-
-
   </style>
 </head>
 <body>
@@ -2005,10 +1966,6 @@ body::before{
   <span class="fab-text">Order Food</span>
 </button>
 
-<button class="mobile-prev-fab" id="mobilePrevBtn" type="button" aria-label="Previous page">
-  ‹
-</button>
-
 <div class="search-float" id="searchFloat">
   <div class="search-float-head">
   <strong>Order Food</strong>
@@ -2122,7 +2079,6 @@ body::before{
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const bookShell = document.getElementById('bookShell');
-  const mobilePrevBtn = document.getElementById('mobilePrevBtn');
 
   const logicalPages = pages.length;
   let current = 0;
@@ -2141,7 +2097,6 @@ body::before{
 
     if (prevBtn) prevBtn.disabled = current <= 0;
     if (nextBtn) nextBtn.disabled = current >= logicalPages - 1;
-    if (mobilePrevBtn) mobilePrevBtn.disabled = current <= 0;
   }
 
   function goTo(pageIndex) {
@@ -2188,7 +2143,6 @@ function prev() {
 
   if (prevBtn) prevBtn.addEventListener('click', prev);
   if (nextBtn) nextBtn.addEventListener('click', next);
-  if (mobilePrevBtn) mobilePrevBtn.addEventListener('click', prev);
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') next();
@@ -4173,7 +4127,6 @@ if (thanksOkBtn) {
 if (thanksBackdrop) {
   thanksBackdrop.addEventListener('click', closeThanksModal);
 }
-
 </script>
 </body>
 </html>
