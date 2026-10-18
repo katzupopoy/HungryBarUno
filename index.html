@@ -1921,7 +1921,7 @@ button:focus-visible,
 <!-- END PAGE -->
 <section class="page" data-page="10">
   <div class="page-face page-front">
-    <img class="page-img promo-page-img" src="images/ads-last-page.jpeg" alt="Promo packages page">
+    <img class="page-img promo-page-img" src="images/ads-last-page.png" alt="Promo packages page">
     <div class="page-number">11</div>
   </div>
   <div class="page-face page-back">
@@ -3384,8 +3384,8 @@ function createAssistantUtterance(message) {
     utter.lang = 'en-US';
   }
 
-  utter.rate = 0.86;
-  utter.pitch = 1.05;
+  utter.rate = 0.98;
+  utter.pitch = 1.0;
   utter.volume = 1;
   return utter;
 }
@@ -3463,6 +3463,50 @@ function findBestMenuMatch(spoken) {
   if (ranked[0].score < 18) return null;
 
   return ranked[0].item;
+}
+
+function scoreTranscript(text) {
+  const parts = splitVoiceCommands(stripFinishPhrase(text));
+  let score = 0;
+
+  parts.forEach(part => {
+    const clean = normalizeText(part);
+    if (extractAction(clean) === 'clear') {
+      score += 40;
+      return;
+    }
+    let best = 0;
+    MENU_ITEMS.forEach(item => {
+      best = Math.max(best, scoreMenuItem(item, clean));
+    });
+    if (best >= 18) score += best;
+  });
+
+  return score;
+}
+
+function pickHeardTranscript(alternatives) {
+  const candidates = [];
+  alternatives.forEach(text => {
+    const fixed = normalizeVoiceTranscript(text).trim();
+    if (fixed && !candidates.includes(fixed)) candidates.push(fixed);
+  });
+
+  const joined = normalizeVoiceTranscript(alternatives.join(' ')).trim();
+  if (joined && !candidates.includes(joined)) candidates.push(joined);
+  if (!candidates.length) return '';
+
+  let best = candidates[0];
+  let bestScore = -1;
+  candidates.forEach(candidate => {
+    const score = scoreTranscript(candidate);
+    if (score > bestScore) {
+      bestScore = score;
+      best = candidate;
+    }
+  });
+
+  return best;
 }
 
 function splitVoiceCommands(text) {
@@ -3787,9 +3831,18 @@ function setVoiceBtnListening(label = 'Say your order now') {
   voiceBtn.innerHTML = `<span class="mic-icon">🎤</span><span class="speak-label">${label}</span>`;
 }
 
-function speakAndThen(message, callback) {
+function splitSpeech(message) {
+  return String(message || '')
+    .split(/(?<=[.!?])\s+/)
+    .map(line => line.trim())
+    .filter(Boolean);
+}
+
+function speakAndThen(message, callback, spoken) {
   const token = ++speakToken;
   let finished = false;
+  const say = spoken || message;
+  const lines = splitSpeech(say);
   showVoiceCaption(message);
   setVoiceBtnListening('Speaking...');
 
@@ -3799,6 +3852,30 @@ function speakAndThen(message, callback) {
     callback?.();
   };
 
+  const speakLine = (index) => {
+    if (finished || token !== speakToken) return;
+    if (index >= lines.length) {
+      done();
+      return;
+    }
+
+    const utter = createAssistantUtterance(lines[index]);
+    utter.onend = () => {
+      if (finished || token !== speakToken) return;
+      setTimeout(() => speakLine(index + 1), 160);
+    };
+    utter.onerror = () => {
+      if (finished || token !== speakToken) return;
+      speakLine(index + 1);
+    };
+
+    try {
+      window.speechSynthesis.speak(utter);
+    } catch (err) {
+      speakLine(index + 1);
+    }
+  };
+
   try {
     if (!('speechSynthesis' in window)) {
       setTimeout(done, 900);
@@ -3806,19 +3883,17 @@ function speakAndThen(message, callback) {
     }
 
     window.speechSynthesis.cancel();
-    const utter = createAssistantUtterance(message);
-    utter.onend = done;
-    utter.onerror = done;
-
     setTimeout(() => {
       if (token !== speakToken) return;
-      try { window.speechSynthesis.speak(utter); } catch (err) { done(); }
-      setTimeout(() => {
-        if (!finished && token === speakToken && !window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
-          done();
-        }
-      }, 2500);
-    }, 80);
+      speakLine(0);
+    }, 90);
+
+    const backup = 2500 + (say.length * 90);
+    setTimeout(() => {
+      if (!finished && token === speakToken && !window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+        done();
+      }
+    }, backup);
   } catch (err) {
     console.log('speakAndThen failed:', err);
     done();
@@ -3870,6 +3945,7 @@ function speakableName(name) {
     .replace(/\bw\//gi, 'with')
     .replace(/(\d+)\s*pcs\b/gi, (_, n) => `${n} ${Number(n) === 1 ? 'piece' : 'pieces'}`)
     .replace(/(\d+)"/g, '$1 inch')
+    .replace(/\bBBQ\b/g, 'barbecue')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -3883,43 +3959,38 @@ function speakableMoney(amount) {
 }
 
 function closingLine(parsed) {
-  const heard = parsed && parsed.successCount > 0
-    ? buildVoiceSummary(parsed).replace(/\.$/, '') + '. '
-    : '';
+  const heard = parsed && parsed.successCount > 0 ? `${buildVoiceSummary(parsed)} ` : '';
   const total = order.length ? `Your total is ${speakableMoney(getTotal())}. ` : '';
-  return `${heard}${total}Thank you. Please check the order, tap Copy Now, then send it on Messenger.`.replace(/\s+/g, ' ').trim();
+  return `${heard}${total}Thanks! Please check your order, then tap Copy Now.`.replace(/\s+/g, ' ').trim();
 }
 
 function buildVoiceSummary(parsed) {
   if (!parsed || parsed.successCount === 0) {
-    return 'Sorry, I did not find that item. Please say the item name again.';
+    return 'Sorry. I could not find that item. Please say it again.';
   }
 
   if (parsed.cleared && !parsed.addedItems.length && !parsed.removedItems.length) {
     return 'Okay. I cleared the cart.';
   }
 
+  const ack = ['Okay.', 'Got it.', 'Sure.'][Math.floor(Math.random() * 3)];
   const parts = [];
 
-  if (parsed.addedItems && parsed.addedItems.length) {
-    const addedText = parsed.addedItems
-      .map(item => `${speakableQty(item.qty)} ${speakableName(item.name)}`)
-      .join(', and ');
-    parts.push(`Okay. I added ${addedText}`);
-  }
+  (parsed.addedItems || []).forEach((item, index) => {
+    const bit = `${speakableQty(item.qty)} ${speakableName(item.name)}.`;
+    parts.push(index === 0 ? `${ack} ${bit}` : `And ${bit}`);
+  });
 
-  if (parsed.removedItems && parsed.removedItems.length) {
-    const removedText = parsed.removedItems
-      .map(item => `${speakableQty(item.qty)} ${speakableName(item.name)}`)
-      .join(', and ');
-    parts.push(`I removed ${removedText}`);
-  }
+  (parsed.removedItems || []).forEach((item, index) => {
+    const bit = `${speakableQty(item.qty)} ${speakableName(item.name)}.`;
+    parts.push(index === 0 ? `I removed ${bit}` : `And ${bit}`);
+  });
 
   if (parsed.misses && parsed.misses.length) {
-    parts.push('I missed one item. Please repeat that one');
+    parts.push('I missed one item. Please say that one again.');
   }
 
-  return parts.join('. ') + '.';
+  return parts.join(' ').replace(/\s+/g, ' ').trim();
 }
 
 if (voiceBtn) {
@@ -3947,7 +4018,7 @@ if (voiceBtn) {
 
     function askForOrder() {
       voiceSessionActive = true;
-      speakAndThen('Hi, welcome to Hungry Bar. What would you like to order?', () => {
+      speakAndThen('Hi! Welcome to Hungry Bar. What can I get for you?', () => {
         if (voiceSessionActive) startListening();
         else setVoiceBtnIdle();
       });
@@ -3972,15 +4043,12 @@ if (voiceBtn) {
       if (heard) {
         for (let i = 0; i < heard.length; i++) alternatives.push(heard[i].transcript || '');
       }
-      const fixedOptions = alternatives
-        .map(text => normalizeVoiceTranscript(text).trim())
-        .filter(Boolean);
-      const fixedTranscript = fixedOptions[0] || '';
 
+      const fixedTranscript = pickHeardTranscript(alternatives);
       recognitionBusy = false;
 
       if (!fixedTranscript) {
-        speakAndThen('Sorry, I did not catch that. Please say the item again.', () => {
+        speakAndThen('Sorry. I missed that. Please say it again.', () => {
           if (voiceSessionActive) startListening();
           else setVoiceBtnIdle();
         });
@@ -4004,10 +4072,14 @@ if (voiceBtn) {
       }
 
       if (parsed.successCount === 0) {
-        speakAndThen('Sorry, I did not find that item. Please say the item name again.', () => {
-          if (voiceSessionActive) startListening();
-          else setVoiceBtnIdle();
-        });
+        speakAndThen(
+          `I heard: ${fixedTranscript}. Please say the item again.`,
+          () => {
+            if (voiceSessionActive) startListening();
+            else setVoiceBtnIdle();
+          },
+          'Hmm. Please say that item one more time.'
+        );
         return;
       }
 
@@ -4036,7 +4108,7 @@ if (voiceBtn) {
         return;
       }
 
-      speakAndThen('Sorry, I could not hear you. Please tap Speak Order and try again.', () => {
+      speakAndThen('Sorry. I cannot hear you. Tap the mic and try again.', () => {
         voiceSessionActive = false;
         setVoiceBtnIdle();
       });
