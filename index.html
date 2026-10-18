@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0b0b0b" />
+  <meta name="description" content="The Hungry Bar digital flipbook menu – Sta Rosa Uno, Marilao. Burgers, combo meals, frappes, wings, pasta, breakfast and more. Order easily with voice or search.">
+  <meta property="og:title" content="The Hungry Bar | Digital Menu">
+  <meta property="og:description" content="Premium digital menu experience. Burgers, wings, frappes, pasta, and more. Order via voice or search.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/hungrybar-logo-premium.png">
+  <meta name="apple-mobile-web-app-title" content="Hungry Bar">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/hungrybar-logo-premium.png">
+
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>The Hungry Bar | Flipbook Menu</title>
@@ -1717,6 +1726,19 @@ body::before{
   min-width: 120px;
 }
 
+  
+/* Accessibility focus styles */
+button:focus-visible,
+.nav-btn:focus-visible,
+.action-btn:focus-visible,
+.qty-btn:focus-visible,
+.cart-fab:focus-visible,
+.speak-fab:focus-visible,
+.search-fab:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
   </style>
 </head>
 <body>
@@ -1735,7 +1757,7 @@ body::before{
             <div class="page-face page-front">
   <div class="cover-content premium-cover">
     <div class="cover-top">
-      <img class="cover-logo-img" src="images/hungrybar-logo-premium.png" alt="The Hungry Bar Logo">
+      <img class="cover-logo-img" loading="eager" decoding="async" src="images/hungrybar-logo-premium.png" alt="The Hungry Bar Logo">
       <div class="cover-chip premium-chip">Sta Rosa Uno, Marilao</div>
     </div>
 
@@ -1763,7 +1785,7 @@ body::before{
           <!-- MENU PAGE 1 -->
 <section class="page" data-page="1">
   <div class="page-face page-front">
-    <img class="page-img" src="images/01-burgers.jpg" alt="Burgers menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/01-burgers.jpg" alt="Burgers menu">
     <div class="page-label">Burgers</div>
     <div class="page-number">2</div>
   </div>
@@ -1775,7 +1797,7 @@ body::before{
 <!-- MENU PAGE 2 -->
 <section class="page" data-page="2">
   <div class="page-face page-front">
-    <img class="page-img" src="images/02-combo-meals.jpg" alt="Combo meals menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/02-combo-meals.jpg" alt="Combo meals menu">
     <div class="page-label">Combo Meals</div>
     <div class="page-number">3</div>
   </div>
@@ -1787,7 +1809,7 @@ body::before{
 <!-- MENU PAGE 3 -->
 <section class="page" data-page="3">
   <div class="page-face page-front">
-    <img class="page-img" src="images/03-frappes.jpg" alt="Frappes menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/03-frappes.jpg" alt="Frappes menu">
     <div class="page-label">Frappes</div>
     <div class="page-number">4</div>
   </div>
@@ -1799,7 +1821,7 @@ body::before{
 <!-- MENU PAGE 4 -->
 <section class="page" data-page="4">
   <div class="page-face page-front">
-    <img class="page-img" src="images/04-mango-lemon.jpg" alt="Mango and lemon menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/04-mango-lemon.jpg" alt="Mango and lemon menu">
     <div class="page-label">Mango & Lemon</div>
     <div class="page-number">5</div>
   </div>
@@ -1811,7 +1833,7 @@ body::before{
 <!-- MENU PAGE 5 -->
 <section class="page" data-page="5">
   <div class="page-face page-front">
-    <img class="page-img" src="images/05-hungry-meal-box.jpg" alt="Hungry Meal Box menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/05-hungry-meal-box.jpg" alt="Hungry Meal Box menu">
     <div class="page-label">Hungry Meal Box</div>
     <div class="page-number">6</div>
   </div>
@@ -1823,7 +1845,7 @@ body::before{
 <!-- MENU PAGE 6 -->
 <section class="page" data-page="6">
   <div class="page-face page-front">
-    <img class="page-img" src="images/06-pizza-wings.jpg" alt="Pizza and wings menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/06-pizza-wings.jpg" alt="Pizza and wings menu">
     <div class="page-label">Pizza & Wings</div>
     <div class="page-number">7</div>
   </div>
@@ -1835,7 +1857,7 @@ body::before{
 <!-- MENU PAGE 7 -->
 <section class="page" data-page="7">
   <div class="page-face page-front">
-    <img class="page-img" src="images/07-wings-bilao.jpg" alt="Wings bilao menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/07-wings-bilao.jpg" alt="Wings bilao menu">
     <div class="page-label">Wings Bilao</div>
     <div class="page-number">8</div>
   </div>
@@ -1847,7 +1869,7 @@ body::before{
 <!-- MENU PAGE 8 -->
 <section class="page" data-page="8">
   <div class="page-face page-front">
-    <img class="page-img" src="images/08-pasta.jpg" alt="Pasta menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/08-pasta.jpg" alt="Pasta menu">
     <div class="page-label">Pasta</div>
     <div class="page-number">9</div>
   </div>
@@ -1859,7 +1881,7 @@ body::before{
 <!-- MENU PAGE 9 -->
 <section class="page" data-page="9">
   <div class="page-face page-front">
-    <img class="page-img" src="images/09-all-day-breakfast.jpg" alt="All Day Breakfast menu">
+    <img class="page-img" loading="lazy" decoding="async" src="images/09-all-day-breakfast.jpg" alt="All Day Breakfast menu">
     <div class="page-label">All Day Breakfast</div>
     <div class="page-number">10</div>
   </div>
@@ -4092,5 +4114,16 @@ if (thanksBackdrop) {
   thanksBackdrop.addEventListener('click', closeThanksModal);
 }
 </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
+
 </body>
 </html>
